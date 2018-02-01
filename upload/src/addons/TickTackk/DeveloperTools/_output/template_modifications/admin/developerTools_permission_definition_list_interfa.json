@@ -1,0 +1,9 @@
+{
+    "template": "permission_definition_list",
+    "description": "Add the display order next to permission definition interface group",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "{$interfaceGroup.title}",
+    "replace": "$0\n<span class=\"dataList-hint\">{$interfaceGroup.display_order}</span>"
+}

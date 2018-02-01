@@ -1,0 +1,18 @@
+<xf:title>{{ phrase('developerTools_developer_options_for_x_add_on', {'addon_title': $addOn.title}) }}</xf:title>
+
+<xf:form action="{{ link('add-ons/save-developer-options', $addOn) }}" ajax="true" class="block">
+	<div class="block-container">
+
+		<div class="block-body">
+			<xf:textarearow name="license" value="{{ $addOn.license }}" autosize="true" label="{{ phrase('developerTools_contents_for_license') }}" />
+
+			<xf:textarearow name="gitignore" value="{{ $addOn.gitignore }}" autosize="true" label="{{ phrase('developerTools_contents_for_gitignore') }}" />
+			
+			<xf:textarearow name="readme_md" value="{{ $addOn.readme_md }}" autosize="true" label="{{ phrase('developerTools_contents_for_readme_markdown_file') }}" />
+
+			<hr class="formRowSep" />
+		</div>
+
+		<xf:submitrow sticky="true" icon="save" />
+	</div>
+</xf:form>

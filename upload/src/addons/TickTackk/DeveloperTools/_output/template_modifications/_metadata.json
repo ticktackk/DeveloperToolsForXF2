@@ -1,0 +1,20 @@
+{
+    "admin/developerTools_addon_controls.json": {
+        "hash": "3d9c95811a087a0bd4f7885ec74aa7bf"
+    },
+    "admin/developerTools_option_group_list.json": {
+        "hash": "e9fa7a3c8d9433a3b484c15b9f788263"
+    },
+    "admin/developerTools_permission_definition_list.json": {
+        "hash": "c369718995c09a40457c1307a8f99ac3"
+    },
+    "admin/developerTools_permission_definition_list_interfa.json": {
+        "hash": "3c88e26caca8918f2c38acffe7a47aad"
+    },
+    "admin/developerTools_permission_macros.json": {
+        "hash": "a11649fae7fee2de87f7b871b2fff28e"
+    },
+    "admin/developerTools_permission_macros_interface_group.json": {
+        "hash": "31b16a7fb1994ed842e2559dc5811dff"
+    }
+}

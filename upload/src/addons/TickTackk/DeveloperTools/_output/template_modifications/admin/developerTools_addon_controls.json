@@ -1,0 +1,9 @@
+{
+    "template": "addon_controls",
+    "description": "Add \"Developer Options\" under add-on controls",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:if is=\"$addOn.isInstalled() AND !$addOn.canUpgrade()\">",
+    "replace": "<a href=\"{{ link('add-ons/developer-options', $addOn) }}\" class=\"menu-linkRow\" data-xf-click=\"overlay\">{{ phrase('developerTools_developer_options') }}</a>\n\t\t\t\t$0"
+}

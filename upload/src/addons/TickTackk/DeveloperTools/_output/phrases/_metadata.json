@@ -1,0 +1,32 @@
+{
+    "developerTools_contents_for_gitignore.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "7e4ff4acf57343a8321aafa911462101"
+    },
+    "developerTools_contents_for_license.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "65cdadf9c83528131bde8557d6d664e3"
+    },
+    "developerTools_contents_for_readme_markdown_file.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "0b14bb62602138d97661c415426b72b4"
+    },
+    "developerTools_developer_options.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "c519e5658e9ac72b41a981158440d325"
+    },
+    "developerTools_developer_options_for_x_add_on.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "3e94a04a3fe0c42eac73c1c1762c00d5"
+    }
+}

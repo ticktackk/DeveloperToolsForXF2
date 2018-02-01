@@ -1,0 +1,9 @@
+{
+    "template": "permission_macros",
+    "description": "Add the display order next to permission",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "label=\"{$permission.title}\"",
+    "replace": "label=\"{$permission.title} <span class='dataList-hint'>{$permission.display_order}</span>\""
+}
