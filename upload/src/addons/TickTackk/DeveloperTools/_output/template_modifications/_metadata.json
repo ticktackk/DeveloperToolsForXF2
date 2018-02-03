@@ -16,5 +16,20 @@
     },
     "admin/developerTools_permission_macros_interface_group.json": {
         "hash": "31b16a7fb1994ed842e2559dc5811dff"
+    },
+    "admin/developerTools_template_modification_edit_acurl.json": {
+        "hash": "a8a330347568834d11ca88393580915a"
+    },
+    "admin/developerTools_template_modification_edit_contents.json": {
+        "hash": "6e174e445cc8039f7e63abeaeb9f1d8b"
+    },
+    "admin/developerTools_template_modification_edit_error_ph.json": {
+        "hash": "035ddcce372e9855b4096de0c9ad30e0"
+    },
+    "admin/developerTools_template_modification_edit_js.json": {
+        "hash": "863a34f04e9799248f502a3742778c16"
+    },
+    "admin/developerTools_template_modification_edit_style_id.json": {
+        "hash": "bcfc76039e2d38383c35a18feef51b56"
     }
 }

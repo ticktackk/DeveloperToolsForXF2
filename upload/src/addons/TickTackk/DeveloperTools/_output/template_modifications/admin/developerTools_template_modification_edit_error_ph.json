@@ -1,0 +1,9 @@
+{
+    "template": "template_modification_edit",
+    "description": "Change not found error phrase to show template was not found in selected style",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<!--\n\t\t\t\t\t\t--><i>{{ phrase('requested_template_not_found') }}</i><!--\n\t\t\t\t\t-->",
+    "replace": "<xf:if is=\"{$modification.type} == 'public' && {$style.style_id} !== 0\">\n<!--\n\t\t\t\t\t\t--><i>{{ phrase('developerTools_requested_template_for_selected_style_could_not_be_found') }}</i><!--\n\t\t\t\t\t-->\n<xf:else />\n\t$0\n</xf:if>"
+}

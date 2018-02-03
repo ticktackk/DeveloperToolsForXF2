@@ -1,0 +1,9 @@
+{
+    "template": "template_modification_edit",
+    "description": "Add support for \"style_id\" when autocomplete",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:js>\n\t$(function() {",
+    "replace": "$0\n\t\t<xf:if is=\"{$modification.type} == 'public'\">\n\t\t\t$(\"select[name='style_id']\").on('change', function() {\n\t\t\t\tvar placehollderACUrl = $(\"#js-templateModificationTemplate\").data('acurl-placeholder');\n\t\t\t\tplacehollderACUrl = placehollderACUrl.slice(0, -1) + $(\"select[name='style_id']\").val();\n\t\t\t\t$(\"#js-templateModificationTemplate\").attr('data-acurl', placehollderACUrl);\n\t\t\t\tXF.Element.initializeElement($(\"#js-templateModificationTemplate\"));\n\t\t\t\t$(\"select[name='style_id']\").off(\"AutoComplete blur paste\");\n\t\t\tXF.Element.register('auto-complete', 'XF.AutoComplete');\n\t\t\t});\n\t\t</xf:if>"
+}

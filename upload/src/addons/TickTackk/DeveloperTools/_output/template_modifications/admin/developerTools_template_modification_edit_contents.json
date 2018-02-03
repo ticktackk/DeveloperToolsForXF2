@@ -1,0 +1,9 @@
+{
+    "template": "template_modification_edit",
+    "description": "Add \"style_id\" to template contents container url data",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "{ template: templateName },",
+    "replace": "<xf:if is=\"{$modification.type} == 'public'\">\n\t\t\t\t\t\t{ template: templateName, style_id: {$style.style_id} },\n\t\t\t\t\t<xf:else />\n\t\t\t\t\t\t{ template: templateName},\n\t\t\t\t\t</xf:if>"
+}
