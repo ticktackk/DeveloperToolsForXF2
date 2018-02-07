@@ -24,6 +24,12 @@ class BetterExport extends Command
                 'id',
                 InputArgument::REQUIRED,
                 'Add-On ID'
+            )
+            ->addOption(
+                'release',
+                null,
+                InputOption::VALUE_NONE,
+                'Run \'xf-addon:build-release\' command'
             );
     }
 
@@ -71,6 +77,17 @@ class BetterExport extends Command
             '--addon' => $addOn->getAddOnId()
         ]);
         $command->run($childInput, $output);
+
+        $release = $input->getOption('release');
+        if ($release)
+        {
+            $command = $this->getApplication()->find('xf-addon:build-release');
+            $childInput = new ArrayInput([
+                'command' => 'xf-addon:build-release',
+                'id' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
+        }
 
         return 0;
     }
