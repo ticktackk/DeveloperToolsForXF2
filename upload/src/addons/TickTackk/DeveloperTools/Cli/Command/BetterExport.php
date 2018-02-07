@@ -43,6 +43,13 @@ class BetterExport extends Command
         ]);
         $command->run($childInput, $output);
 
+        // xf 2.0.2 bug workaround
+        $entityPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . 'Entity';
+        if (!is_dir($entityPath))
+        {
+            \XF\Util\File::createDirectory($entityPath, false);
+        }
+
         $command = $this->getApplication()->find('xf-dev:entity-class-properties');
         $childInput = new ArrayInput([
             'command' => 'xf-dev:entity-class-properties',
