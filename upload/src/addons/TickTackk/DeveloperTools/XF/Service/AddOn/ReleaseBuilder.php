@@ -81,10 +81,16 @@ GITIGNORE;
 
         if (!empty($addOn->readme_md))
         {
+            $readMeMarkdownFileInRepoRoot = $repoRoot . $ds . 'README.md';
+            if (file_exists($readMeMarkdownFileInRepoRoot) && is_readable($readMeMarkdownFileInRepoRoot))
+            {
+                unlink($readMeMarkdownFileInRepoRoot);
+            }
+
             $readMeMarkdownContent = <<< README_MD
 {$addOn->readme_md}
 README_MD;
-            File::writeFile($repoRoot . $ds . 'README.md', $readMeMarkdownContent, false);
+            File::writeFile($srcRoot . $ds . 'README.md', $readMeMarkdownContent, false);
         }
 
         $git = new GitRepository($repoRoot);
