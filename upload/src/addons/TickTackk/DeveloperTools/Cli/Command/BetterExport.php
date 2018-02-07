@@ -6,8 +6,10 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use XF\Cli\Command\AddOnActionTrait;
+use \XF\Util\File;
 
 class BetterExport extends Command
 {
@@ -39,21 +41,34 @@ class BetterExport extends Command
         $command = $this->getApplication()->find('xf-addon:export');
         $childInput = new ArrayInput([
             'command' => 'xf-addon:export',
-            'id' => $addOn->addon_id
+            'id' => $addOn->getAddOnId()
         ]);
         $command->run($childInput, $output);
 
         // xf 2.0.2 bug workaround
         $entityPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . 'Entity';
-        if (!is_dir($entityPath))
+        $entityDirExists = is_dir($entityPath);
+        if (!$entityDirExists)
         {
-            \XF\Util\File::createDirectory($entityPath, false);
+            File::createDirectory($entityPath, false);
         }
 
         $command = $this->getApplication()->find('xf-dev:entity-class-properties');
         $childInput = new ArrayInput([
             'command' => 'xf-dev:entity-class-properties',
-            'addon-or-entity' => $addOn->addon_id
+            'addon-or-entity' => $addOn->getAddOnId()
+        ]);
+        $command->run($childInput, $output);
+
+        if (!$entityDirExists && is_dir($entityPath))
+        {
+            File::deleteDirectory($entityPath);
+        }
+
+        $command = $this->getApplication()->find('xf-dev:export');
+        $childInput = new ArrayInput([
+            'command' => 'xf-dev:export',
+            '--addon' => $addOn->getAddOnId()
         ]);
         $command->run($childInput, $output);
 
