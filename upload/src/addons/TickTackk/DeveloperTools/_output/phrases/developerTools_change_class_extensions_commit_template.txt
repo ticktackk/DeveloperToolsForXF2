@@ -1,0 +1,1 @@
+Change class extension for extending {from_class}

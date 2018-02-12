@@ -1,0 +1,1 @@
+Delete {interface_title} permission interface group

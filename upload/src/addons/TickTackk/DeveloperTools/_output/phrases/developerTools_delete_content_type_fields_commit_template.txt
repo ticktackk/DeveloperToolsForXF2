@@ -1,0 +1,1 @@
+Remove content type field for {content_type}

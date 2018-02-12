@@ -1,0 +1,1 @@
+Add route {route_prefix} for {route_type} type

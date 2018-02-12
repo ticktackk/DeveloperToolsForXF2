@@ -1,0 +1,3 @@
+GitHub uses the email address set in your local Git configuration to associate commits pushed from the command line with your GitHub account.
+<br/> <br/>
+You can use this option (or git config command) to change the email address you associate with your Git commits. The new email address you set will be visible in any future commits you push to GitHub from the command line. Any commits you made prior to changing your commit email address are still associated with your previous email address.

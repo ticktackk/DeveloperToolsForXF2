@@ -1,0 +1,1 @@
+Delete {title} style property group

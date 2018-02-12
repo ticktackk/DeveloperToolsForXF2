@@ -1,0 +1,6 @@
+{
+    "from_class": "XF\\DevelopmentOutput\\AdminPermission",
+    "to_class": "TickTackk\\DeveloperTools\\XF\\DevelopmentOutput\\AdminPermission",
+    "execute_order": 10,
+    "active": true
+}

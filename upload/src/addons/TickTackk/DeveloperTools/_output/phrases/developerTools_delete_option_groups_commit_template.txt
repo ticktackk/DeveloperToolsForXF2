@@ -1,0 +1,1 @@
+Delete {option_group_title} option group
