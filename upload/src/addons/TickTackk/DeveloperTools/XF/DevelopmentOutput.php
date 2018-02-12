@@ -139,7 +139,10 @@ class DevelopmentOutput extends XFCP_DevelopmentOutput
     protected function writeTypeMetadata($typeDir, $addOnId, array $typeMetadata)
     {
         parent::writeTypeMetadata($typeDir, $addOnId, $typeMetadata);
-        $this->writeTypeMetadataForRepo($typeDir, $addOnId, $typeMetadata);
+        if ($this->isCommittable($addOnId))
+        {
+            $this->writeTypeMetadataForRepo($typeDir, $addOnId, $typeMetadata);
+        }
     }
 
     public function cloneEntity(Entity $entity)
@@ -160,15 +163,15 @@ class DevelopmentOutput extends XFCP_DevelopmentOutput
         }
     }
 
-    protected function getRepoPath(Entity $entity)
+    protected function getRepoPath($addOnId)
     {
         $ds = DIRECTORY_SEPARATOR;
-        return $this->basePath . $ds . $this->prepareAddOnIdForPath($entity->addon_id) . $ds . '_repo';
+        return $this->basePath . $ds . $addOnId . $ds . '_repo';
     }
 
-    protected function commitOutput($actionType, Entity $entity)
+    public function isCommittable($addOnId)
     {
-        $repoDir = $this->getRepoPath($entity);
+        $repoDir = $this->getRepoPath($addOnId);
 
         if (is_dir($repoDir))
         {
@@ -176,16 +179,28 @@ class DevelopmentOutput extends XFCP_DevelopmentOutput
 
             if (!$this->batchMode && $git->isInitialized())
             {
-                /** @var \TickTackk\DeveloperTools\XF\DevelopmentOutput\CommitTrait $handler */
-                $handler = $this->getHandler($entity->structure()->shortName);
+                return true;
+            }
+        }
 
-                if (method_exists($handler, 'commitRepo') &&
-                    method_exists($handler, 'getOutputCommitData'))
-                {
-                    $jobId = $entity->structure()->shortName . '_' . $actionType . '_' . $entity->getEntityId();
+        return false;
+    }
 
-                    $handler->commitRepo($jobId, $repoDir, $actionType, $entity->isUpdate());
-                }
+    protected function commitOutput($actionType, Entity $entity)
+    {
+        $repoDir = $this->getRepoPath($entity->addon_id);
+
+        if ($this->isCommittable($entity))
+        {
+            /** @var \TickTackk\DeveloperTools\XF\DevelopmentOutput\CommitTrait $handler */
+            $handler = $this->getHandler($entity->structure()->shortName);
+
+            if (method_exists($handler, 'commitRepo') &&
+                method_exists($handler, 'getOutputCommitData'))
+            {
+                $jobId = $entity->structure()->shortName . '_' . $actionType . '_' . $entity->getEntityId();
+
+                $handler->commitRepo($jobId, $repoDir, $actionType, $entity->isUpdate());
             }
         }
     }
