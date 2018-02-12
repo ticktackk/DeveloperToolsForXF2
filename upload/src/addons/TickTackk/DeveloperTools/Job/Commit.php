@@ -37,34 +37,31 @@ class Commit extends AbstractJob
         {
             $git = new GitRepository($repoDir);
 
-            if ($git->isInitialized())
+            $comment = \XF::phrase('developerTools_' . $actionType . '_' . $typeDir . '_commit_template', $entityClone)->render();
+
+            $options = \XF::options();
+            $gitUsername = $options->developerTools_git_username;
+            $gitEmail = $options->developerTools_git_email;
+
+            if (!empty($git->config()->get('user.name')))
             {
-                $comment = \XF::phrase('developerTools_' . $actionType . '_' . $typeDir . '_commit_template', $entityClone)->render();
-
-                $options = \XF::options();
-                $gitUsername = $options->developerTools_git_username;
-                $gitEmail = $options->developerTools_git_email;
-
-                if (!empty($git->config()->get('user.name')))
-                {
-                    $git->config()->add('user.name', $gitUsername)->execute();
-                }
-                if (!empty($git->config()->get('user.email')))
-                {
-                    $git->config()->add('user.email', $gitEmail)->execute();
-                }
-
-                if (empty($git->config()->get('user.name')) || empty($git->config()->get('user.name')))
-                {
-                    return $this->complete();
-                }
-
-                $git->add()->execute('*');
-
-                $git->commit()
-                    ->message($comment)
-                    ->execute();
+                $git->config()->add('user.name', $gitUsername)->execute();
             }
+            if (!empty($git->config()->get('user.email')))
+            {
+                $git->config()->add('user.email', $gitEmail)->execute();
+            }
+
+            if (empty($git->config()->get('user.name')) || empty($git->config()->get('user.name')))
+            {
+                return $this->complete();
+            }
+
+            $git->add()->execute('*');
+
+            $git->commit()
+                ->message($comment)
+                ->execute();
         }
 
         return $this->complete();

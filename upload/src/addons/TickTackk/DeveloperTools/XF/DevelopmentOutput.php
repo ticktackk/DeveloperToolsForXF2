@@ -4,6 +4,7 @@ namespace TickTackk\DeveloperTools\XF;
 
 use XF\Mvc\Entity\Entity;
 use XF\Util\Json;
+use \TickTackk\DeveloperTools\Git\GitRepository;
 
 class DevelopmentOutput extends XFCP_DevelopmentOutput
 {
@@ -159,22 +160,32 @@ class DevelopmentOutput extends XFCP_DevelopmentOutput
         }
     }
 
+    protected function getRepoPath(Entity $entity)
+    {
+        $ds = DIRECTORY_SEPARATOR;
+        return $this->basePath . $ds . $this->prepareAddOnIdForPath($entity->addon_id) . $ds . '_repo';
+    }
+
     protected function commitOutput($actionType, Entity $entity)
     {
-        if (!$this->batchMode)
+        $repoDir = $this->getRepoPath($entity);
+
+        if (is_dir($repoDir))
         {
-            /** @var \TickTackk\DeveloperTools\XF\DevelopmentOutput\CommitTrait $handler */
-            $handler = $this->getHandler($entity->structure()->shortName);
+            $git = new GitRepository($repoDir);
 
-            if (method_exists($handler, 'commitRepo') &&
-                method_exists($handler, 'getOutputCommitData'))
+            if (!$this->batchMode && $git->isInitialized())
             {
-                $ds = DIRECTORY_SEPARATOR;
-                $repoDir = $this->basePath . $ds . $this->prepareAddOnIdForPath($entity->addon_id) . $ds . '_repo';
+                /** @var \TickTackk\DeveloperTools\XF\DevelopmentOutput\CommitTrait $handler */
+                $handler = $this->getHandler($entity->structure()->shortName);
 
-                $jobId = $entity->structure()->shortName . '_' . $actionType . '_' . $entity->getEntityId();
+                if (method_exists($handler, 'commitRepo') &&
+                    method_exists($handler, 'getOutputCommitData'))
+                {
+                    $jobId = $entity->structure()->shortName . '_' . $actionType . '_' . $entity->getEntityId();
 
-                $handler->commitRepo($jobId, $repoDir, $actionType, $entity->isUpdate());
+                    $handler->commitRepo($jobId, $repoDir, $actionType, $entity->isUpdate());
+                }
             }
         }
     }
