@@ -68,7 +68,10 @@ class DevelopmentOutput extends XFCP_DevelopmentOutput
     {
         $response = parent::writeFile($typeDir, $addOnId, $fileName, $fileContents, $metadata, $verifyChange);
 
-        $this->writeFileToRepo($typeDir, $addOnId, $fileName, $fileContents, $metadata, $verifyChange);
+        if ($this->isCommittable($addOnId))
+        {
+            $this->writeFileToRepo($typeDir, $addOnId, $fileName, $fileContents, $metadata, $verifyChange);
+        }
 
         return $response;
     }
@@ -95,7 +98,10 @@ class DevelopmentOutput extends XFCP_DevelopmentOutput
     {
         $reponse = parent::deleteFile($typeDir, $addOnId, $fileName);
 
-        $this->deleteFileFromRepo($typeDir, $addOnId, $fileName);
+        if ($this->isCommittable($addOnId))
+        {
+            $this->deleteFileFromRepo($typeDir, $addOnId, $fileName);
+        }
 
         return $reponse;
     }
@@ -125,15 +131,8 @@ class DevelopmentOutput extends XFCP_DevelopmentOutput
 
         $this->metadataCache[$typeDir][$addOnId] = $typeMetadata;
 
-        if ($this->batchMode)
-        {
-            $this->batchesPending[$typeDir][$addOnId] = true;
-        }
-        else
-        {
-            $metadataPath = $this->getMetadataFileNameForRepo($typeDir, $addOnId);
-            file_put_contents($metadataPath, Json::jsonEncodePretty($typeMetadata));
-        }
+        $metadataPath = $this->getMetadataFileNameForRepo($typeDir, $addOnId);
+        file_put_contents($metadataPath, Json::jsonEncodePretty($typeMetadata));
     }
 
     protected function writeTypeMetadata($typeDir, $addOnId, array $typeMetadata)
