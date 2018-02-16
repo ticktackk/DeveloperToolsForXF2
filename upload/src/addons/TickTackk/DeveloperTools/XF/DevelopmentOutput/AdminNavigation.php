@@ -18,7 +18,7 @@ class AdminNavigation extends XFCP_AdminNavigation
     {
         return [
             'navigation_title' => ['getTitle', '\__phrase'],
-            'navigation_id' => $entity->getEntityId()
+            'navigation_id'
         ];
     }
 }

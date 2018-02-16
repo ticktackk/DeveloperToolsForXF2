@@ -18,7 +18,7 @@ class WidgetPosition extends XFCP_WidgetPosition
     {
         return [
             'title' => ['getTitle', '\__phrase'],
-            'position_id' => $entity->position_id
+            'position_id'
         ];
     }
 }

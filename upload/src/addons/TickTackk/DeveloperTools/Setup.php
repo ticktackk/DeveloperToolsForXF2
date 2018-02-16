@@ -26,31 +26,32 @@ class Setup extends AbstractSetup
 
     public function upgrade1000010Step1()
     {
-        if ($this->schemaManager()->columnExists('xf_user', 'license'))
+        $sm = $this->schemaManager();
+        if ($sm->columnExists('xf_user', 'license'))
         {
-            $this->schemaManager()->alterTable('xf_user', function(Alter $table)
+            $sm->alterTable('xf_user', function(Alter $table)
             {
                 $table->dropColumns('license');
             });
         }
 
-        if ($this->schemaManager()->columnExists('xf_user', 'gitignore'))
+        if ($sm->columnExists('xf_user', 'gitignore'))
         {
-            $this->schemaManager()->alterTable('xf_user', function(Alter $table)
+            $sm->alterTable('xf_user', function(Alter $table)
             {
                 $table->dropColumns('gitignore');
             });
         }
 
-        if ($this->schemaManager()->columnExists('xf_user', 'readme_md'))
+        if ($sm->columnExists('xf_user', 'readme_md'))
         {
-            $this->schemaManager()->alterTable('xf_user', function(Alter $table)
+            $sm->alterTable('xf_user', function(Alter $table)
             {
                 $table->dropColumns('readme_md');
             });
         }
 
-        $this->schemaManager()->alterTable('xf_addon', function(Alter $table)
+        $sm->alterTable('xf_addon', function(Alter $table)
         {
             $table->addColumn('license', 'mediumtext');
             $table->addColumn('gitignore', 'mediumtext');
