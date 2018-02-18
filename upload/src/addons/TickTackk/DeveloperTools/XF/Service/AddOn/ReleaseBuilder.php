@@ -44,6 +44,7 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
         $addOn = $this->addOn;
         $ds = DIRECTORY_SEPARATOR;
         $uploadRoot = $repoRoot . $ds . 'upload';
+        $buildUploadRoot = $addOn->getBuildDirectory();
         $srcRoot =  $uploadRoot . $ds . 'src' . $ds . 'addons' . $ds . $addOn->prepareAddOnIdForPath();
 
         $filesIterator = $this->getFileIterator($addOnRoot);
@@ -116,6 +117,7 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
 {$addOn->license}
 LICENSE;
             File::writeFile($repoRoot . $ds . 'LICENSE.md', $licenseContent, false);
+            File::writeFile($buildUploadRoot . $ds . 'LICENSE.md', $licenseContent, false);
         }
 
         if (!empty($addOn->gitignore))
@@ -138,6 +140,7 @@ GITIGNORE;
 {$addOn->readme_md}
 README_MD;
             File::writeFile($repoRoot . $ds . 'README.md', $readMeMarkdownContent, false);
+            File::writeFile($buildUploadRoot . $ds . 'README.md', $readMeMarkdownContent, false);
         }
 
         $git = new GitRepository($repoRoot);
