@@ -109,7 +109,7 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
             $licenseContent = <<< LICENSE
 {$addOn->license}
 LICENSE;
-            File::writeFile($srcRoot . $ds . 'LICENSE', $licenseContent, false);
+            File::writeFile($repoRoot . $ds . 'LICENSE', $licenseContent, false);
         }
 
         if (!empty($addOn->gitignore))
@@ -131,7 +131,7 @@ GITIGNORE;
             $readMeMarkdownContent = <<< README_MD
 {$addOn->readme_md}
 README_MD;
-            File::writeFile($srcRoot . $ds . 'README.md', $readMeMarkdownContent, false);
+            File::writeFile($repoRoot . $ds . 'README.md', $readMeMarkdownContent, false);
         }
 
         $git = new GitRepository($repoRoot);
