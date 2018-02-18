@@ -106,10 +106,16 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
 
         if (!empty($addOn->license))
         {
+            $licenseFileInRepoRoot = $repoRoot . $ds . 'LICENSE';
+            if (file_exists($licenseFileInRepoRoot) && is_readable($licenseFileInRepoRoot))
+            {
+                unlink($licenseFileInRepoRoot);
+            }
+
             $licenseContent = <<< LICENSE
 {$addOn->license}
 LICENSE;
-            File::writeFile($repoRoot . $ds . 'LICENSE', $licenseContent, false);
+            File::writeFile($repoRoot . $ds . 'LICENSE.md', $licenseContent, false);
         }
 
         if (!empty($addOn->gitignore))
