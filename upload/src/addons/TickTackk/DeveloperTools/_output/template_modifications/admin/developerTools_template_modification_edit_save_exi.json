@@ -1,0 +1,9 @@
+{
+    "template": "template_modification_edit",
+    "description": "Add \"Save and exit\" button next to \"Save\" similar to Phrase add/edit process",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:button type=\"submit\" name=\"test\" value=\"1\">{{ phrase('test') }}</xf:button>",
+    "replace": "<xf:button type=\"submit\" icon=\"save\" name=\"exit\">{{ phrase('save_and_exit') }}</xf:button>\n$0"
+}

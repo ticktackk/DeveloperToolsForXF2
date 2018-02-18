@@ -267,6 +267,36 @@ class TemplateModification extends XFCP_TemplateModification
         return $view;
     }
 
+    public function actionSave(ParameterBag $params)
+    {
+        $response = parent::actionSave($params);
+
+        if ($response instanceof \XF\Mvc\Reply\Redirect)
+        {
+            if ($params['modification_id'])
+            {
+                $modification = $this->assertTemplateModificationExists($params['modification_id']);
+            }
+            else
+            {
+                $modification = $this->assertTemplateModificationExists(\TickTackk\DeveloperTools\Listener::$modificationId);
+            }
+
+            if ($this->request->exists('exit'))
+            {
+                $redirect = $this->buildLink('template-modifications', '', ['type' => $modification->type]);
+            }
+            else
+            {
+                $redirect = $this->buildLink('template-modifications/edit', $modification);
+            }
+
+            return $this->redirect($redirect);
+        }
+
+        return $response;
+    }
+
     /**
      * @return \XF\Repository\Style
      */
