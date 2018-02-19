@@ -1,6 +1,0 @@
-{
-    "from_class": "XF\\DevelopmentOutput\\TemplateModification",
-    "to_class": "TickTackk\\DeveloperTools\\XF\\DevelopmentOutput\\TemplateModification",
-    "execute_order": 10,
-    "active": true
-}

@@ -3,11 +3,14 @@
 namespace TickTackk\DeveloperTools\Cli\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Question\Question;
 use XF\Cli\Command\AddOnActionTrait;
 use \XF\Util\File;
 
@@ -27,9 +30,15 @@ class BetterExport extends Command
             )
             ->addOption(
                 'release',
-                null,
+                'r',
                 InputOption::VALUE_NONE,
                 'Run \'xf-addon:build-release\' command'
+            )
+            ->addOption(
+                'commit',
+                'c',
+                InputOption::VALUE_NONE,
+                'Run \'ticktackk-devtools:git-commit\' command'
             );
     }
 
@@ -85,6 +94,24 @@ class BetterExport extends Command
             $childInput = new ArrayInput([
                 'command' => 'xf-addon:build-release',
                 'id' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
+        }
+
+        $commit = $input->getOption('commit');
+        if ($commit)
+        {
+            /** @var QuestionHelper $helper */
+            $helper = $this->getHelper('question');
+            $question = new Question("<question>Commit summary:</question> ");
+            $commitMessage = $helper->ask($input, $output, $question);
+            $output->writeln("");
+
+            $command = $this->getApplication()->find('ticktackk-devtools:git-commit');
+            $childInput = new ArrayInput([
+                'command' => 'ticktackk-devtools:git-commit',
+                'id' => $addOn->getAddOnId(),
+                '--message' => $commitMessage
             ]);
             $command->run($childInput, $output);
         }

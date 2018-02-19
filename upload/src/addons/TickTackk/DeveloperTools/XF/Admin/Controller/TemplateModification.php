@@ -305,12 +305,14 @@ class TemplateModification extends XFCP_TemplateModification
         return $this->repository('XF:Style');
     }
 
-    /**
-     * @param string $id
-     * @param array|string|null $with
-     * @param null|string $phraseKey
+    /***
+     * @param $id
+     * @param null $with
+     * @param null $phraseKey
      *
-     * @return \XF\Entity\Style
+     * @return \XF\Entity\Style|\XF\Mvc\Entity\Entity
+     *
+     * @throws \XF\Mvc\Reply\Exception
      */
     protected function assertStyleExists($id, $with = null, $phraseKey = null)
     {

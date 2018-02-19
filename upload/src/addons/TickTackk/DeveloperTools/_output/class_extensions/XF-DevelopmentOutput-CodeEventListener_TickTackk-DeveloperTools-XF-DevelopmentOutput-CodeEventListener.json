@@ -1,6 +1,0 @@
-{
-    "from_class": "XF\\DevelopmentOutput\\CodeEventListener",
-    "to_class": "TickTackk\\DeveloperTools\\XF\\DevelopmentOutput\\CodeEventListener",
-    "execute_order": 10,
-    "active": true
-}

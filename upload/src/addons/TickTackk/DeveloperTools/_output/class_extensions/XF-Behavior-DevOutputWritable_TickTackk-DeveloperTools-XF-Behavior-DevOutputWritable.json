@@ -1,6 +1,0 @@
-{
-    "from_class": "XF\\Behavior\\DevOutputWritable",
-    "to_class": "TickTackk\\DeveloperTools\\XF\\Behavior\\DevOutputWritable",
-    "execute_order": 10,
-    "active": true
-}
