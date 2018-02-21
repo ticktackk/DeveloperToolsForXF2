@@ -145,6 +145,16 @@ LICENSE;
             File::writeFile($repoRoot . $ds . 'LICENSE.md', $licenseContent, false);
         }
 
+        $globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
+
+        if (!empty($globalGitIgnore))
+        {
+            $globalGitIgnoreContent = <<< GLOBALGITIGNORE
+{$addOnEntity->gitignore}
+GLOBALGITIGNORE;
+            File::writeFile($repoRoot . $ds . '.gitignore', $globalGitIgnoreContent, false);
+        }
+
         if (!empty($addOnEntity->gitignore))
         {
             $gitIgnoreContent = <<< GITIGNORE
