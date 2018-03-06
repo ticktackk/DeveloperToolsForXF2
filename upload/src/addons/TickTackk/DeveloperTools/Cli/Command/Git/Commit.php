@@ -54,14 +54,6 @@ class Commit extends Command
 
         $addOnEntity = \XF::app()->em()->findOne('XF:AddOn', ['addon_id' => $addOnId]);
 
-        $commitMessage = $input->getOption('message');
-        if (!$commitMessage)
-        {
-            $question = new Question("<question>Commit summary:</question> ");
-            $commitMessage = $helper->ask($input, $output, $question);
-            $output->writeln("");
-        }
-
         $addOnDirectory = $addOn->getAddOnDirectory();
         $ds = DIRECTORY_SEPARATOR;
         $repoRoot = $addOnDirectory . $ds . '_repo';
@@ -183,6 +175,14 @@ README_MD;
         {
             $output->writeln(["", "Nothing to commit."]);
             return 0;
+        }
+
+        $commitMessage = $input->getOption('message');
+        if (!$commitMessage)
+        {
+            $question = new Question("<question>Commit summary:</question> ");
+            $commitMessage = $helper->ask($input, $output, $question);
+            $output->writeln("");
         }
 
         $git->commit()->message($commitMessage)->execute();// do error handling here

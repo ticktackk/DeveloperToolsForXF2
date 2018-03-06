@@ -101,17 +101,10 @@ class BetterExport extends Command
         $commit = $input->getOption('commit');
         if ($commit)
         {
-            /** @var QuestionHelper $helper */
-            $helper = $this->getHelper('question');
-            $question = new Question("<question>Commit summary:</question> ");
-            $commitMessage = $helper->ask($input, $output, $question);
-            $output->writeln("");
-
             $command = $this->getApplication()->find('ticktackk-devtools:git-commit');
             $childInput = new ArrayInput([
                 'command' => 'ticktackk-devtools:git-commit',
-                'id' => $addOn->getAddOnId(),
-                '--message' => $commitMessage
+                'id' => $addOn->getAddOnId()
             ]);
             $command->run($childInput, $output);
         }
