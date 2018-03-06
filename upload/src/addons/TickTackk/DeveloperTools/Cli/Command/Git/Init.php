@@ -3,13 +3,10 @@
 namespace TickTackk\DeveloperTools\Cli\Command\Git;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use XF\Cli\Command\AddOnActionTrait;
-use \XF\Util\File;
 use TickTackk\DeveloperTools\Git\GitRepository;
 
 class Init extends Command

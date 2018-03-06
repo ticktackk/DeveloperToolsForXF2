@@ -3,7 +3,6 @@
 namespace TickTackk\DeveloperTools\XF\Service\AddOn;
 
 use XF\Util\File;
-use TickTackk\DeveloperTools\Git\GitRepository;
 
 class ReleaseBuilder extends XFCP_ReleaseBuilder
 {
