@@ -3,7 +3,6 @@
 namespace TickTackk\DeveloperTools\Job;
 
 use \XF\Job\AbstractJob;
-use \XF\Mvc\Entity\Entity;
 use \TickTackk\DeveloperTools\Git\GitRepository;
 
 class Commit extends AbstractJob

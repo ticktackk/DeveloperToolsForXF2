@@ -8,6 +8,7 @@ class AddOn extends XFCP_AddOn
 {
     public function actionDeveloperOptions(ParameterBag $params)
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         $addOn = $this->assertAddOnAvailable($params->addon_id_url);
 
         $viewParams = [
@@ -20,6 +21,7 @@ class AddOn extends XFCP_AddOn
     {
         $this->assertPostOnly();
 
+        /** @noinspection PhpUndefinedFieldInspection */
         $addOn = $this->assertAddOnAvailable($params->addon_id_url);
 
         $input = $this->filter([

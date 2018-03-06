@@ -95,6 +95,7 @@ class TemplateModification extends XFCP_TemplateModification
             ])
             ->fetchOne();
 
+        /** @noinspection PhpUndefinedFieldInspection */
         $content = $templateForMasterStyle->template;
         $style = null;
 
@@ -127,6 +128,7 @@ class TemplateModification extends XFCP_TemplateModification
             {
                 return $this->error(\XF::phrase('requested_template_not_found'));
             }
+            /** @noinspection PhpUndefinedFieldInspection */
             $content = $templateForStyle->template;
         }
 
