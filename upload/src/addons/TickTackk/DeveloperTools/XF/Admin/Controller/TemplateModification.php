@@ -154,69 +154,40 @@ class TemplateModification extends XFCP_TemplateModification
     {
         $type = $this->filter('type', 'str');
 
-        $types = $this->getTemplateModificationRepo()->getModificationTypes();
-        if (empty($types[$type]))
+        $response = parent::actionAutoComplete();
+        if ($type !== 'public')
         {
-            $type = 'public';
+            return $response;
         }
 
-        $styleId = 0;
-        if ($type == 'public')
-        {
-            $styleId = $this->filter('style_id', 'uint');
-            $this->assertStyleExists($styleId);
-        }
-
+        $styleId = $this->filter('style_id', 'uint');
+        $this->assertStyleExists($styleId);
         $q = $this->filter('q', 'str');
 
-        $finderForMasterStyle = $this->finder('XF:Template');
-        $finderForMasterStyle->where('type', $type)
-            ->where('style_id', 0)
+        $finderForStyle = $this->finder('XF:Template');
+        $finderForStyle->where('type', $type)
+            ->where('style_id', $styleId)
             ->where(
-                $finderForMasterStyle->columnUtf8('title'),
-                'LIKE', $finderForMasterStyle->escapeLike($q, '?%'))
+                $finderForStyle->columnUtf8('title'),
+                'LIKE', $finderForStyle->escapeLike($q, '?%'))
             ->limit(10);
 
-        $resultsForMasterStyle = [];
-        foreach ($finderForMasterStyle->fetch() AS $templateMap)
+        $resultsForStyle = [];
+
+        foreach ($finderForStyle->fetch() AS $templateMap)
         {
-            $resultsForMasterStyle[] = [
+            $resultsForStyle[] = [
                 'id' => $templateMap->title,
                 'text' => $templateMap->title
             ];
         }
 
-        $finalResults = $resultsForMasterStyle;
-        if ($type == 'public')
+        if (!empty($resultsForStyle))
         {
-            $finderForStyle = $this->finder('XF:Template');
-            $finderForStyle->where('type', $type)
-                ->where('style_id', $styleId)
-                ->where(
-                    $finderForStyle->columnUtf8('title'),
-                    'LIKE', $finderForStyle->escapeLike($q, '?%'))
-                ->limit(10);
-
-            $resultsForStyle = [];
-
-            foreach ($finderForStyle->fetch() AS $templateMap)
-            {
-                $resultsForStyle[] = [
-                    'id' => $templateMap->title,
-                    'text' => $templateMap->title
-                ];
-            }
-
-            if (count($resultsForStyle))
-            {
-                $finalResults = $resultsForStyle;
-            }
+            $response->setJsonParam('results', $resultsForStyle);
         }
 
-        $view = $this->view();
-        $view->setJsonParam('results', $finalResults);
-
-        return $view;
+        return $response;
     }
 
     public function actionContents()
