@@ -3,7 +3,9 @@
 namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
 use XF\Mvc\ParameterBag;
+use XF\Mvc\Reply\Redirect;
 use XF\Diff;
+use TickTackk\DeveloperTools\Listener;
 
 class TemplateModification extends XFCP_TemplateModification
 {
@@ -273,7 +275,7 @@ class TemplateModification extends XFCP_TemplateModification
     {
         $response = parent::actionSave($params);
 
-        if ($response instanceof \XF\Mvc\Reply\Redirect)
+        if ($response instanceof Redirect)
         {
             if ($params['modification_id'])
             {
@@ -281,7 +283,7 @@ class TemplateModification extends XFCP_TemplateModification
             }
             else
             {
-                $modification = $this->assertTemplateModificationExists(\TickTackk\DeveloperTools\Listener::$modificationId);
+                $modification = $this->assertTemplateModificationExists(Listener::$modificationId);
             }
 
             if ($this->request->exists('exit'))

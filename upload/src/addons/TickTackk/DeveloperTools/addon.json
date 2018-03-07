@@ -9,6 +9,15 @@
     "faq_url": "",
     "support_url": "",
     "extra_urls": [],
-    "require": [],
+    "require": {
+        "XF": [
+            2000010,
+            "XenForo 2.0.0+"
+        ],
+        "php": [
+            "5.6.0",
+            "PHP 5.6.0+"
+        ]
+    },
     "icon": "fa-terminal"
 }
