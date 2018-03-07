@@ -223,52 +223,30 @@ class TemplateModification extends XFCP_TemplateModification
     {
         $type = $this->filter('type', 'str');
 
-        $types = $this->getTemplateModificationRepo()->getModificationTypes();
-        if (empty($types[$type]))
+        $response = parent::actionContents();
+        if ($type !== 'public')
         {
-            $type = 'public';
+            return $response;
         }
 
-        $styleId = 0;
-        if ($type == 'public')
-        {
-            $styleId = $this->filter('style_id', 'uint');
-            $this->assertStyleExists($styleId);
-        }
+        $styleId = $this->filter('style_id', 'uint');
+        $this->assertStyleExists($styleId);
 
         $templateTitle = $this->filter('template', 'str');
 
-        /** @var \XF\Entity\Template $templateForMasterStyle */
-        $templateForMasterStyle = $this->finder('XF:Template')
+        /** @var \XF\Entity\Template $templateForStyle */
+        if ($templateForStyle = $this->finder('XF:Template')
             ->where([
-                'style_id' => 0,
+                'style_id' => $styleId,
                 'title' => $templateTitle,
                 'type' => $type
             ])
-            ->fetchOne();
-
-        $finalTemplate = $templateForMasterStyle;
-
-        if ($type == 'public')
+            ->fetchOne())
         {
-            /** @var \XF\Entity\Template $templateForStyle */
-            $templateForStyle = $this->finder('XF:Template')
-                ->where([
-                    'style_id' => $styleId,
-                    'title' => $templateTitle,
-                    'type' => $type
-                ])
-                ->fetchOne();
-
-            if ($templateForStyle)
-            {
-                $finalTemplate = $templateForStyle;
-            }
+            $response->setJsonParam('template', $templateForStyle ? $templateForStyle->template : false);
         }
 
-        $view = $this->view('XF:TemplateModification\Contents', '');
-        $view->setJsonParam('template', $finalTemplate ? $finalTemplate->template : false);
-        return $view;
+        return $response;
     }
 
     public function actionSave(ParameterBag $params)
