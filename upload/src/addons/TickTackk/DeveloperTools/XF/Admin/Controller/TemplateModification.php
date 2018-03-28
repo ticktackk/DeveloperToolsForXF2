@@ -6,6 +6,7 @@ use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\Redirect;
 use XF\Diff;
 use TickTackk\DeveloperTools\Listener;
+use XF\Mvc\View;
 
 class TemplateModification extends XFCP_TemplateModification
 {
@@ -54,55 +55,12 @@ class TemplateModification extends XFCP_TemplateModification
 
     public function actionTest(ParameterBag $params)
     {
-        if ($params['modification_id'])
+        $response = parent::actionTest($params);
+
+        if ($response instanceof View)
         {
-            $modification = $this->assertTemplateModificationExists($params['modification_id']);
-        }
-        else
-        {
-            $modification = $this->em()->create('XF:TemplateModification');
-        }
+            $modification = $response->getParam('modification');
 
-        $input = $this->filter([
-            'type' => 'str',
-            'template' => 'str',
-            'modification_key' => 'str',
-            'description' => 'str',
-            'action' => 'str',
-            'find' => 'str,no-trim',
-            'replace' => 'str,no-trim',
-            'execution_order' => 'uint',
-            'enabled' => 'bool',
-            'addon_id' => 'str'
-        ]);
-
-        $modification->bulkSet($input);
-        $modification->preSave();
-
-        $errors = $modification->getErrors();
-        if (isset($errors['template']))
-        {
-            return $this->error($errors['template']);
-        }
-        if (isset($errors['find']))
-        {
-            return $this->error($errors['find']);
-        }
-
-        $templateForMasterStyle = $this->finder('XF:Template')
-            ->where([
-                'style_id' => 0,
-                'title' => $input['template'],
-                'type' => $input['type']
-            ])
-            ->fetchOne();
-
-        /** @noinspection PhpUndefinedFieldInspection */
-        $content = $templateForMasterStyle->template;
-        $style = null;
-
-        if ($modification->type == 'public')
-        {
             if ($modification->Template->exists() && !$this->request->exists('style_id'))
             {
                 $styleId = $modification->Template->style_id;
@@ -111,7 +69,56 @@ class TemplateModification extends XFCP_TemplateModification
             {
                 $styleId = $this->filter('style_id', 'uint');
             }
+
+            if ($modification->type !== 'public')
+            {
+                return $response;
+            }
+
             $style = $this->assertStyleExists($styleId);
+
+            if ($params['modification_id'])
+            {
+                $modification = $this->assertTemplateModificationExists($params['modification_id']);
+            }
+            else
+            {
+                $modification = $this->em()->create('XF:TemplateModification');
+            }
+
+            $input = $this->filter([
+                'type' => 'str',
+                'template' => 'str',
+                'modification_key' => 'str',
+                'description' => 'str',
+                'action' => 'str',
+                'find' => 'str,no-trim',
+                'replace' => 'str,no-trim',
+                'execution_order' => 'uint',
+                'enabled' => 'bool',
+                'addon_id' => 'str'
+            ]);
+
+            $modification->bulkSet($input);
+            $modification->preSave();
+
+            $errors = $modification->getErrors();
+            if (isset($errors['template']))
+            {
+                return $this->error($errors['template']);
+            }
+            if (isset($errors['find']))
+            {
+                return $this->error($errors['find']);
+            }
+
+            $templateForMasterStyle = $this->finder('XF:Template')
+                ->where([
+                    'style_id' => 0,
+                    'title' => $input['template'],
+                    'type' => $input['type']
+                ])
+                ->fetchOne();
 
             $templateForStyle = $this->finder('XF:Template')
                 ->where([
@@ -132,22 +139,22 @@ class TemplateModification extends XFCP_TemplateModification
             }
             /** @noinspection PhpUndefinedFieldInspection */
             $content = $templateForStyle->template;
+
+            $contentModified = $this->getTemplateModificationRepo()->applyTemplateModifications($content, [$modification]);
+
+            $diff = new Diff();
+            $diffs = $diff->findDifferences($content, $contentModified);
+
+            $response->setParams([
+                'modification' => $modification,
+                'content' => $content,
+                'contentModified' => $contentModified,
+                'diffs' => $diffs,
+                'style' => $style
+            ]);
         }
 
-        $contentModified = $this->getTemplateModificationRepo()->applyTemplateModifications($content, [$modification]);
-
-        $diff = new Diff();
-        $diffs = $diff->findDifferences($content, $contentModified);
-
-        $viewParams = [
-            'modification' => $modification,
-            'content' => $content,
-            'contentModified' => $contentModified,
-            'diffs' => $diffs,
-            'style' => $style
-        ];
-
-        return $this->view('XF:TemplateModification\Test', 'template_modification_test', $viewParams);
+        return $response;
     }
 
     public function actionAutoComplete()

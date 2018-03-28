@@ -66,11 +66,11 @@ class Commit extends Command
         $gitUsername = $options->developerTools_git_username;
         $gitEmail = $options->developerTools_git_email;
 
-        if (!empty($git->config()->get('user.name')->execute()))
+        if (empty($git->config()->get('user.name')->execute()))
         {
             $git->config()->add('user.name', $gitUsername)->execute();
         }
-        if (!empty($git->config()->get('user.email')->execute()))
+        if (empty($git->config()->get('user.email')->execute()))
         {
             $git->config()->add('user.email', $gitEmail)->execute();
         }
@@ -144,7 +144,7 @@ GLOBALGITIGNORE;
             File::writeFile($repoRoot . $ds . '.gitignore', $globalGitIgnoreContent, false);
         }
 
-        if (!empty($addOnEntity->gitignore))
+        if (empty($globalGitIgnore) && !empty($addOnEntity->gitignore))
         {
             $gitIgnoreContent = <<< GITIGNORE
 {$addOnEntity->gitignore}
@@ -205,7 +205,8 @@ README_MD;
         return [
             '_build',
             '_releases',
-            '_repo'
+            '_repo',
+            '_data'
         ];
     }
 

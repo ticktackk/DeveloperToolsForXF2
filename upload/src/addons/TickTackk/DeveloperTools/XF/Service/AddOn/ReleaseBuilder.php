@@ -38,10 +38,31 @@ README_MD;
         }
     }
 
+    /**
+     * @return array
+     */
     protected function getExcludedDirectories()
     {
         return array_merge([
             '_repo'
         ], parent::getExcludedDirectories());
+    }
+
+    /**
+     * @return bool
+     *
+     * @throws \ErrorException
+     * @throws \XF\PrintableException
+     */
+    public function build()
+    {
+        $build = parent::build();
+
+        if ($build)
+        {
+            File::deleteDirectory($this->addOnRoot . DIRECTORY_SEPARATOR . '_data');
+        }
+
+        return $build;
     }
 }

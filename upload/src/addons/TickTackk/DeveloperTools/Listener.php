@@ -10,6 +10,10 @@ class Listener
 {
     public static $modificationId;
 
+    /**
+     * @param Manager $em
+     * @param Structure $structure
+     */
     public static function XFEntityAddOn_entity_structure(/** @noinspection PhpUnusedParameterInspection */
         Manager $em, Structure &$structure)
     {
@@ -18,6 +22,9 @@ class Listener
         $structure->columns['readme_md'] = ['type' => Entity::STR, 'default' => ''];
     }
 
+    /**
+     * @param Entity $entity
+     */
     public static function XFEntityTemplateModification_entity_post_save(Entity $entity)
     {
         self::$modificationId = $entity->getEntityId();
