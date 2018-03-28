@@ -445,8 +445,8 @@
     },
     "option.developerTools_git_ignore.txt": {
         "global_cache": false,
-        "version_id": 10000031,
-        "version_string": "10.0.0 Beta 1",
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
         "hash": "3b19c6dfcd68c0621639d58416de917c"
     },
     "option.developerTools_git_username.txt": {
@@ -463,8 +463,8 @@
     },
     "option_explain.developerTools_git_ignore.txt": {
         "global_cache": false,
-        "version_id": 10000031,
-        "version_string": "10.0.0 Beta 1",
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
         "hash": "499e241c80e5b76c56b5f342214f4424"
     },
     "option_explain.developerTools_git_username.txt": {
