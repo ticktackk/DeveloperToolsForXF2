@@ -2,8 +2,8 @@
 
 namespace TickTackk\DeveloperTools\Job;
 
-use \XF\Job\AbstractJob;
-use \TickTackk\DeveloperTools\Git\GitRepository;
+use TickTackk\DeveloperTools\Git\GitRepository;
+use XF\Job\AbstractJob;
 
 class Commit extends AbstractJob
 {

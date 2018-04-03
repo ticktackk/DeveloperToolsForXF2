@@ -11,7 +11,7 @@ class Listener
     public static $modificationId;
 
     /**
-     * @param Manager $em
+     * @param Manager   $em
      * @param Structure $structure
      */
     public static function XFEntityAddOn_entity_structure(/** @noinspection PhpUnusedParameterInspection */
