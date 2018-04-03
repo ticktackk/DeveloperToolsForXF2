@@ -9,9 +9,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use XF\Cli\Command\AddOnActionTrait;
-use \XF\Util\File;
 use TickTackk\DeveloperTools\Git\GitRepository;
+use XF\Cli\Command\AddOnActionTrait;
+use XF\Util\File;
 
 class Commit extends Command
 {
@@ -32,8 +32,7 @@ class Commit extends Command
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'Commit message'
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -102,7 +101,7 @@ class Commit extends Command
         }
 
         $uploadRoot = $repoRoot . $ds . 'upload';
-        $srcRoot =  $uploadRoot . $ds . 'src' . $ds . 'addons' . $ds . $addOn->prepareAddOnIdForPath();
+        $srcRoot = $uploadRoot . $ds . 'src' . $ds . 'addons' . $ds . $addOn->prepareAddOnIdForPath();
 
         $filesIterator = $this->getFileIterator($addOnDirectory);
         foreach ($filesIterator AS $file)
@@ -188,6 +187,27 @@ README_MD;
         return 0;
     }
 
+    /**
+     * @param $path
+     *
+     * @return \SplFileInfo[]|\RecursiveIteratorIterator
+     */
+    protected function getFileIterator($path)
+    {
+        return new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator(
+                $path, \RecursiveDirectoryIterator::SKIP_DOTS
+            ),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+    }
+
+    protected function standardizePath($rootPath, $path)
+    {
+        $ds = DIRECTORY_SEPARATOR;
+        return preg_replace('#^' . preg_quote(rtrim($rootPath, $ds) . $ds) . '#', '', $path, 1);
+    }
+
     protected function isPartOfExcludedDirectoryForRepo($path)
     {
         foreach ($this->getExcludedDirectoriesForRepo() AS $dir)
@@ -208,26 +228,5 @@ README_MD;
             '_repo',
             '_data'
         ];
-    }
-
-    /**
-     * @param $path
-     *
-     * @return \SplFileInfo[]|\RecursiveIteratorIterator
-     */
-    protected function getFileIterator($path)
-    {
-        return new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
-                $path, \RecursiveDirectoryIterator::SKIP_DOTS
-            ),
-            \RecursiveIteratorIterator::SELF_FIRST
-        );
-    }
-
-    protected function standardizePath($rootPath, $path)
-    {
-        $ds = DIRECTORY_SEPARATOR;
-        return preg_replace('#^' . preg_quote(rtrim($rootPath, $ds) . $ds) . '#', '', $path, 1);
     }
 }

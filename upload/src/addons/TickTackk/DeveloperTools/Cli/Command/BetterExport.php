@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use XF\Cli\Command\AddOnActionTrait;
-use \XF\Util\File;
+use XF\Util\File;
 
 class BetterExport extends Command
 {

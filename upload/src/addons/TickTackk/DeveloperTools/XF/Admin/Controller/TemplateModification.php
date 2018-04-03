@@ -2,57 +2,14 @@
 
 namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
+use TickTackk\DeveloperTools\Listener;
+use XF\Diff;
 use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\Redirect;
-use XF\Diff;
-use TickTackk\DeveloperTools\Listener;
 use XF\Mvc\View;
 
 class TemplateModification extends XFCP_TemplateModification
 {
-    protected function templateModificationAddEdit(\XF\Entity\TemplateModification $modification)
-    {
-        $response = parent::templateModificationAddEdit($modification);
-
-        /** @var \XF\Entity\TemplateModification $_modification_ */
-        if ($_modification = $response->getParam('modification'))
-        {
-            if ($_modification->type == 'public')
-            {
-                if ($_modification->Template && !$this->request->exists('style_id'))
-                {
-                    $styleId = $_modification->Template->style_id;
-                }
-                else
-                {
-                    $styleId = $this->filter('style_id', 'uint');
-                }
-
-                $style = $this->assertStyleExists($styleId);
-                $styleTree = $this->getStyleRepo()->getStyleTree();
-                $response->setParam('styleTree', $styleTree);
-                $response->setParam('style', $style);
-
-                $modificationRouteParams = [
-                    'type' => $_modification->type,
-                ];
-
-                $modificationRouteType = 'add';
-
-                if ($_modification->modification_id)
-                {
-                    $modificationRouteType = 'edit/' . $_modification->modification_id;
-                    $modificationRouteParams = [];
-                }
-
-                $response->setParam('modificationRouteParams', $modificationRouteParams);
-                $response->setParam('modificationRouteType', $modificationRouteType);
-            }
-        }
-
-        return $response;
-    }
-
     public function actionTest(ParameterBag $params)
     {
         $response = parent::actionTest($params);
@@ -133,7 +90,7 @@ class TemplateModification extends XFCP_TemplateModification
             {
                 return $this->error(\XF::phrase('developerTools_requested_template_for_selected_style_could_not_be_found'));
             }
-            elseif (!$templateForMasterStyle && !$templateForStyle)
+            else if (!$templateForMasterStyle && !$templateForStyle)
             {
                 return $this->error(\XF::phrase('requested_template_not_found'));
             }
@@ -213,13 +170,15 @@ class TemplateModification extends XFCP_TemplateModification
         $templateTitle = $this->filter('template', 'str');
 
         /** @var \XF\Entity\Template $templateForStyle */
-        if ($templateForStyle = $this->finder('XF:Template')
+        if (
+        $templateForStyle = $this->finder('XF:Template')
             ->where([
                 'style_id' => $styleId,
                 'title' => $templateTitle,
                 'type' => $type
             ])
-            ->fetchOne())
+            ->fetchOne()
+        )
         {
             $response->setJsonParam('template', $templateForStyle ? $templateForStyle->template : false);
         }
@@ -257,16 +216,51 @@ class TemplateModification extends XFCP_TemplateModification
         return $response;
     }
 
-    /**
-     * @return \XF\Repository\Style
-     */
-    protected function getStyleRepo()
+    protected function templateModificationAddEdit(\XF\Entity\TemplateModification $modification)
     {
-        return $this->repository('XF:Style');
+        $response = parent::templateModificationAddEdit($modification);
+
+        /** @var \XF\Entity\TemplateModification $_modification_ */
+        if ($_modification = $response->getParam('modification'))
+        {
+            if ($_modification->type == 'public')
+            {
+                if ($_modification->Template && !$this->request->exists('style_id'))
+                {
+                    $styleId = $_modification->Template->style_id;
+                }
+                else
+                {
+                    $styleId = $this->filter('style_id', 'uint');
+                }
+
+                $style = $this->assertStyleExists($styleId);
+                $styleTree = $this->getStyleRepo()->getStyleTree();
+                $response->setParam('styleTree', $styleTree);
+                $response->setParam('style', $style);
+
+                $modificationRouteParams = [
+                    'type' => $_modification->type,
+                ];
+
+                $modificationRouteType = 'add';
+
+                if ($_modification->modification_id)
+                {
+                    $modificationRouteType = 'edit/' . $_modification->modification_id;
+                    $modificationRouteParams = [];
+                }
+
+                $response->setParam('modificationRouteParams', $modificationRouteParams);
+                $response->setParam('modificationRouteType', $modificationRouteType);
+            }
+        }
+
+        return $response;
     }
 
     /***
-     * @param $id
+     * @param      $id
      * @param null $with
      * @param null $phraseKey
      *
@@ -282,5 +276,13 @@ class TemplateModification extends XFCP_TemplateModification
         }
 
         return $this->assertRecordExists('XF:Style', $id, $with, $phraseKey);
+    }
+
+    /**
+     * @return \XF\Repository\Style
+     */
+    protected function getStyleRepo()
+    {
+        return $this->repository('XF:Style');
     }
 }
