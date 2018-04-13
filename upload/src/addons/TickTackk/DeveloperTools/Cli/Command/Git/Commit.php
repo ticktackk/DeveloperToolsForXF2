@@ -80,6 +80,13 @@ class Commit extends Command
             return 1;
         }
 
+        $globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
+
+        if (!empty($globalGitIgnore))
+        {
+            File::writeFile($repoRoot . $ds . '.gitignore', $globalGitIgnore, false);
+        }
+
         if (is_dir($repoRoot))
         {
             if (file_exists($uploadDirectory))
@@ -117,10 +124,10 @@ class Commit extends Command
                 File::copyFile($file->getPathname(), $srcRoot . $ds . $path, false);
             }
         }
-    
+
         $rootPath = \XF::getRootDirectory();
         $filesRoot = $addOn->getFilesDirectory();
-    
+
         if ($addOnEntity->devTools_parse_additional_files)
         {
             $additionalFiles = $addOn->additional_files;
@@ -140,7 +147,7 @@ class Commit extends Command
                     }
                     $root = $rootPath;
                 }
-        
+
                 if (is_dir($filePath))
                 {
                     $filesIterator = $this->getFileIterator($filePath);
@@ -166,17 +173,11 @@ class Commit extends Command
             File::writeFile($repoRoot . $ds . 'LICENSE.md', $addOnEntity->devTools_license, false);
         }
 
-        $globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
-
         if (!empty($addOnEntity->devTools_gitignore))
         {
             File::writeFile($srcRoot . $ds . '.gitignore', $addOnEntity->gitignore, false);
         }
-        else if (!empty($globalGitIgnore))
-        {
-            File::writeFile($repoRoot . $ds . '.gitignore', $globalGitIgnore, false);
-        }
-    
+
         if (!empty($addOnEntity->devTools_readme_md))
         {
             $readMeMarkdownFileInRepoRoot = $repoRoot . $ds . 'README.md';
@@ -184,7 +185,7 @@ class Commit extends Command
             {
                 unlink($readMeMarkdownFileInRepoRoot);
             }
-            
+
             File::writeFile($repoRoot . $ds . 'README.md', $addOnEntity->devTools_readme_md, false);
         }
 
