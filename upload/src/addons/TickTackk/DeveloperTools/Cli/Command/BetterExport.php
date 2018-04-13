@@ -36,7 +36,14 @@ class BetterExport extends Command
                 'c',
                 InputOption::VALUE_NONE,
                 'Run \'ticktackk-devtools:git-commit\' command'
-            );
+            )
+            ->addOption(
+                'push',
+                'p',
+                InputOption::VALUE_NONE,
+                'Run \'ticktackk-devtools:git-push\' command'
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -101,6 +108,17 @@ class BetterExport extends Command
             $command = $this->getApplication()->find('ticktackk-devtools:git-commit');
             $childInput = new ArrayInput([
                 'command' => 'ticktackk-devtools:git-commit',
+                'id' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
+        }
+    
+        $push = $input->getOption('push');
+        if ($push)
+        {
+            $command = $this->getApplication()->find('ticktackk-devtools:git-push');
+            $childInput = new ArrayInput([
+                'command' => 'ticktackk-devtools:git-push',
                 'id' => $addOn->getAddOnId()
             ]);
             $command->run($childInput, $output);
