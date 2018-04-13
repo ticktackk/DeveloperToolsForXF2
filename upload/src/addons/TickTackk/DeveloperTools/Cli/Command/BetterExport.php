@@ -57,7 +57,6 @@ class BetterExport extends Command
         ]);
         $command->run($childInput, $output);
 
-        // xf 2.0.2 bug workaround
         $entityPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . 'Entity';
         $entityDirExists = is_dir($entityPath);
         if ($entityDirExists)
