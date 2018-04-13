@@ -10,6 +10,12 @@ use XF\Mvc\View;
 
 class TemplateModification extends XFCP_TemplateModification
 {
+    /**
+     * @param ParameterBag $params
+     *
+     * @return \XF\Mvc\Reply\Error|\XF\Mvc\Reply\View
+     * @throws \XF\Mvc\Reply\Exception
+     */
     public function actionTest(ParameterBag $params)
     {
         $response = parent::actionTest($params);
@@ -283,6 +289,7 @@ class TemplateModification extends XFCP_TemplateModification
      */
     protected function getStyleRepo()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         return $this->repository('XF:Style');
     }
 }
