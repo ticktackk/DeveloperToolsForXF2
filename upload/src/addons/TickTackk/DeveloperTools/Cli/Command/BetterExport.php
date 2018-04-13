@@ -57,24 +57,16 @@ class BetterExport extends Command
         ]);
         $command->run($childInput, $output);
 
-        // xf 2.0.2 bug workaround
         $entityPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . 'Entity';
         $entityDirExists = is_dir($entityPath);
-        if (!$entityDirExists)
+        if ($entityDirExists)
         {
-            File::createDirectory($entityPath, false);
-        }
-
-        $command = $this->getApplication()->find('xf-dev:entity-class-properties');
-        $childInput = new ArrayInput([
-            'command' => 'xf-dev:entity-class-properties',
-            'addon-or-entity' => $addOn->getAddOnId()
-        ]);
-        $command->run($childInput, $output);
-
-        if (!$entityDirExists && is_dir($entityPath))
-        {
-            File::deleteDirectory($entityPath);
+            $command = $this->getApplication()->find('xf-dev:entity-class-properties');
+            $childInput = new ArrayInput([
+                'command' => 'xf-dev:entity-class-properties',
+                'addon-or-entity' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
         }
 
         $command = $this->getApplication()->find('xf-dev:export');
