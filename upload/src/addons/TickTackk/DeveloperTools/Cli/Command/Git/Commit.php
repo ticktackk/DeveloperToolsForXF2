@@ -208,11 +208,6 @@ class Commit extends Command
 
     protected function getExcludedDirectoriesForRepo()
     {
-        return [
-            '_build',
-            '_releases',
-            '_repo',
-            '_data'
-        ];
+        return preg_split('/\r?\n/', \XF::options()->developerTools_excluded_directories, -1, PREG_SPLIT_NO_EMPTY);
     }
 }
