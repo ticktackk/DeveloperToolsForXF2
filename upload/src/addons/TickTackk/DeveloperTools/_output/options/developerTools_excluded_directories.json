@@ -1,0 +1,12 @@
+{
+    "edit_format": "textbox",
+    "edit_format_params": "rows=6",
+    "data_type": "string",
+    "sub_options": [],
+    "validation_class": "",
+    "validation_method": "",
+    "default_value": "_build\n_releases\n_repo\n_data",
+    "relations": {
+        "developerTools": 20
+    }
+}

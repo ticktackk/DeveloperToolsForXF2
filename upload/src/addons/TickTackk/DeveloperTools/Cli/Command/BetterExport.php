@@ -26,6 +26,12 @@ class BetterExport extends Command
                 'Add-On ID'
             )
             ->addOption(
+                'skip-export',
+                's',
+                InputOption::VALUE_NONE,
+                'Skip \'xf-dev:export\' command'
+            )
+            ->addOption(
                 'release',
                 'r',
                 InputOption::VALUE_NONE,
@@ -36,7 +42,28 @@ class BetterExport extends Command
                 'c',
                 InputOption::VALUE_NONE,
                 'Run \'ticktackk-devtools:git-commit\' command'
-            );
+            )
+            ->addOption(
+                'push',
+                'p',
+                InputOption::VALUE_NONE,
+                'Run \'ticktackk-devtools:git-push\' command'
+            )
+            ->addOption(
+                'repo',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Repository to push to',
+                'origin'
+            )
+            ->addOption(
+                'branch',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Branch to push to',
+                null
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -57,32 +84,28 @@ class BetterExport extends Command
         ]);
         $command->run($childInput, $output);
 
-        // xf 2.0.2 bug workaround
         $entityPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . 'Entity';
         $entityDirExists = is_dir($entityPath);
-        if (!$entityDirExists)
+        if ($entityDirExists)
         {
-            File::createDirectory($entityPath, false);
+            $command = $this->getApplication()->find('xf-dev:entity-class-properties');
+            $childInput = new ArrayInput([
+                'command' => 'xf-dev:entity-class-properties',
+                'addon-or-entity' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
         }
-
-        $command = $this->getApplication()->find('xf-dev:entity-class-properties');
-        $childInput = new ArrayInput([
-            'command' => 'xf-dev:entity-class-properties',
-            'addon-or-entity' => $addOn->getAddOnId()
-        ]);
-        $command->run($childInput, $output);
-
-        if (!$entityDirExists && is_dir($entityPath))
+        
+        $skipExport = $input->getOption('skip-export');
+        if (!$skipExport)
         {
-            File::deleteDirectory($entityPath);
+            $command = $this->getApplication()->find('xf-dev:export');
+            $childInput = new ArrayInput([
+                'command' => 'xf-dev:export',
+                '--addon' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
         }
-
-        $command = $this->getApplication()->find('xf-dev:export');
-        $childInput = new ArrayInput([
-            'command' => 'xf-dev:export',
-            '--addon' => $addOn->getAddOnId()
-        ]);
-        $command->run($childInput, $output);
 
         $release = $input->getOption('release');
         if ($release)
@@ -102,6 +125,19 @@ class BetterExport extends Command
             $childInput = new ArrayInput([
                 'command' => 'ticktackk-devtools:git-commit',
                 'id' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
+        }
+    
+        $push = $input->getOption('push');
+        if ($push)
+        {
+            $command = $this->getApplication()->find('ticktackk-devtools:git-push');
+            $childInput = new ArrayInput([
+                'command' => 'ticktackk-devtools:git-push',
+                'id' => $addOn->getAddOnId(),
+                '--repo' => $input->getOption('repo'),
+                '--branch' => $input->getOption('branch')
             ]);
             $command->run($childInput, $output);
         }
