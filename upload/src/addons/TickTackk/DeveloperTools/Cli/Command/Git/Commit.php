@@ -125,32 +125,21 @@ class Commit extends Command
             {
                 unlink($licenseFileInRepoRoot);
             }
-
-            $licenseContent = <<< LICENSE
-{$addOnEntity->license}
-LICENSE;
-            File::writeFile($repoRoot . $ds . 'LICENSE.md', $licenseContent, false);
+            
+            File::writeFile($repoRoot . $ds . 'LICENSE.md', $addOnEntity->license, false);
         }
 
         $globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
 
-        if (!empty($globalGitIgnore))
+        if (!empty($addOnEntity->gitignore))
         {
-            /** @noinspection PhpUndefinedFieldInspection */
-            $globalGitIgnoreContent = <<< GLOBALGITIGNORE
-{$addOnEntity->gitignore}
-GLOBALGITIGNORE;
-            File::writeFile($repoRoot . $ds . '.gitignore', $globalGitIgnoreContent, false);
+            File::writeFile($srcRoot . $ds . '.gitignore', $addOnEntity->gitignore, false);
         }
-
-        if (empty($globalGitIgnore) && !empty($addOnEntity->gitignore))
+        else if (!empty($globalGitIgnore))
         {
-            $gitIgnoreContent = <<< GITIGNORE
-{$addOnEntity->gitignore}
-GITIGNORE;
-            File::writeFile($srcRoot . $ds . '.gitignore', $gitIgnoreContent, false);
+            File::writeFile($repoRoot . $ds . '.gitignore', $globalGitIgnore, false);
         }
-
+    
         if (!empty($addOnEntity->readme_md))
         {
             $readMeMarkdownFileInRepoRoot = $repoRoot . $ds . 'README.md';
@@ -158,11 +147,8 @@ GITIGNORE;
             {
                 unlink($readMeMarkdownFileInRepoRoot);
             }
-
-            $readMeMarkdownContent = <<< README_MD
-{$addOnEntity->readme_md}
-README_MD;
-            File::writeFile($repoRoot . $ds . 'README.md', $readMeMarkdownContent, false);
+            
+            File::writeFile($repoRoot . $ds . 'README.md', $addOnEntity->readme_md, false);
         }
 
         $git->add()->execute('*');
@@ -222,11 +208,6 @@ README_MD;
 
     protected function getExcludedDirectoriesForRepo()
     {
-        return [
-            '_build',
-            '_releases',
-            '_repo',
-            '_data'
-        ];
+        return preg_split('/\r?\n/', \XF::options()->developerTools_excluded_directories, -1, PREG_SPLIT_NO_EMPTY);
     }
 }
