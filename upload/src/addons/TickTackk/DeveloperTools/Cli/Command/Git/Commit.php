@@ -35,6 +35,12 @@ class Commit extends Command
             );
     }
 
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var QuestionHelper $helper */
@@ -52,7 +58,6 @@ class Commit extends Command
         $addOnDirectory = $addOn->getAddOnDirectory();
         $ds = DIRECTORY_SEPARATOR;
         $repoRoot = $addOnDirectory . $ds . '_repo';
-        $uploadDirectory = $repoRoot . $ds . 'upload';
 
         $git = new GitRepository($repoRoot);
         if (!$git->isInitialized())
@@ -86,6 +91,13 @@ class Commit extends Command
         {
             File::writeFile($repoRoot . $ds . '.gitignore', $globalGitIgnore, false);
         }
+
+        $customSubDir = $git->config()->get('custom.subdir')->execute();
+        if (!empty($customSubDir))
+        {
+            $repoRoot .= ($ds . $customSubDir);
+        }
+        $uploadDirectory = $repoRoot . $ds . 'upload';
 
         if (is_dir($repoRoot))
         {
