@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
+use TickTackk\DeveloperTools\Git\GitException;
 use TickTackk\DeveloperTools\Git\GitRepository;
 use XF\Cli\Command\AddOnActionTrait;
 use XF\Util\File;
@@ -92,11 +93,18 @@ class Commit extends Command
             File::writeFile($repoRoot . $ds . '.gitignore', $globalGitIgnore, false);
         }
 
-        $customSubDir = $git->config()->get('custom.subdir')->execute();
-        if (!empty($customSubDir))
+        try
         {
-            $repoRoot .= ($ds . $customSubDir);
+            $customSubDir = $git->config()->get('custom.subdir')->execute();
+            if (!empty($customSubDir))
+            {
+                $repoRoot .= ($ds . $customSubDir);
+            }
         }
+        catch (GitException $e)
+        {
+        }
+
         $uploadDirectory = $repoRoot . $ds . 'upload';
 
         if (is_dir($repoRoot))
