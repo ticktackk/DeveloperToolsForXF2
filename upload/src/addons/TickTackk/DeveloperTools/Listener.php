@@ -17,9 +17,10 @@ class Listener
     public static function XFEntityAddOn_entity_structure(/** @noinspection PhpUnusedParameterInspection */
         Manager $em, Structure &$structure)
     {
-        $structure->columns['license'] = ['type' => Entity::STR, 'default' => ''];
-        $structure->columns['gitignore'] = ['type' => Entity::STR, 'default' => ''];
-        $structure->columns['readme_md'] = ['type' => Entity::STR, 'default' => ''];
+        $structure->columns['devTools_license'] = ['type' => Entity::STR, 'default' => ''];
+        $structure->columns['devTools_gitignore'] = ['type' => Entity::STR, 'default' => ''];
+        $structure->columns['devTools_readme_md'] = ['type' => Entity::STR, 'default' => ''];
+        $structure->columns['devTools_parse_additional_files'] = ['type' => Entity::BOOL, 'default' => false];
     }
 
     /**

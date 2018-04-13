@@ -1,17 +1,17 @@
 {
-  "admin/developerTools_developer_options.html": {
-    "version_id": 1000010,
-    "version_string": "1.0.0 Alpha",
-    "hash": "cd6b83a06f60b1f991445e39aeed44ce"
-  },
-  "admin/developerTools_template_modification_edit_style_id.html": {
-    "version_id": 1000012,
-    "version_string": "1.0.0 Alpha 2",
-    "hash": "cbdff6f998b6d2f7c6b98d6ad4d2e2f0"
-  },
-  "public/developerTools_template_modification_edit_style_id.html": {
-    "version_id": 1000012,
-    "version_string": "1.0.0 Alpha 2",
-    "hash": "0f0db5c8247572b16f547a4bae039d98"
-  }
+    "admin/developerTools_developer_options.html": {
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "d1cdb294e23965d662ad5cf39bc54682"
+    },
+    "admin/developerTools_template_modification_edit_style_id.html": {
+        "version_id": 1000012,
+        "version_string": "1.0.0 Alpha 2",
+        "hash": "cbdff6f998b6d2f7c6b98d6ad4d2e2f0"
+    },
+    "public/developerTools_template_modification_edit_style_id.html": {
+        "version_id": 1000012,
+        "version_string": "1.0.0 Alpha 2",
+        "hash": "0f0db5c8247572b16f547a4bae039d98"
+    }
 }

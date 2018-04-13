@@ -4,11 +4,15 @@
 	<div class="block-container">
 
 		<div class="block-body">
-			<xf:textarearow name="license" value="{{ $addOn.license }}" autosize="true" label="{{ phrase('developerTools_contents_for_license') }}" />
+			<xf:textarearow name="devTools_license" value="{{ $addOn.devTools_license }}" autosize="true" label="{{ phrase('developerTools_contents_for_license') }}" />
 
-			<xf:textarearow name="gitignore" value="{{ $addOn.gitignore }}" autosize="true" label="{{ phrase('developerTools_contents_for_gitignore') }}" />
+			<xf:textarearow name="devTools_gitignore" value="{{ $addOn.devTools_gitignore }}" autosize="true" label="{{ phrase('developerTools_contents_for_gitignore') }}" />
 			
-			<xf:textarearow name="readme_md" value="{{ $addOn.readme_md }}" autosize="true" label="{{ phrase('developerTools_contents_for_readme_markdown_file') }}" />
+			<xf:textarearow name="devTools_readme_md" value="{{ $addOn.devTools_readme_md }}" autosize="true" label="{{ phrase('developerTools_contents_for_readme_markdown_file') }}" />
+			
+			<xf:checkboxrow name="devTools_parse_additional_files" explain="{{ phrase('developerTools_parse_additional_files_explain') }}">
+				<xf:option value="1" selected="{$addOn.devTools_parse_additional_files}">{{ phrase('developerTools_parse_additional_files') }}</xf:option>
+			</xf:checkboxrow>
 
 			<hr class="formRowSep" />
 		</div>
