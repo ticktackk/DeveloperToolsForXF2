@@ -6,6 +6,12 @@ use XF\Mvc\ParameterBag;
 
 class AddOn extends XFCP_AddOn
 {
+    /**
+     * @param ParameterBag $params
+     *
+     * @return \XF\Mvc\Reply\View
+     * @throws \XF\Mvc\Reply\Exception
+     */
     public function actionDeveloperOptions(ParameterBag $params)
     {
         /** @noinspection PhpUndefinedFieldInspection */
@@ -17,6 +23,13 @@ class AddOn extends XFCP_AddOn
         return $this->view('TickTackk\DeveloperTools\XF:AddOn\DeveloperOptions', 'developerTools_developer_options', $viewParams);
     }
 
+    /**
+     * @param ParameterBag $params
+     *
+     * @return \XF\Mvc\Reply\Redirect
+     * @throws \XF\Mvc\Reply\Exception
+     * @throws \XF\PrintableException
+     */
     public function actionSaveDeveloperOptions(ParameterBag $params)
     {
         $this->assertPostOnly();
