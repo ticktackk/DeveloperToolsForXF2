@@ -54,6 +54,7 @@ class Commit extends Command
             return 1;
         }
 
+        /** @var \XF\Entity\AddOn $addOnEntity */
         $addOnEntity = $addOn->getInstalledAddOn();
 
         $addOnDirectory = $addOn->getAddOnDirectory();
