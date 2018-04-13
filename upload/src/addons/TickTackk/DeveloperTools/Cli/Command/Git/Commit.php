@@ -117,6 +117,46 @@ class Commit extends Command
                 File::copyFile($file->getPathname(), $srcRoot . $ds . $path, false);
             }
         }
+    
+        $rootPath = \XF::getRootDirectory();
+        $filesRoot = $addOn->getFilesDirectory();
+    
+        $additionalFiles = $addOn->additional_files;
+        foreach ((array)$additionalFiles AS $additionalFile)
+        {
+            $filePath = $filesRoot . $ds . $additionalFile;
+            if (file_exists($filePath))
+            {
+                $root = $filesRoot;
+            }
+            else
+            {
+                $filePath = $rootPath . $ds . $additionalFile;
+                if (!file_exists($filePath))
+                {
+                    continue;
+                }
+                $root = $rootPath;
+            }
+        
+            if (is_dir($filePath))
+            {
+                $filesIterator = $this->getFileIterator($filePath);
+                foreach ($filesIterator AS $file)
+                {
+                    $stdPath = $this->standardizePath($root, $file->getPathname());
+                    if (!$file->isDir())
+                    {
+                        File::copyFile($file->getPathname(), $uploadRoot . $ds . $stdPath, false);
+                    }
+                }
+            }
+            else
+            {
+                $stdPath = $this->standardizePath($root, $filePath);
+                File::copyFile($filePath, $uploadRoot . $ds . $stdPath, false);
+            }
+        }
 
         if (!empty($addOnEntity->license))
         {
