@@ -47,7 +47,7 @@ class Commit extends Command
             return 1;
         }
 
-        $addOnEntity = \XF::app()->em()->findOne('XF:AddOn', ['addon_id' => $addOnId]);
+        $addOnEntity = $addOn->getInstalledAddOn();
 
         $addOnDirectory = $addOn->getAddOnDirectory();
         $ds = DIRECTORY_SEPARATOR;
@@ -121,57 +121,54 @@ class Commit extends Command
         $rootPath = \XF::getRootDirectory();
         $filesRoot = $addOn->getFilesDirectory();
     
-        $additionalFiles = $addOn->additional_files;
-        foreach ((array)$additionalFiles AS $additionalFile)
+        if ($addOnEntity->devTools_parse_additional_files)
         {
-            $filePath = $filesRoot . $ds . $additionalFile;
-            if (file_exists($filePath))
+            $additionalFiles = $addOn->additional_files;
+            foreach ((array)$additionalFiles AS $additionalFile)
             {
-                $root = $filesRoot;
-            }
-            else
-            {
-                $filePath = $rootPath . $ds . $additionalFile;
-                if (!file_exists($filePath))
+                $filePath = $filesRoot . $ds . $additionalFile;
+                if (file_exists($filePath))
                 {
-                    continue;
+                    $root = $filesRoot;
                 }
-                $root = $rootPath;
-            }
-        
-            if (is_dir($filePath))
-            {
-                $filesIterator = $this->getFileIterator($filePath);
-                foreach ($filesIterator AS $file)
+                else
                 {
-                    $stdPath = $this->standardizePath($root, $file->getPathname());
-                    if (!$file->isDir())
+                    $filePath = $rootPath . $ds . $additionalFile;
+                    if (!file_exists($filePath))
                     {
-                        File::copyFile($file->getPathname(), $uploadRoot . $ds . $stdPath, false);
+                        continue;
+                    }
+                    $root = $rootPath;
+                }
+        
+                if (is_dir($filePath))
+                {
+                    $filesIterator = $this->getFileIterator($filePath);
+                    foreach ($filesIterator AS $file)
+                    {
+                        $stdPath = $this->standardizePath($root, $file->getPathname());
+                        if (!$file->isDir())
+                        {
+                            File::copyFile($file->getPathname(), $uploadRoot . $ds . $stdPath, false);
+                        }
                     }
                 }
-            }
-            else
-            {
-                $stdPath = $this->standardizePath($root, $filePath);
-                File::copyFile($filePath, $uploadRoot . $ds . $stdPath, false);
+                else
+                {
+                    $stdPath = $this->standardizePath($root, $filePath);
+                    File::copyFile($filePath, $uploadRoot . $ds . $stdPath, false);
+                }
             }
         }
 
-        if (!empty($addOnEntity->license))
+        if (!empty($addOnEntity->devTools_license))
         {
-            $licenseFileInRepoRoot = $repoRoot . $ds . 'LICENSE';
-            if (file_exists($licenseFileInRepoRoot) && is_readable($licenseFileInRepoRoot))
-            {
-                unlink($licenseFileInRepoRoot);
-            }
-            
-            File::writeFile($repoRoot . $ds . 'LICENSE.md', $addOnEntity->license, false);
+            File::writeFile($repoRoot . $ds . 'LICENSE.md', $addOnEntity->devTools_license, false);
         }
 
         $globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
 
-        if (!empty($addOnEntity->gitignore))
+        if (!empty($addOnEntity->devTools_gitignore))
         {
             File::writeFile($srcRoot . $ds . '.gitignore', $addOnEntity->gitignore, false);
         }
@@ -180,7 +177,7 @@ class Commit extends Command
             File::writeFile($repoRoot . $ds . '.gitignore', $globalGitIgnore, false);
         }
     
-        if (!empty($addOnEntity->readme_md))
+        if (!empty($addOnEntity->devTools_readme_md))
         {
             $readMeMarkdownFileInRepoRoot = $repoRoot . $ds . 'README.md';
             if (file_exists($readMeMarkdownFileInRepoRoot) && is_readable($readMeMarkdownFileInRepoRoot))
@@ -188,7 +185,7 @@ class Commit extends Command
                 unlink($readMeMarkdownFileInRepoRoot);
             }
             
-            File::writeFile($repoRoot . $ds . 'README.md', $addOnEntity->readme_md, false);
+            File::writeFile($repoRoot . $ds . 'README.md', $addOnEntity->devTools_readme_md, false);
         }
 
         $git->add()->execute('*');

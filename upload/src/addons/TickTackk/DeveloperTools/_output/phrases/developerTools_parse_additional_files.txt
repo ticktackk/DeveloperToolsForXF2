@@ -1,0 +1,1 @@
+Parse additional_files directive

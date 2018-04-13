@@ -25,13 +25,14 @@ class AddOn extends XFCP_AddOn
         $addOn = $this->assertAddOnAvailable($params->addon_id_url);
 
         $input = $this->filter([
-            'license' => 'str',
-            'gitignore' => 'str',
-            'readme_md' => 'str'
+            'devTools_license' => 'str',
+            'devTools_gitignore' => 'str',
+            'devTools_readme_md' => 'str',
+            'devTools_parse_additional_files' => 'bool'
         ]);
 
         $addOnId = $addOn->getAddOnId();
-        $addOnEntity = $this->em()->findOne('XF:AddOn', ['addon_id' => $addOnId]);
+        $addOnEntity = $addOn->getInstalledAddOn();
         $addOnEntity->bulkSet($input);
         $addOnEntity->save();
 
