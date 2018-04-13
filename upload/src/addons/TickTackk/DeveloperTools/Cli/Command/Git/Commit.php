@@ -195,7 +195,7 @@ class Commit extends Command
 
         if (!empty($addOnEntity->devTools_gitignore))
         {
-            File::writeFile($srcRoot . $ds . '.gitignore', $addOnEntity->gitignore, false);
+            File::writeFile($srcRoot . $ds . '.gitignore', $addOnEntity->devTools_gitignore, false);
         }
 
         if (!empty($addOnEntity->devTools_readme_md))
