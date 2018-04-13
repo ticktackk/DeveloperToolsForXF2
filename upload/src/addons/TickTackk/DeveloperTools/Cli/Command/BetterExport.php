@@ -26,6 +26,12 @@ class BetterExport extends Command
                 'Add-On ID'
             )
             ->addOption(
+                'skip-export',
+                's',
+                InputOption::VALUE_NONE,
+                'Skip \'xf-dev:export\' command'
+            )
+            ->addOption(
                 'release',
                 'r',
                 InputOption::VALUE_NONE,
@@ -76,13 +82,17 @@ class BetterExport extends Command
         {
             File::deleteDirectory($entityPath);
         }
-
-        $command = $this->getApplication()->find('xf-dev:export');
-        $childInput = new ArrayInput([
-            'command' => 'xf-dev:export',
-            '--addon' => $addOn->getAddOnId()
-        ]);
-        $command->run($childInput, $output);
+        
+        $skipExport = $input->getOption('skip-export');
+        if (!$skipExport)
+        {
+            $command = $this->getApplication()->find('xf-dev:export');
+            $childInput = new ArrayInput([
+                'command' => 'xf-dev:export',
+                '--addon' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
+        }
 
         $release = $input->getOption('release');
         if ($release)
