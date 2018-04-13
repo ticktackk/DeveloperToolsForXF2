@@ -5,6 +5,7 @@ namespace TickTackk\DeveloperTools\Cli\Command\Git;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TickTackk\DeveloperTools\Git\GitRepository;
 use XF\Cli\Command\AddOnActionTrait;
@@ -23,6 +24,20 @@ class Push extends Command
                 'id',
                 InputArgument::REQUIRED,
                 'Add-On ID'
+            )
+            ->addOption(
+                'repo',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Repository to push to',
+                'origin'
+            )
+            ->addOption(
+                'branch',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Branch to push to',
+                null
             );
     }
 
@@ -50,9 +65,22 @@ class Push extends Command
             return 0;
         }
     
-        $git->push()->execute('origin');
+        $repo = $input->getOption('repo');
+        $branch = $input->getOption('branch');
+        
+        // Passing null as second argument doesn't work for some reason
+        if ($branch)
+        {
+            $git->push()->execute($repo, $branch);
+            $output->writeln(["", "Successfully pushed to {$repo}/{$branch}."]);
+            
+        }
+        else
+        {
+            $git->push()->execute($repo);
+            $output->writeln(["", "Successfully pushed to {$repo}."]);
+        }
 
-        $output->writeln(["", "Successfully pushed branch."]);
         return 0;
     }
 }

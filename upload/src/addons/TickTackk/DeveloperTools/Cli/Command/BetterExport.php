@@ -43,6 +43,20 @@ class BetterExport extends Command
                 InputOption::VALUE_NONE,
                 'Run \'ticktackk-devtools:git-push\' command'
             )
+            ->addOption(
+                'repo',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Repository to push to',
+                'origin'
+            )
+            ->addOption(
+                'branch',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Branch to push to',
+                null
+            )
         ;
     }
 
@@ -119,7 +133,9 @@ class BetterExport extends Command
             $command = $this->getApplication()->find('ticktackk-devtools:git-push');
             $childInput = new ArrayInput([
                 'command' => 'ticktackk-devtools:git-push',
-                'id' => $addOn->getAddOnId()
+                'id' => $addOn->getAddOnId(),
+                '--repo' => $input->getOption('repo'),
+                '--branch' => $input->getOption('branch')
             ]);
             $command->run($childInput, $output);
         }
