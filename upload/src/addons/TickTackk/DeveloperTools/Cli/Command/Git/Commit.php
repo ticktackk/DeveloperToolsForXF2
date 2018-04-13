@@ -53,7 +53,7 @@ class Commit extends Command
             return 1;
         }
 
-        $addOnEntity = \XF::app()->em()->findOne('XF:AddOn', ['addon_id' => $addOnId]);
+        $addOnEntity = $addOn->getInstalledAddOn();
 
         $addOnDirectory = $addOn->getAddOnDirectory();
         $ds = DIRECTORY_SEPARATOR;
@@ -84,21 +84,21 @@ class Commit extends Command
             $output->writeln(["", "Git username or email cannot be empty."]);
             return 1;
         }
-    
+
         $globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
-    
+
         if (!empty($globalGitIgnore))
         {
             File::writeFile($repoRoot . $ds . '.gitignore', $globalGitIgnore, false);
         }
-    
+
         $customSubDir = $git->config()->get('custom.subdir')->execute();
         if (!empty($customSubDir))
         {
             $repoRoot .= ($ds . $customSubDir);
         }
         $uploadDirectory = $repoRoot . $ds . 'upload';
-    
+
         if (is_dir($repoRoot))
         {
             if (file_exists($uploadDirectory))
@@ -137,31 +137,68 @@ class Commit extends Command
             }
         }
 
-        if (!empty($addOnEntity->license))
+        $rootPath = \XF::getRootDirectory();
+        $filesRoot = $addOn->getFilesDirectory();
+
+        if ($addOnEntity->devTools_parse_additional_files)
         {
-            $licenseFileInRepoRoot = $repoRoot . $ds . 'LICENSE';
-            if (file_exists($licenseFileInRepoRoot) && is_readable($licenseFileInRepoRoot))
+            $additionalFiles = $addOn->additional_files;
+            foreach ((array)$additionalFiles AS $additionalFile)
             {
-                unlink($licenseFileInRepoRoot);
+                $filePath = $filesRoot . $ds . $additionalFile;
+                if (file_exists($filePath))
+                {
+                    $root = $filesRoot;
+                }
+                else
+                {
+                    $filePath = $rootPath . $ds . $additionalFile;
+                    if (!file_exists($filePath))
+                    {
+                        continue;
+                    }
+                    $root = $rootPath;
+                }
+
+                if (is_dir($filePath))
+                {
+                    $filesIterator = $this->getFileIterator($filePath);
+                    foreach ($filesIterator AS $file)
+                    {
+                        $stdPath = $this->standardizePath($root, $file->getPathname());
+                        if (!$file->isDir())
+                        {
+                            File::copyFile($file->getPathname(), $uploadRoot . $ds . $stdPath, false);
+                        }
+                    }
+                }
+                else
+                {
+                    $stdPath = $this->standardizePath($root, $filePath);
+                    File::copyFile($filePath, $uploadRoot . $ds . $stdPath, false);
+                }
             }
-            
-            File::writeFile($repoRoot . $ds . 'LICENSE.md', $addOnEntity->license, false);
         }
 
-        if (!empty($addOnEntity->gitignore))
+        if (!empty($addOnEntity->devTools_license))
+        {
+            File::writeFile($repoRoot . $ds . 'LICENSE.md', $addOnEntity->devTools_license, false);
+        }
+
+        if (!empty($addOnEntity->devTools_gitignore))
         {
             File::writeFile($srcRoot . $ds . '.gitignore', $addOnEntity->gitignore, false);
         }
-    
-        if (!empty($addOnEntity->readme_md))
+
+        if (!empty($addOnEntity->devTools_readme_md))
         {
             $readMeMarkdownFileInRepoRoot = $repoRoot . $ds . 'README.md';
             if (file_exists($readMeMarkdownFileInRepoRoot) && is_readable($readMeMarkdownFileInRepoRoot))
             {
                 unlink($readMeMarkdownFileInRepoRoot);
             }
-            
-            File::writeFile($repoRoot . $ds . 'README.md', $addOnEntity->readme_md, false);
+
+            File::writeFile($repoRoot . $ds . 'README.md', $addOnEntity->devTools_readme_md, false);
         }
 
         $git->add()->execute('*');

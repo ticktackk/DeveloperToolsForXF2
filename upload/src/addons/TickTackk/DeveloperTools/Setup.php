@@ -21,6 +21,7 @@ class Setup extends AbstractSetup
             $table->addColumn('license', 'mediumtext');
             $table->addColumn('gitignore', 'mediumtext');
             $table->addColumn('readme_md', 'mediumtext');
+            $table->addColumn('devTools_parse_additional_files', 'tinyint')->setDefault(0);
         });
     }
 
@@ -58,12 +59,26 @@ class Setup extends AbstractSetup
             $table->addColumn('readme_md', 'mediumtext');
         });
     }
-
+    
+    public function upgrade1000030Step1()
+    {
+        $sm = $this->schemaManager();
+        $sm->alterTable('xf_addon', function (Alter $table)
+        {
+            $table->renameColumn('license', 'devTools_license');
+            $table->renameColumn('gitignore', 'devTools_gitignore');
+            $table->renameColumn('readme_md', 'devTools_readme_md');
+            
+            $table->addColumn('devTools_parse_additional_files', 'tinyint')->setDefault(0);
+        });
+    }
+    
+    
     public function uninstallStep1()
     {
         $this->schemaManager()->alterTable('xf_addon', function (Alter $table)
         {
-            $table->dropColumns(['license', 'gitignore', 'readme_md']);
+            $table->dropColumns(['devTools_license', 'devTools_gitignore', 'devTools_readme_md', 'devTools_parse_additional_files']);
         });
     }
 }

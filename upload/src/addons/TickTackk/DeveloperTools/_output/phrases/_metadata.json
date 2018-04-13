@@ -425,6 +425,18 @@
         "version_string": "1.0.0 Alpha 4",
         "hash": "a4d238c45c3282de775adee8a8ce0fee"
     },
+    "developerTools_parse_additional_files.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "ac13e4ac6da6c56a725d6e14c8500b8b"
+    },
+    "developerTools_parse_additional_files_explain.txt": {
+        "global_cache": false,
+        "version_id": 1000031,
+        "version_string": "1.0.0 Beta 1",
+        "hash": "be1ebf8c5854a515b5308ba28f618fee"
+    },
     "developerTools_requested_style_could_not_be_found.txt": {
         "global_cache": false,
         "version_id": 1000012,
