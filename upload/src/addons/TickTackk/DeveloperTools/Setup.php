@@ -18,9 +18,9 @@ class Setup extends AbstractSetup
     {
         $this->schemaManager()->alterTable('xf_addon', function (Alter $table)
         {
-            $table->addColumn('license', 'mediumtext');
-            $table->addColumn('gitignore', 'mediumtext');
-            $table->addColumn('readme_md', 'mediumtext');
+            $table->addColumn('devTools_license', 'mediumtext');
+            $table->addColumn('devTools_gitignore', 'mediumtext');
+            $table->addColumn('devTools_readme_md', 'mediumtext');
             $table->addColumn('devTools_parse_additional_files', 'tinyint')->setDefault(0);
         });
     }
@@ -72,7 +72,6 @@ class Setup extends AbstractSetup
             $table->addColumn('devTools_parse_additional_files', 'tinyint')->setDefault(0);
         });
     }
-    
     
     public function uninstallStep1()
     {
