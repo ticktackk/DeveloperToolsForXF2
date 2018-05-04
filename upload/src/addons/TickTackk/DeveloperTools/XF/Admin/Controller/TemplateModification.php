@@ -8,6 +8,11 @@ use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\Redirect;
 use XF\Mvc\View;
 
+/**
+ * Class TemplateModification
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class TemplateModification extends XFCP_TemplateModification
 {
     /**
@@ -120,6 +125,10 @@ class TemplateModification extends XFCP_TemplateModification
         return $response;
     }
 
+    /**
+     * @return \XF\Mvc\Reply\View
+     * @throws \XF\Mvc\Reply\Exception
+     */
     public function actionAutoComplete()
     {
         $type = $this->filter('type', 'str');
@@ -160,6 +169,10 @@ class TemplateModification extends XFCP_TemplateModification
         return $response;
     }
 
+    /**
+     * @return \XF\Mvc\Reply\View
+     * @throws \XF\Mvc\Reply\Exception
+     */
     public function actionContents()
     {
         $type = $this->filter('type', 'str');
@@ -192,6 +205,11 @@ class TemplateModification extends XFCP_TemplateModification
         return $response;
     }
 
+    /**
+     * @param ParameterBag $params
+     *
+     * @return Redirect|\XF\Mvc\Reply\Reroute
+     */
     public function actionSave(ParameterBag $params)
     {
         $response = parent::actionSave($params);
@@ -222,6 +240,12 @@ class TemplateModification extends XFCP_TemplateModification
         return $response;
     }
 
+    /**
+     * @param \XF\Entity\TemplateModification $modification
+     *
+     * @return \XF\Mvc\Reply\Error|\XF\Mvc\Reply\View
+     * @throws \XF\Mvc\Reply\Exception
+     */
     protected function templateModificationAddEdit(\XF\Entity\TemplateModification $modification)
     {
         $response = parent::templateModificationAddEdit($modification);
@@ -229,7 +253,7 @@ class TemplateModification extends XFCP_TemplateModification
         /** @var \XF\Entity\TemplateModification $_modification_ */
         if ($_modification = $response->getParam('modification'))
         {
-            if ($_modification->type == 'public')
+            if ($_modification->type === 'public')
             {
                 if ($_modification->Template && !$this->request->exists('style_id'))
                 {
@@ -276,7 +300,7 @@ class TemplateModification extends XFCP_TemplateModification
      */
     protected function assertStyleExists($id, $with = null, $phraseKey = null)
     {
-        if ($id === 0 || $id === "0")
+        if ($id === 0 || $id === '0')
         {
             return $this->getStyleRepo()->getMasterStyle();
         }
@@ -289,7 +313,6 @@ class TemplateModification extends XFCP_TemplateModification
      */
     protected function getStyleRepo()
     {
-        /** @noinspection PhpUndefinedFieldInspection */
         return $this->repository('XF:Style');
     }
 }

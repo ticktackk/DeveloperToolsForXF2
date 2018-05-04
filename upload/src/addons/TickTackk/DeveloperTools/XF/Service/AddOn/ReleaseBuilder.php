@@ -4,6 +4,11 @@ namespace TickTackk\DeveloperTools\XF\Service\AddOn;
 
 use XF\Util\File;
 
+/**
+ * Class TemplateModification
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class ReleaseBuilder extends XFCP_ReleaseBuilder
 {
     protected function prepareFilesToCopy()
