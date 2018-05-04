@@ -49,7 +49,6 @@ class AddOn extends XFCP_AddOn
             'devTools_parse_additional_files' => 'bool'
         ]);
 
-        $addOnId = $addOn->getAddOnId();
         $addOnEntity = $addOn->getInstalledAddOn();
         $addOnEntity->bulkSet($input);
         $addOnEntity->save();

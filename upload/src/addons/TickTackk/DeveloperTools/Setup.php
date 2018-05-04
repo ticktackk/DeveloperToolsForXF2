@@ -15,7 +15,8 @@ use XF\Db\Schema\Alter;
  */
 class Setup extends AbstractSetup
 {
-    use StepRunnerInstallTrait;
+    use /** @noinspection TraitsPropertiesConflictsInspection */
+        StepRunnerInstallTrait;
     use StepRunnerUpgradeTrait;
     use StepRunnerUninstallTrait;
 
