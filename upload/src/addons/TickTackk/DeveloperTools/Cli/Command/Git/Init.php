@@ -32,6 +32,7 @@ class Init extends Command
      *
      * @return int
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $id = $input->getArgument('id');

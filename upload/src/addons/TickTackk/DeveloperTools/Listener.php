@@ -6,6 +6,11 @@ use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Manager;
 use XF\Mvc\Entity\Structure;
 
+/**
+ * Class TemplateModification
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class Listener
 {
     public static $modificationId;

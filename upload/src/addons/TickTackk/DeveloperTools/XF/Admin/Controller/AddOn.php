@@ -4,6 +4,11 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
 use XF\Mvc\ParameterBag;
 
+/**
+ * Class AddOn
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class AddOn extends XFCP_AddOn
 {
     /**

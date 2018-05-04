@@ -8,6 +8,11 @@ use XF\AddOn\StepRunnerUninstallTrait;
 use XF\AddOn\StepRunnerUpgradeTrait;
 use XF\Db\Schema\Alter;
 
+/**
+ * Class TemplateModification
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class Setup extends AbstractSetup
 {
     use StepRunnerInstallTrait;

@@ -10,6 +10,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use XF\Cli\Command\AddOnActionTrait;
 
+/**
+ * Class BetterExport
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class BetterExport extends Command
 {
     use AddOnActionTrait;
@@ -72,6 +77,7 @@ class BetterExport extends Command
      * @return int|null
      * @throws \Exception
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $id = $input->getArgument('id');
