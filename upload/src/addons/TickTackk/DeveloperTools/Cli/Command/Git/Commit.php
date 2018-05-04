@@ -14,6 +14,11 @@ use TickTackk\DeveloperTools\Git\GitRepository;
 use XF\Cli\Command\AddOnActionTrait;
 use XF\Util\File;
 
+/**
+ * Class BetterExport
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class Commit extends Command
 {
     use AddOnActionTrait;
@@ -42,6 +47,7 @@ class Commit extends Command
      *
      * @return int
      */
+    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var QuestionHelper $helper */
@@ -181,8 +187,10 @@ class Commit extends Command
         $rootPath = \XF::getRootDirectory();
         $filesRoot = $addOn->getFilesDirectory();
 
+        /** @noinspection PhpUndefinedFieldInspection */
         if ($addOnEntity->devTools_parse_additional_files)
         {
+            /** @noinspection PhpUndefinedFieldInspection */
             $additionalFiles = $addOn->additional_files;
             foreach ((array)$additionalFiles AS $additionalFile)
             {
@@ -279,12 +287,23 @@ class Commit extends Command
         );
     }
 
+    /**
+     * @param $rootPath
+     * @param $path
+     *
+     * @return null|string|string[]
+     */
     protected function standardizePath($rootPath, $path)
     {
         $ds = DIRECTORY_SEPARATOR;
         return preg_replace('#^' . preg_quote(rtrim($rootPath, $ds) . $ds) . '#', '', $path, 1);
     }
 
+    /**
+     * @param $path
+     *
+     * @return bool
+     */
     protected function isPartOfExcludedDirectoryForRepo($path)
     {
         foreach ($this->getExcludedDirectoriesForRepo() AS $dir)
