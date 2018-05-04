@@ -18,18 +18,30 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
         $addOn = $this->addOn;
         $ds = DIRECTORY_SEPARATOR;
         $buildUploadRoot = $addOn->getBuildDirectory();
+        $addOnEntity = $this->addOn->getInstalledAddOn();
 
-        $addOnId = $this->addOn->getAddOnId();
-        $addOn = $this->em()->findOne('XF:AddOn', ['addon_id' => $addOnId]);
-
-        if (!empty($addOn->devTools_license))
+        if (!empty($addOnEntity->devTools_license))
         {
-            File::writeFile($buildUploadRoot . $ds . 'LICENSE.md', $addOn->devTools_license, false);
+            File::writeFile($buildUploadRoot . $ds . 'LICENSE.md', $addOnEntity->devTools_license, false);
         }
 
-        if (!empty($addOn->devTools_readme_md))
+        if (!empty($addOnEntity->devTools_readme_md))
         {
-            File::writeFile($buildUploadRoot . $ds . 'README.md', $addOn->devTools_readme_md, false);
+            File::writeFile($buildUploadRoot . $ds . 'README.md', $addOnEntity->devTools_readme_md, false);
+        }
+    }
+
+    /**
+     * @throws \XF\PrintableException
+     */
+    public function performBuildTasks()
+    {
+        parent::performBuildTasks();
+
+        $dataPath = $this->addOnRoot . DIRECTORY_SEPARATOR . '_data';
+        if (is_dir($dataPath))
+        {
+            File::deleteDirectory($dataPath);
         }
     }
 
