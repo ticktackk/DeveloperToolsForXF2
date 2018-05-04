@@ -71,20 +71,52 @@ class Commit extends Command
         $options = \XF::options();
         $gitUsername = $options->developerTools_git_username;
         $gitEmail = $options->developerTools_git_email;
+        $gitAlreadyHasName = null;
+        $gitAlreadyHasEmail = null;
 
-        if (empty($git->config()->get('user.name')->execute()))
+        try
         {
-            $git->config()->add('user.name', $gitUsername)->execute();
+            $gitAlreadyHasName = empty($git->config()->get('user.name')->execute());
         }
-        if (empty($git->config()->get('user.email')->execute()))
+        catch (GitException $e)
         {
-            $git->config()->add('user.email', $gitEmail)->execute();
+            $gitAlreadyHasName = false;
+        }
+        finally
+        {
+            if ($gitAlreadyHasName === false)
+            {
+                $git->config()->add('user.name', $gitUsername)->execute();
+            }
         }
 
-        if (empty($git->config()->get('user.name')->execute()) || empty($git->config()->get('user.email')->execute()))
+        try
         {
-            $output->writeln(["", "Git username or email cannot be empty."]);
-            return 1;
+            $gitAlreadyHasEmail = empty($git->config()->get('user.email')->execute());
+        }
+        catch (GitException $e)
+        {
+            $gitAlreadyHasEmail = false;
+        }
+        finally
+        {
+            if ($gitAlreadyHasEmail === false)
+            {
+                $git->config()->add('user.email', $gitEmail)->execute();
+            }
+        }
+
+        try
+        {
+            if (empty($git->config()->get('user.name')->execute()) || empty($git->config()->get('user.email')->execute()))
+            {
+                $output->writeln(["", "Git username or email cannot be empty."]);
+                return 1;
+            }
+        }
+        catch (GitException $e)
+        {
+            throw $e;
         }
 
         $globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
