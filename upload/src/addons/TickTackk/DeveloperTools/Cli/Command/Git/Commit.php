@@ -4,6 +4,7 @@ namespace TickTackk\DeveloperTools\Cli\Command\Git;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,7 +16,7 @@ use XF\Cli\Command\AddOnActionTrait;
 use XF\Util\File;
 
 /**
- * Class BetterExport
+ * Class Commit
  *
  * @package TickTackk\DeveloperTools
  */
@@ -45,9 +46,9 @@ class Commit extends Command
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int
+     * @return int|null
+     * @throws \Exception
      */
-    /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var QuestionHelper $helper */
@@ -70,8 +71,12 @@ class Commit extends Command
         $git = new GitRepository($repoRoot);
         if (!$git->isInitialized())
         {
-            $output->writeln(["", "Git directory must be initialized"]);
-            return 0;
+            $command = $this->getApplication()->find('ticktackk-devtools:git-init');
+            $childInput = new ArrayInput([
+                'command' => 'ticktackk-devtools:git-init',
+                'id' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
         }
 
         $options = \XF::options();
@@ -234,11 +239,6 @@ class Commit extends Command
             File::writeFile($repoRoot . $ds . 'LICENSE.md', $addOnEntity->devTools_license, false);
         }
 
-        if (!empty($addOnEntity->devTools_gitignore))
-        {
-            File::writeFile($srcRoot . $ds . '.gitignore', $addOnEntity->devTools_gitignore, false);
-        }
-
         if (!empty($addOnEntity->devTools_readme_md))
         {
             $readMeMarkdownFileInRepoRoot = $repoRoot . $ds . 'README.md';
@@ -247,7 +247,12 @@ class Commit extends Command
                 unlink($readMeMarkdownFileInRepoRoot);
             }
 
-            File::writeFile($repoRoot . $ds . 'README.md', $addOnEntity->devTools_readme_md, false);
+            File::writeFile($readMeMarkdownFileInRepoRoot, $addOnEntity->devTools_readme_md, false);
+        }
+
+        if (!empty($addOnEntity->devTools_gitignore))
+        {
+            File::writeFile($srcRoot . $ds . '.gitignore', $addOnEntity->devTools_gitignore, false);
         }
 
         $git->add()->execute('*');
