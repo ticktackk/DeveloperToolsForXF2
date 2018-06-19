@@ -119,6 +119,17 @@ class BetterExport extends Command
             $command->run($childInput, $output);
         }
 
+        $release = $input->getOption('release');
+        if ($release)
+        {
+            $command = $this->getApplication()->find('xf-addon:build-release');
+            $childInput = new ArrayInput([
+                'command' => 'xf-addon:build-release',
+                'id' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
+        }
+
         $commit = $input->getOption('commit');
         if ($commit)
         {
@@ -139,17 +150,6 @@ class BetterExport extends Command
                 'id' => $addOn->getAddOnId(),
                 '--repo' => $input->getOption('repo'),
                 '--branch' => $input->getOption('branch')
-            ]);
-            $command->run($childInput, $output);
-        }
-
-        $release = $input->getOption('release');
-        if ($release)
-        {
-            $command = $this->getApplication()->find('xf-addon:build-release');
-            $childInput = new ArrayInput([
-                'command' => 'xf-addon:build-release',
-                'id' => $addOn->getAddOnId()
             ]);
             $command->run($childInput, $output);
         }
