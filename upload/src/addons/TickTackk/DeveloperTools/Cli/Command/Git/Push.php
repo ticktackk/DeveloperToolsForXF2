@@ -11,6 +11,11 @@ use TickTackk\DeveloperTools\Git\GitRepository;
 use XF\Cli\Command\AddOnActionTrait;
 use XF\Util\File;
 
+/**
+ * Class Push
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class Push extends Command
 {
     use AddOnActionTrait;

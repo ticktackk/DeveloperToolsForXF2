@@ -5,7 +5,7 @@ namespace TickTackk\DeveloperTools\XF\Service\AddOn;
 use XF\Util\File;
 
 /**
- * Class TemplateModification
+ * Class ReleaseBuilder
  *
  * @package TickTackk\DeveloperTools
  */

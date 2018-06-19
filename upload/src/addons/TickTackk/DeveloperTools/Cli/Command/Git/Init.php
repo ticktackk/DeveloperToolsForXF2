@@ -10,6 +10,11 @@ use TickTackk\DeveloperTools\Git\GitRepository;
 use XF\Cli\Command\AddOnActionTrait;
 use XF\Util\File;
 
+/**
+ * Class Init
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class Init extends Command
 {
     use AddOnActionTrait;

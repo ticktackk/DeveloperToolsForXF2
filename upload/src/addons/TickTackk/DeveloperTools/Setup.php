@@ -9,14 +9,13 @@ use XF\AddOn\StepRunnerUpgradeTrait;
 use XF\Db\Schema\Alter;
 
 /**
- * Class TemplateModification
+ * Class Setup
  *
  * @package TickTackk\DeveloperTools
  */
 class Setup extends AbstractSetup
 {
-    use /** @noinspection TraitsPropertiesConflictsInspection */
-        StepRunnerInstallTrait;
+    use StepRunnerInstallTrait;
     use StepRunnerUpgradeTrait;
     use StepRunnerUninstallTrait;
 

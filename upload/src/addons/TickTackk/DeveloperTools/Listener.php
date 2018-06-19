@@ -7,7 +7,7 @@ use XF\Mvc\Entity\Manager;
 use XF\Mvc\Entity\Structure;
 
 /**
- * Class TemplateModification
+ * Class Listener
  *
  * @package TickTackk\DeveloperTools
  */
