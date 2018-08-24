@@ -79,57 +79,6 @@ class Commit extends Command
             $command->run($childInput, $output);
         }
 
-        $options = \XF::options();
-        $gitUsername = $options->developerTools_git_username;
-        $gitEmail = $options->developerTools_git_email;
-        $gitAlreadyHasName = null;
-        $gitAlreadyHasEmail = null;
-
-        try
-        {
-            $gitAlreadyHasName = empty($git->config()->get('user.name')->execute());
-        }
-        catch (GitException $e)
-        {
-            $gitAlreadyHasName = false;
-        }
-        finally
-        {
-            if ($gitAlreadyHasName === false)
-            {
-                $git->config()->add('user.name', $gitUsername)->execute();
-            }
-        }
-
-        try
-        {
-            $gitAlreadyHasEmail = empty($git->config()->get('user.email')->execute());
-        }
-        catch (GitException $e)
-        {
-            $gitAlreadyHasEmail = false;
-        }
-        finally
-        {
-            if ($gitAlreadyHasEmail === false)
-            {
-                $git->config()->add('user.email', $gitEmail)->execute();
-            }
-        }
-
-        try
-        {
-            if (empty($git->config()->get('user.name')->execute()) || empty($git->config()->get('user.email')->execute()))
-            {
-                $output->writeln(["", "Git username or email cannot be empty."]);
-                return 1;
-            }
-        }
-        catch (GitException $e)
-        {
-            throw $e;
-        }
-
         $globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
 
         if (!empty($globalGitIgnore))
@@ -203,8 +152,7 @@ class Commit extends Command
                 if (file_exists($filePath))
                 {
                     $root = $filesRoot;
-                }
-                else
+                } else
                 {
                     $filePath = $rootPath . $ds . $additionalFile;
                     if (!file_exists($filePath))
@@ -225,8 +173,7 @@ class Commit extends Command
                             File::copyFile($file->getPathname(), $uploadRoot . $ds . $stdPath, false);
                         }
                     }
-                }
-                else
+                } else
                 {
                     $stdPath = $this->standardizePath($root, $filePath);
                     File::copyFile($filePath, $uploadRoot . $ds . $stdPath, false);
@@ -257,9 +204,60 @@ class Commit extends Command
 
         $git->add()->execute('*');
 
+        $options = \XF::options();
+        $gitUsername = $options->developerTools_git_username;
+        $gitEmail = $options->developerTools_git_email;
+        $gitAlreadyHasName = null;
+        $gitAlreadyHasEmail = null;
+
+        try
+        {
+            $gitAlreadyHasName = !empty($git->config()->get('user.name')->execute());
+        }
+        catch (GitException $e)
+        {
+            $gitAlreadyHasName = false;
+        }
+        finally
+        {
+            if ($gitAlreadyHasName === false)
+            {
+                $git->config()->add('user.name', $gitUsername)->execute();
+            }
+        }
+
+        try
+        {
+            $gitAlreadyHasEmail = !empty($git->config()->get('user.email')->execute());
+        }
+        catch (GitException $e)
+        {
+            $gitAlreadyHasEmail = false;
+        }
+        finally
+        {
+            if ($gitAlreadyHasEmail === false)
+            {
+                $git->config()->add('user.email', $gitEmail)->execute();
+            }
+        }
+
+        try
+        {
+            if (empty($git->config()->get('user.name')->execute()) || empty($git->config()->get('user.email')->execute()))
+            {
+                $output->writeln(['', 'Git username or email cannot be empty.']);
+                return 1;
+            }
+        }
+        catch (GitException $e)
+        {
+            throw $e;
+        }
+
         if (empty($git->status()->getIndexStatus()))
         {
-            $output->writeln(["", "Nothing to commit."]);
+            $output->writeln(['', 'Nothing to commit.']);
             return 0;
         }
 
@@ -271,9 +269,17 @@ class Commit extends Command
             $output->writeln("");
         }
 
-        $git->commit()->message($commitMessage)->execute();// do error handling here
+        try
+        {
+            $git->commit()->message($commitMessage)->execute();
+        }
+        catch (GitException $e)
+        {
+            $output->writeln(['', $e->getMessage()]);
+            return 1;
+        }
 
-        $output->writeln(["", "Successfully committed changes."]);
+        $output->writeln(['', 'Successfully committed changes.']);
         return 0;
     }
 
