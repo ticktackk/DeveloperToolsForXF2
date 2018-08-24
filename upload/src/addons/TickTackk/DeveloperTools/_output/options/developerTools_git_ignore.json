@@ -5,7 +5,7 @@
     "sub_options": [],
     "validation_class": "",
     "validation_method": "",
-    "default_value": "_releases\n_data\nhashes.json\n/.idea/",
+    "default_value": "_releases\n_data\nhashes.json\n/.idea/\n.DS_Store",
     "relations": {
         "developerTools": 15
     }

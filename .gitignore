@@ -2,3 +2,4 @@ _releases
 _data
 hashes.json
 /.idea/
+.DS_Store
