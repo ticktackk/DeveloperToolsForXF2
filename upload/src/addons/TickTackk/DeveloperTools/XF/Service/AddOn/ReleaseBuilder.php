@@ -18,16 +18,26 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
         $addOn = $this->addOn;
         $ds = DIRECTORY_SEPARATOR;
         $buildUploadRoot = $addOn->getBuildDirectory();
+        /** @var \TickTackk\DeveloperTools\XF\Entity\AddOn $addOnEntity */
         $addOnEntity = $this->addOn->getInstalledAddOn();
 
-        if (!empty($addOnEntity->devTools_license))
+        if ($addOnEntity)
         {
-            File::writeFile($buildUploadRoot . $ds . 'LICENSE.md', $addOnEntity->devTools_license, false);
-        }
+            $developerOptions = $addOnEntity->DeveloperOptions;
+            if (!empty($developerOptions['license']))
+            {
+                File::writeFile($buildUploadRoot . $ds . 'LICENSE.md', $developerOptions['license'], false);
+            }
 
-        if (!empty($addOnEntity->devTools_readme_md))
-        {
-            File::writeFile($buildUploadRoot . $ds . 'README.md', $addOnEntity->devTools_readme_md, false);
+            if (!empty($developerOptions['readme']))
+            {
+                File::writeFile($buildUploadRoot . $ds . 'README.md', $developerOptions['readme'], false);
+            }
+
+            if (file_exists($buildUploadRoot . $ds . 'dev.json'))
+            {
+                unlink($buildUploadRoot . $ds . 'dev.json');
+            }
         }
     }
 

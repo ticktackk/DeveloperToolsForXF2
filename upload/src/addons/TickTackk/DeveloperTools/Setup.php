@@ -7,6 +7,8 @@ use XF\AddOn\StepRunnerInstallTrait;
 use XF\AddOn\StepRunnerUninstallTrait;
 use XF\AddOn\StepRunnerUpgradeTrait;
 use XF\Db\Schema\Alter;
+use XF\Util\File;
+use XF\Util\Json;
 
 /**
  * Class Setup
@@ -19,66 +21,41 @@ class Setup extends AbstractSetup
     use StepRunnerUpgradeTrait;
     use StepRunnerUninstallTrait;
 
-    public function installStep1()
+    public function upgrade1000033Step1()
     {
-        $this->schemaManager()->alterTable('xf_addon', function (Alter $table)
+        $addOns = $this->app->finder('XF:AddOn')
+            ->whereOr([
+                ['devTools_license', '<>', ''],
+                ['devTools_gitignore', '<>', ''],
+                ['devTools_readme_md', '<>', ''],
+                ['devTools_parse_additional_files', '=', true]
+            ])
+            ->where('addon_id', '<>', [
+                'XF',
+                'XFRM',
+                'XFMG'
+            ])
+            ->fetch();
+
+        if ($addOns->count())
         {
-            $table->addColumn('devTools_license', 'mediumtext');
-            $table->addColumn('devTools_gitignore', 'mediumtext');
-            $table->addColumn('devTools_readme_md', 'mediumtext');
-            $table->addColumn('devTools_parse_additional_files', 'tinyint')->setDefault(0);
-        });
+            /** @var \TickTackk\DeveloperTools\XF\Repository\AddOn $addOnRepo */
+            $addOnRepo = $this->app->repository('XF:AddOn');
+
+            /** @var \XF\Entity\AddOn $addOn */
+            foreach ($addOns AS $addOn)
+            {
+                $addOnRepo->exportDeveloperOptions($addOn, [
+                    'license' => $addOn->get('devTools_license'),
+                    'gitignore' => $addOn->get('devTools_gitignore'),
+                    'readme' => $addOn->get('devTools_readme_md'),
+                    'parse_additional_files' => $addOn->get('devTools_parse_additional_files')
+                ]);
+            }
+        }
     }
 
-    public function upgrade1000010Step1()
-    {
-        $sm = $this->schemaManager();
-        if ($sm->columnExists('xf_user', 'license'))
-        {
-            $sm->alterTable('xf_user', function (Alter $table)
-            {
-                $table->dropColumns('license');
-            });
-        }
-
-        if ($sm->columnExists('xf_user', 'gitignore'))
-        {
-            $sm->alterTable('xf_user', function (Alter $table)
-            {
-                $table->dropColumns('gitignore');
-            });
-        }
-
-        if ($sm->columnExists('xf_user', 'readme_md'))
-        {
-            $sm->alterTable('xf_user', function (Alter $table)
-            {
-                $table->dropColumns('readme_md');
-            });
-        }
-
-        $sm->alterTable('xf_addon', function (Alter $table)
-        {
-            $table->addColumn('license', 'mediumtext');
-            $table->addColumn('gitignore', 'mediumtext');
-            $table->addColumn('readme_md', 'mediumtext');
-        });
-    }
-    
-    public function upgrade1000030Step1()
-    {
-        $sm = $this->schemaManager();
-        $sm->alterTable('xf_addon', function (Alter $table)
-        {
-            $table->renameColumn('license', 'devTools_license');
-            $table->renameColumn('gitignore', 'devTools_gitignore');
-            $table->renameColumn('readme_md', 'devTools_readme_md');
-            
-            $table->addColumn('devTools_parse_additional_files', 'tinyint')->setDefault(0);
-        });
-    }
-    
-    public function uninstallStep1()
+    public function upgrade1000033Step2()
     {
         $this->schemaManager()->alterTable('xf_addon', function (Alter $table)
         {

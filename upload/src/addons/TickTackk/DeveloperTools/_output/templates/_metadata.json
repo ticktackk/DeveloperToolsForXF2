@@ -1,17 +1,12 @@
 {
     "admin/developerTools_developer_options.html": {
-        "version_id": 1000031,
-        "version_string": "1.0.0 Beta 1",
-        "hash": "cfe751e70061c56e1b5ddf3ede0f2128"
+        "version_id": 1000033,
+        "version_string": "1.0.0 Beta 3",
+        "hash": "7e28057b71830a8e4592df1a9b3dee6c"
     },
     "admin/developerTools_template_modification_edit_style_id.html": {
         "version_id": 1000012,
         "version_string": "1.0.0 Alpha 2",
         "hash": "cbdff6f998b6d2f7c6b98d6ad4d2e2f0"
-    },
-    "public/developerTools_template_modification_edit_style_id.html": {
-        "version_id": 1000012,
-        "version_string": "1.0.0 Alpha 2",
-        "hash": "0f0db5c8247572b16f547a4bae039d98"
     }
 }

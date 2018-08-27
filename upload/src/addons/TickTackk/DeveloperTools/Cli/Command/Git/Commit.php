@@ -61,7 +61,7 @@ class Commit extends Command
             return 1;
         }
 
-        /** @var \XF\Entity\AddOn $addOnEntity */
+        /** @var \TickTackk\DeveloperTools\XF\Entity\AddOn $addOnEntity */
         $addOnEntity = $addOn->getInstalledAddOn();
 
         $addOnDirectory = $addOn->getAddOnDirectory();
@@ -140,66 +140,75 @@ class Commit extends Command
 
         $rootPath = \XF::getRootDirectory();
         $filesRoot = $addOn->getFilesDirectory();
+        $developerOptions = $addOnEntity->DeveloperOptions;
 
-        /** @noinspection PhpUndefinedFieldInspection */
-        if ($addOnEntity->devTools_parse_additional_files)
+        if ($developerOptions)
         {
-            /** @noinspection PhpUndefinedFieldInspection */
-            $additionalFiles = $addOn->additional_files;
-            foreach ((array)$additionalFiles AS $additionalFile)
+            if ($developerOptions['parse_additional_files'])
             {
-                $filePath = $filesRoot . $ds . $additionalFile;
-                if (file_exists($filePath))
+                $additionalFiles = $addOn->additional_files;
+                foreach ((array)$additionalFiles AS $additionalFile)
                 {
-                    $root = $filesRoot;
-                } else
-                {
-                    $filePath = $rootPath . $ds . $additionalFile;
-                    if (!file_exists($filePath))
+                    $filePath = $filesRoot . $ds . $additionalFile;
+                    if (file_exists($filePath))
                     {
-                        continue;
+                        $root = $filesRoot;
                     }
-                    $root = $rootPath;
-                }
-
-                if (is_dir($filePath))
-                {
-                    $filesIterator = $this->getFileIterator($filePath);
-                    foreach ($filesIterator AS $file)
+                    else
                     {
-                        $stdPath = $this->standardizePath($root, $file->getPathname());
-                        if (!$file->isDir())
+                        $filePath = $rootPath . $ds . $additionalFile;
+                        if (!file_exists($filePath))
                         {
-                            File::copyFile($file->getPathname(), $uploadRoot . $ds . $stdPath, false);
+                            continue;
                         }
+                        $root = $rootPath;
                     }
-                } else
-                {
-                    $stdPath = $this->standardizePath($root, $filePath);
-                    File::copyFile($filePath, $uploadRoot . $ds . $stdPath, false);
+
+                    if (is_dir($filePath))
+                    {
+                        $filesIterator = $this->getFileIterator($filePath);
+                        foreach ($filesIterator AS $file)
+                        {
+                            $stdPath = $this->standardizePath($root, $file->getPathname());
+                            if (!$file->isDir())
+                            {
+                                File::copyFile($file->getPathname(), $uploadRoot . $ds . $stdPath, false);
+                            }
+                        }
+                    } else
+                    {
+                        $stdPath = $this->standardizePath($root, $filePath);
+                        File::copyFile($filePath, $uploadRoot . $ds . $stdPath, false);
+                    }
                 }
             }
-        }
 
-        if (!empty($addOnEntity->devTools_license))
-        {
-            File::writeFile($repoRoot . $ds . 'LICENSE.md', $addOnEntity->devTools_license, false);
-        }
-
-        if (!empty($addOnEntity->devTools_readme_md))
-        {
-            $readMeMarkdownFileInRepoRoot = $repoRoot . $ds . 'README.md';
-            if (file_exists($readMeMarkdownFileInRepoRoot) && is_readable($readMeMarkdownFileInRepoRoot))
+            if (!empty($developerOptions['license']))
             {
-                unlink($readMeMarkdownFileInRepoRoot);
+                $licenseFileInRepoRoot = $repoRoot . $ds . 'LICENSE.md';
+                if (file_exists($licenseFileInRepoRoot) && is_readable($licenseFileInRepoRoot))
+                {
+                    unlink($licenseFileInRepoRoot);
+                }
+
+                File::writeFile($repoRoot . $ds . 'LICENSE.md', $developerOptions['license'], false);
             }
 
-            File::writeFile($readMeMarkdownFileInRepoRoot, $addOnEntity->devTools_readme_md, false);
-        }
+            if (!empty($developerOptions['readme']))
+            {
+                $readMeMarkdownFileInRepoRoot = $repoRoot . $ds . 'README.md';
+                if (file_exists($readMeMarkdownFileInRepoRoot) && is_readable($readMeMarkdownFileInRepoRoot))
+                {
+                    unlink($readMeMarkdownFileInRepoRoot);
+                }
 
-        if (!empty($addOnEntity->devTools_gitignore))
-        {
-            File::writeFile($srcRoot . $ds . '.gitignore', $addOnEntity->devTools_gitignore, false);
+                File::writeFile($readMeMarkdownFileInRepoRoot, $developerOptions['readme'], false);
+            }
+
+            if (!empty($developerOptions['gitignore']))
+            {
+                File::writeFile($srcRoot . $ds . '.gitignore', $developerOptions['gitignore'], false);
+            }
         }
 
         $git->add()->execute('*');
