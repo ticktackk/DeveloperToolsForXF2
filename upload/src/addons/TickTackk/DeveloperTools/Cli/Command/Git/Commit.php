@@ -2,6 +2,7 @@
 
 namespace TickTackk\DeveloperTools\Cli\Command\Git;
 
+use function Sodium\add;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -213,42 +214,48 @@ class Commit extends Command
 
         $git->add()->execute('*');
 
-        $options = \XF::options();
-        $gitUsername = $options->developerTools_git_username;
-        $gitEmail = $options->developerTools_git_email;
-        $gitAlreadyHasName = null;
-        $gitAlreadyHasEmail = null;
+        if (empty($developerOptions['git']['name']) || empty($developerOptions['git']['email']))
+        {
+            $options = \XF::app()->options();
+            $globalGitName = $options->developerTools_git_username;
+            $globalGitEmail = $options->developerTools_git_email;
 
-        try
-        {
-            $gitAlreadyHasName = !empty($git->config()->get('user.name')->execute());
-        }
-        catch (GitException $e)
-        {
-            $gitAlreadyHasName = false;
-        }
-        finally
-        {
-            if ($gitAlreadyHasName === false)
+            if (!empty($globalGitName) && !empty($globalGitEmail))
             {
-                $git->config()->add('user.name', $gitUsername)->execute();
+                $developerOptions['git']['name'] = $options->developerTools_git_username;
+                $developerOptions['git']['email'] = $options->developerTools_git_email;
+            }
+            else
+            {
+                $output->writeln(['', 'No git username or email specified for ' . $addOnEntity->title]);
+                return 1;
             }
         }
 
         try
         {
-            $gitAlreadyHasEmail = !empty($git->config()->get('user.email')->execute());
+            $existingGitName = $git->config()->get('user.name')->execute();
+            if ($existingGitName !== $developerOptions['git']['name'])
+            {
+                $git->config()->replaceAll('user.name', $developerOptions['git']['name']);
+            }
         }
         catch (GitException $e)
         {
-            $gitAlreadyHasEmail = false;
+            $git->config()->add('user.name', $developerOptions['git']['name'])->execute();
         }
-        finally
+
+        try
         {
-            if ($gitAlreadyHasEmail === false)
+            $existingGitEmail = $git->config()->get('user.email')->execute();
+            if ($existingGitEmail !== $developerOptions['git']['email'])
             {
-                $git->config()->add('user.email', $gitEmail)->execute();
+                $git->config()->replaceAll('user.email', $developerOptions['git']['email']);
             }
+        }
+        catch (GitException $e)
+        {
+            $git->config()->add('user.email', $developerOptions['git']['email'])->execute();
         }
 
         try
@@ -261,7 +268,8 @@ class Commit extends Command
         }
         catch (GitException $e)
         {
-            throw $e;
+            $output->writeln(['', $e->getMessage()]);
+            return 1;
         }
 
         if (empty($git->status()->getIndexStatus()))

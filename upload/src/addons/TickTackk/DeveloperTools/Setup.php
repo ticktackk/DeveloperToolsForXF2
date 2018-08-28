@@ -42,6 +42,10 @@ class Setup extends AbstractSetup
             /** @var \TickTackk\DeveloperTools\XF\Repository\AddOn $addOnRepo */
             $addOnRepo = $this->app->repository('XF:AddOn');
 
+            $options = $this->app->options();
+            $gitName = $options->developerTools_git_username;
+            $gitEmail = $options->developerTools_git_email;
+
             /** @var \XF\Entity\AddOn $addOn */
             foreach ($addOns AS $addOn)
             {
@@ -49,7 +53,11 @@ class Setup extends AbstractSetup
                     'license' => $addOn->get('devTools_license'),
                     'gitignore' => $addOn->get('devTools_gitignore'),
                     'readme' => $addOn->get('devTools_readme_md'),
-                    'parse_additional_files' => $addOn->get('devTools_parse_additional_files')
+                    'parse_additional_files' => $addOn->get('devTools_parse_additional_files'),
+                    'git' => [
+                        'name' => $gitName,
+                        'email' => $gitEmail
+                    ]
                 ]);
             }
         }

@@ -36,7 +36,8 @@ class AddOn extends XFCP_AddOn
                 'license' => 'str',
                 'gitignore' => 'str',
                 'readme' => 'str',
-                'parse_additional_files' => 'bool'
+                'parse_additional_files' => 'bool',
+                'git' => 'array-string'
             ]);
 
             $addOnRepo->exportDeveloperOptions($addOn->getInstalledAddOn(), $input);

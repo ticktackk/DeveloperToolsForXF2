@@ -1,0 +1,2 @@
+Git uses a username to associate commits with an identity. The Git username is not the same as your GitHub username. <br /><br />
+Changing the name associated with your Git commits using this option (or git config) will only affect future commits and will not change the name used for past commits.

@@ -4,17 +4,23 @@
 	<div class="block-container">
 
 		<div class="block-body">
-			<xf:textarearow name="license" value="{{ $addOn.DeveloperOptions.license }}" autosize="true" label="{{ phrase('developerTools_contents_for_license') }}" />
-
+			<xf:textboxrow name="git[name]" value="{{ $addOn.DeveloperOptions.git.name ?: $xf.options.developerTools_git_username }}" label="{{ phrase('developerTools_git_name') }}" explain="{{ phrase('developerTools_git_name_explain') }}" />
+			
+			<xf:textboxrow name="git[email]" value="{{ $addOn.DeveloperOptions.git.email ?: $xf.options.developerTools_git_email }}" label="{{ phrase('developerTools_git_email') }}" explain="{{ phrase('developerTools_git_email_explain') }}" />
+			
 			<xf:textarearow name="gitignore" value="{{ $addOn.DeveloperOptions.gitignore }}" autosize="true" label="{{ phrase('developerTools_contents_for_gitignore') }}" />
 			
+			<hr class="formRowSep" />
+			
+			<xf:textarearow name="license" value="{{ $addOn.DeveloperOptions.license }}" autosize="true" label="{{ phrase('developerTools_contents_for_license') }}" />
+			
 			<xf:textarearow name="readme" value="{{ $addOn.DeveloperOptions.readme }}" autosize="true" label="{{ phrase('developerTools_contents_for_readme_markdown_file') }}" />
+			
+			<hr class="formRowSep" />
 			
 			<xf:checkboxrow name="parse_additional_files" explain="{{ phrase('developerTools_parse_additional_files_explain') }}">
 				<xf:option value="1" selected="{$addOn.DeveloperOptions.parse_additional_files}">{{ phrase('developerTools_parse_additional_files') }}</xf:option>
 			</xf:checkboxrow>
-
-			<hr class="formRowSep" />
 		</div>
 
 		<xf:submitrow sticky="true" icon="save" />

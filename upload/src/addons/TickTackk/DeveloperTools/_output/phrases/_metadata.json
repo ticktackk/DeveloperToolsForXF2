@@ -425,6 +425,30 @@
         "version_string": "1.0.0 Alpha 4",
         "hash": "a4d238c45c3282de775adee8a8ce0fee"
     },
+    "developerTools_git_email.txt": {
+        "global_cache": false,
+        "version_id": 1000033,
+        "version_string": "1.0.0 Beta 3",
+        "hash": "d51d6723c0bb880495e02f7d164ff6c0"
+    },
+    "developerTools_git_email_explain.txt": {
+        "global_cache": false,
+        "version_id": 1000033,
+        "version_string": "1.0.0 Beta 3",
+        "hash": "0bd9323683abc1233de6a35b53bf2aca"
+    },
+    "developerTools_git_name.txt": {
+        "global_cache": false,
+        "version_id": 1000033,
+        "version_string": "1.0.0 Beta 3",
+        "hash": "279e165f727ef6b8bddb76277cdc8388"
+    },
+    "developerTools_git_name_explain.txt": {
+        "global_cache": false,
+        "version_id": 1000033,
+        "version_string": "1.0.0 Beta 3",
+        "hash": "43bb4f5ceef7cd6c50402e5ecdcf03de"
+    },
     "developerTools_parse_additional_files.txt": {
         "global_cache": false,
         "version_id": 1000031,
@@ -457,21 +481,21 @@
     },
     "option.developerTools_git_email.txt": {
         "global_cache": false,
-        "version_id": 1000014,
-        "version_string": "1.0.0 Alpha 4",
-        "hash": "5804386c013a3fc469d7cbc61f9066af"
+        "version_id": 1000033,
+        "version_string": "1.0.0 Beta 3",
+        "hash": "d51d6723c0bb880495e02f7d164ff6c0"
     },
     "option.developerTools_git_ignore.txt": {
         "global_cache": false,
-        "version_id": 1000031,
-        "version_string": "1.0.0 Beta 1",
-        "hash": "3b19c6dfcd68c0621639d58416de917c"
+        "version_id": 1000033,
+        "version_string": "1.0.0 Beta 3",
+        "hash": "a084b794bc0759e7a6b77810e01874f2"
     },
     "option.developerTools_git_username.txt": {
         "global_cache": false,
-        "version_id": 1000014,
-        "version_string": "1.0.0 Alpha 4",
-        "hash": "e0817f4320627d72ac54058337f1ec64"
+        "version_id": 1000033,
+        "version_string": "1.0.0 Beta 3",
+        "hash": "279e165f727ef6b8bddb76277cdc8388"
     },
     "option_explain.developerTools_excluded_directories.txt": {
         "global_cache": false,
@@ -481,15 +505,15 @@
     },
     "option_explain.developerTools_git_email.txt": {
         "global_cache": false,
-        "version_id": 1000014,
-        "version_string": "1.0.0 Alpha 4",
-        "hash": "a986bf03ffa93538e8cf54c2fa25ab80"
+        "version_id": 1000033,
+        "version_string": "1.0.0 Beta 3",
+        "hash": "0bd9323683abc1233de6a35b53bf2aca"
     },
     "option_explain.developerTools_git_ignore.txt": {
         "global_cache": false,
-        "version_id": 1000031,
-        "version_string": "1.0.0 Beta 1",
-        "hash": "499e241c80e5b76c56b5f342214f4424"
+        "version_id": 1000033,
+        "version_string": "1.0.0 Beta 3",
+        "hash": "2722f3ca055effe6f9893e6a8f549f41"
     },
     "option_explain.developerTools_git_username.txt": {
         "global_cache": false,
