@@ -11,8 +11,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use TickTackk\DeveloperTools\Git\GitException;
-use TickTackk\DeveloperTools\Git\GitRepository;
+use Bit3\GitPhp\GitException;
+use Bit3\GitPhp\GitRepository;
 use XF\Cli\Command\AddOnActionTrait;
 use XF\Util\File;
 

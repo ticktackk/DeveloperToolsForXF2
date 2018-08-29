@@ -22,4 +22,14 @@ class Listener
     {
         self::$modificationId = $entity->getEntityId();
     }
+
+    /**
+     * @param \XF\App $app
+     */
+    public static function appSetup(\XF\App $app)
+    {
+        $ds = DIRECTORY_SEPARATOR;
+        \XF::$autoLoader
+            ->addPsr4('Bit3\\GitPhp\\', \XF::getRootDirectory() . $ds . "src{$ds}addons{$ds}TickTackk{$ds}DeveloperTools{$ds}vendor{$ds}bit3{$ds}git-php{$ds}src", true);
+    }
 }

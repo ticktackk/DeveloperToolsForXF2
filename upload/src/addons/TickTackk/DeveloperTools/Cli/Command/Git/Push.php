@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use TickTackk\DeveloperTools\Git\GitRepository;
+use Bit3\GitPhp\GitRepository;
 use XF\Cli\Command\AddOnActionTrait;
 use XF\Util\File;
 
