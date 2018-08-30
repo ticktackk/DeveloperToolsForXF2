@@ -61,7 +61,8 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
     protected function getExcludedDirectories()
     {
         return array_merge([
-            '_repo'
+            '_repo',
+            '_tests'
         ], parent::getExcludedDirectories());
     }
 }

@@ -1,0 +1,51 @@
+{
+  "name": "codedungeon/phpunit-result-printer",
+  "version": "0.19.13",
+  "description": "PHPUnit Pretty Result Printer",
+  "keywords": [
+    "phpunit",
+    "printer",
+    "result-printer",
+    "composer",
+    "package",
+    "testing",
+    "tdd"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mike Erickson",
+      "email": "codedungeon@gmail.com"
+    }
+  ],
+  "type": "library",
+  "require": {
+    "php": "^7.1",
+    "hassankhan/config": "^1.0",
+    "symfony/yaml": "^2.7|^3.0|^4.0",
+    "codedungeon/php-cli-colors": "^1.10"
+  },
+  "require-dev": {
+    "spatie/phpunit-watcher": "^1.5",
+    "phpunit/phpunit": "7.1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Codedungeon\\PHPUnitPrettyResultPrinter\\": "src/"
+    }
+  },
+  "scripts": {
+    "coverage-report": "open ./coverage/index.html",
+    "test": "vendor/bin/phpunit --colors=always",
+    "test-unit": "vendor/bin/phpunit --colors=always --testsuite=Unit",
+    "test-coverage": [
+      "./vendor/bin/phpunit --colors=always --testsuite Unit --coverage-html coverage",
+      "open ./coverage/index.html"
+    ],
+    "test-ci": "vendor/bin/phpunit -c phpunit.ci.xml",
+    "test-watch":
+      "vendor/bin/phpunit-watcher watch --testsuite Unit  < /dev/tty",
+    "watch-tickets":
+      "vendor/bin/phpunit-watcher watch --testsuite Tickets  < /dev/tty"
+  }
+}

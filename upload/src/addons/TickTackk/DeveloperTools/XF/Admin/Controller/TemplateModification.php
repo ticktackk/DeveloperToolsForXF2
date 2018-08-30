@@ -101,10 +101,12 @@ class TemplateModification extends XFCP_TemplateModification
             {
                 return $this->error(\XF::phrase('developerTools_requested_template_for_selected_style_could_not_be_found'));
             }
-            else if (!$templateForMasterStyle && !$templateForStyle)
+
+            if (!$templateForMasterStyle && !$templateForStyle)
             {
                 return $this->error(\XF::phrase('requested_template_not_found'));
             }
+
             /** @noinspection PhpUndefinedFieldInspection */
             $content = $templateForStyle->template;
 
@@ -251,39 +253,37 @@ class TemplateModification extends XFCP_TemplateModification
         $response = parent::templateModificationAddEdit($modification);
 
         /** @var \XF\Entity\TemplateModification $_modification_ */
-        if ($_modification = $response->getParam('modification'))
+        $_modification = $response->getParam('modification');
+        if ($_modification && $_modification->type === 'public')
         {
-            if ($_modification->type === 'public')
+            if ($_modification->Template && !$this->request->exists('style_id'))
             {
-                if ($_modification->Template && !$this->request->exists('style_id'))
-                {
-                    $styleId = $_modification->Template->style_id;
-                }
-                else
-                {
-                    $styleId = $this->filter('style_id', 'uint');
-                }
-
-                $style = $this->assertStyleExists($styleId);
-                $styleTree = $this->getStyleRepo()->getStyleTree();
-                $response->setParam('styleTree', $styleTree);
-                $response->setParam('style', $style);
-
-                $modificationRouteParams = [
-                    'type' => $_modification->type,
-                ];
-
-                $modificationRouteType = 'add';
-
-                if ($_modification->modification_id)
-                {
-                    $modificationRouteType = 'edit/' . $_modification->modification_id;
-                    $modificationRouteParams = [];
-                }
-
-                $response->setParam('modificationRouteParams', $modificationRouteParams);
-                $response->setParam('modificationRouteType', $modificationRouteType);
+                $styleId = $_modification->Template->style_id;
             }
+            else
+            {
+                $styleId = $this->filter('style_id', 'uint');
+            }
+
+            $style = $this->assertStyleExists($styleId);
+            $styleTree = $this->getStyleRepo()->getStyleTree();
+            $response->setParam('styleTree', $styleTree);
+            $response->setParam('style', $style);
+
+            $modificationRouteParams = [
+                'type' => $_modification->type,
+            ];
+
+            $modificationRouteType = 'add';
+
+            if ($_modification->modification_id)
+            {
+                $modificationRouteType = 'edit/' . $_modification->modification_id;
+                $modificationRouteParams = [];
+            }
+
+            $response->setParam('modificationRouteParams', $modificationRouteParams);
+            $response->setParam('modificationRouteType', $modificationRouteType);
         }
 
         return $response;
