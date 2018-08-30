@@ -2,7 +2,6 @@
 
 namespace TickTackk\DeveloperTools\Cli\Command\Git;
 
-use function Sodium\add;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -15,6 +14,8 @@ use Bit3\GitPhp\GitException;
 use Bit3\GitPhp\GitRepository;
 use XF\Cli\Command\AddOnActionTrait;
 use XF\Util\File;
+use PHPUnit\TextUI\TestRunner;
+use PHPUnit\Exception as PHPUnitException;
 
 /**
  * Class Commit
@@ -67,6 +68,7 @@ class Commit extends Command
 
         $addOnDirectory = $addOn->getAddOnDirectory();
         $ds = DIRECTORY_SEPARATOR;
+
         $repoRoot = $addOnDirectory . $ds . '_repo';
 
         $git = new GitRepository($repoRoot);
@@ -344,6 +346,9 @@ class Commit extends Command
         return false;
     }
 
+    /**
+     * @return array[]|false|string[]
+     */
     protected function getExcludedDirectoriesForRepo()
     {
         return preg_split('/\r?\n/', \XF::options()->developerTools_excluded_directories, -1, PREG_SPLIT_NO_EMPTY);
