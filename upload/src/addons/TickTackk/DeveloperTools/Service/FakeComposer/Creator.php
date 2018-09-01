@@ -2,6 +2,8 @@
 
 namespace TickTackk\DeveloperTools\Service\FakeComposer;
 
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 use XF\AddOn\AddOn;
 use XF\Entity\AddOn AS AddOnEntity;
 use XF\Service\AbstractService;
@@ -54,9 +56,177 @@ class Creator extends AbstractService
         $addOnRoot = $this->getAddOn()->getAddOnDirectory();
         $vendorDir = $addOnRoot . $ds . 'vendor';
 
-        $iterator = $this->getFileIterator($vendorDir);
+        $namespaces = [];
+        $psr4 = [];
+        $classMap = [];
+        $requiredFiles = [];
 
-        $classes = [];
+        $local = new Local($vendorDir);
+        $localFs = new Filesystem($local);
+
+        $cleanPath = function ($path, $contentPath, $trim = true) use($vendorDir, $ds)
+        {
+            $cleanedPath = str_replace('\\', '/', utf8_substr($vendorDir, utf8_strlen(\XF::getRootDirectory() . $ds)) . '/' . dirname($path) . '/' . $contentPath);
+            return $trim ? trim($cleanedPath, '/') : $cleanedPath;
+        };
+
+        foreach ($localFs->listContents('', true) AS $info)
+        {
+            if ($info['type'] === 'file' && $info['basename'] === 'composer.json')
+            {
+                $composerContents = json_decode(file_get_contents(
+                    $vendorDir . $ds . $info['path']
+                ), true);
+
+                if (!empty($composerContents['autoload']['psr-0']))
+                {
+                    foreach ($composerContents['autoload']['psr-0'] AS $namespace => $contentPath)
+                    {
+                        $namespaces[$namespace][] = $cleanPath($info['path'], $contentPath);
+                    }
+                }
+
+                if (!empty($composerContents['autoload']['psr-4']))
+                {
+                    foreach ($composerContents['autoload']['psr-4'] AS $namespace => $directoryList)
+                    {
+                        foreach ((array) $directoryList AS $contentPath)
+                        {
+                            $psr4[$namespace][] = $cleanPath($info['path'], $contentPath);
+                        }
+                    }
+                }
+
+                if (!empty($composerContents['autoload']['classmap']))
+                {
+                    foreach ($composerContents['autoload']['classmap'] AS $contentPath)
+                    {
+                        $src = rtrim($vendorDir . $ds . dirname($info['path']) . $ds . str_replace('/', $ds, $contentPath), $ds);
+                        if (is_dir($src))
+                        {
+                            $this->getClassMapsFromDir($src, $classMap);
+                        }
+                    }
+                }
+
+                if (!empty($composerContents['autoload']['files']))
+                {
+                    foreach ($composerContents['autoload']['files'] AS $file)
+                    {
+                        $requiredFiles[] = $cleanPath($info['path'], $file, false);
+                    }
+                }
+            }
+        }
+
+        $addOn = $this->getAddOn();
+
+        $fakeComposerPath = $addOnRoot . $ds . 'FakeComposer.php';
+
+        $exportedNamespaces = var_export($namespaces, true);
+        $exportedPsr4 = var_export($psr4, true);
+        $exportedClassMap = var_export($classMap, true);
+        $exportedRequiredFiles = var_export($requiredFiles, true);
+
+        $fakeComposerContent = '<?php
+
+// ################## THIS IS A GENERATED FILE ##################
+// #################### DO NOT EDIT DIRECTLY ####################
+
+namespace ' . $addOn->prepareAddOnIdForClass() . ';
+
+/**
+ * Class FakeComposer
+ *
+ * @package ' . $addOn->prepareAddOnIdForClass() . '
+ */
+class FakeComposer
+{
+    /**
+     * @return array
+     */
+    protected static function getNamespaces()
+    {
+        return ' . $exportedNamespaces . ';
+    }
+
+    /**
+     * @return array
+     */
+    protected static function getPsr4()
+    {
+        return ' . $exportedPsr4 . ';
+    }
+
+    /**
+     * @return array
+     */
+    protected static function getClassMap()
+    {
+        return ' . $exportedClassMap . ';
+    }
+
+    /**
+     * @return array
+     */
+    protected static function getRequiredFiles()
+    {
+        return ' . $exportedRequiredFiles . ';
+    }
+    
+    /**
+     * @param \XF\App $app
+     */
+    public static function appSetup(\XF\App $app)
+    {
+        foreach (self::getNamespaces() AS $namespace => $filePath)
+        {
+            \XF::$autoLoader->add($namespace, $filePath);
+        }
+
+        foreach (self::getPsr4() AS $namespace => $filePath)
+        {
+            \XF::$autoLoader->addPsr4($namespace, $filePath, true);
+        }
+
+        \XF::$autoLoader->addClassMap(self::getClassMap());
+
+        foreach (self::getRequiredFiles() AS $filePath)
+        {
+            require $filePath;
+        }
+    }
+}';
+
+        File::writeFile($fakeComposerPath, $fakeComposerContent, false);
+
+        $fakeComposerCELExists = $this->finder('XF:CodeEventListener')
+            ->where('callback_class', $addOn->prepareAddOnIdForClass() . '\\FakeComposer')
+            ->where('callback_method', 'appSetup')
+            ->where('addon_id', $addOn->getAddOnId())
+            ->fetchOne();
+
+        if (!$fakeComposerCELExists)
+        {
+            /** @var \XF\Entity\CodeEventListener $fakeComposerCEL */
+            $fakeComposerCEL = $this->em()->create('XF:CodeEventListener');
+            $fakeComposerCEL->event_id = 'app_setup';
+            $fakeComposerCEL->callback_class = $addOn->prepareAddOnIdForClass() . '\\FakeComposer';
+            $fakeComposerCEL->callback_method = 'appSetup';
+            $fakeComposerCEL->addon_id = $addOn->getAddOnId();
+            $fakeComposerCEL->description = 'Loads packages from vendor directory';
+            $fakeComposerCEL->save();
+        }
+    }
+
+    /**
+     * @param       $directory
+     * @param array $classMap
+     */
+    protected function getClassMapsFromDir($directory, array &$classMap)
+    {
+        $iterator = $this->getFileIterator($directory);
+
         foreach ($iterator AS $file)
         {
             if ($file->isDir())
@@ -95,7 +265,7 @@ class Creator extends AbstractService
                         if (T_WHITESPACE === $tokens[$index + 1][0] && T_STRING === $tokens[$index + 2][0])
                         {
                             $index += 2;
-                            $classes[$namespace . '\\' . $tokens[$index][1]] = utf8_substr($file->getPathname(), utf8_strlen(\XF::getRootDirectory() . $ds));
+                            $classMap[$namespace . '\\' . $tokens[$index][1]] = utf8_substr($file->getPathname(), utf8_strlen(\XF::getRootDirectory() . DIRECTORY_SEPARATOR));
                         }
                         break;
 
@@ -103,53 +273,6 @@ class Creator extends AbstractService
                         break;
                 }
             }
-        }
-
-        $addOn = $this->getAddOn();
-
-        $fakeComposerPath = $addOnRoot . $ds . 'FakeComposer.php';
-        $exportedClasses = var_export($classes, true);
-        $fakeComposerContent = '<?php
-
-// ################## THIS IS A GENERATED FILE ##################
-// #################### DO NOT EDIT DIRECTLY ####################
-
-namespace ' . $addOn->prepareAddOnIdForClass() . ';
-
-/**
- * Class FakeComposer
- *
- * @package ' . $addOn->prepareAddOnIdForClass() . '
- */
-class FakeComposer
-{
-    /**
-     * @param \XF\App $app
-     */
-    public static function appSetup(\XF\App $app)
-    {
-        \XF::$autoLoader->addClassMap(' . $exportedClasses . ');
-    }
-}';
-
-        File::writeFile($fakeComposerPath, $fakeComposerContent, false);
-
-        $fakeComposerCELExists = $this->finder('XF:CodeEventListener')
-            ->where('callback_class', $addOn->prepareAddOnIdForClass() . '\\FakeComposer')
-            ->where('callback_method', 'appSetup')
-            ->where('addon_id', $addOn->getAddOnId())
-            ->fetchOne();
-
-        if (!$fakeComposerCELExists)
-        {
-            /** @var \XF\Entity\CodeEventListener $fakeComposerCEL */
-            $fakeComposerCEL = $this->em()->create('XF:CodeEventListener');
-            $fakeComposerCEL->event_id = 'app_setup';
-            $fakeComposerCEL->callback_class = $addOn->prepareAddOnIdForClass() . '\\FakeComposer';
-            $fakeComposerCEL->callback_method = 'appSetup';
-            $fakeComposerCEL->addon_id = $addOn->getAddOnId();
-            $fakeComposerCEL->description = 'Loads packages from vendor directory';
-            $fakeComposerCEL->save();
         }
     }
 
