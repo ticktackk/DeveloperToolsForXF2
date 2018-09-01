@@ -1,6 +1,6 @@
 <?php
 
-namespace TickTackk\DeveloperTools\Service\Autoload;
+namespace TickTackk\DeveloperTools\Service\FakeComposer;
 
 use XF\AddOn\AddOn;
 use XF\Entity\AddOn AS AddOnEntity;
@@ -10,7 +10,7 @@ use XF\Util\File;
 /**
  * Class ClassMap
  *
- * @package TickTackk\DeveloperTools\XF\Service\Autoload
+ * @package TickTackk\DeveloperTools\XF\Service\FakeComposer
  */
 class Creator extends AbstractService
 {
@@ -109,7 +109,7 @@ class Creator extends AbstractService
 
         $fakeComposerPath = $addOnRoot . $ds . 'FakeComposer.php';
         $exportedClasses = var_export($classes, true);
-        $autoLoaderContent = '<?php
+        $fakeComposerContent = '<?php
 
 // ################## THIS IS A GENERATED FILE ##################
 // #################### DO NOT EDIT DIRECTLY ####################
@@ -132,7 +132,7 @@ class FakeComposer
     }
 }';
 
-        File::writeFile($fakeComposerPath, $autoLoaderContent, false);
+        File::writeFile($fakeComposerPath, $fakeComposerContent, false);
 
         $fakeComposerCELExists = $this->finder('XF:CodeEventListener')
             ->where('callback_class', $addOn->prepareAddOnIdForClass() . '\\FakeComposer')
