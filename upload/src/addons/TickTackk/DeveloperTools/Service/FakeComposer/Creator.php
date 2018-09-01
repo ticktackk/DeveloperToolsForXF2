@@ -265,7 +265,7 @@ class FakeComposer
                         if (T_WHITESPACE === $tokens[$index + 1][0] && T_STRING === $tokens[$index + 2][0])
                         {
                             $index += 2;
-                            $classMap[$namespace . '\\' . $tokens[$index][1]] = utf8_substr($file->getPathname(), utf8_strlen(\XF::getRootDirectory() . DIRECTORY_SEPARATOR));
+                            $classMap[$namespace . (!empty($namespace) ? '\\' : '') . $tokens[$index][1]] = utf8_substr($file->getPathname(), utf8_strlen(\XF::getRootDirectory() . DIRECTORY_SEPARATOR));
                         }
                         break;
 
