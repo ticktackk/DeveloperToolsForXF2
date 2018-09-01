@@ -77,8 +77,8 @@ class AddOn extends XFCP_AddOn
             return $this->noPermission();
         }
 
-        /** @var \TickTackk\DeveloperTools\Service\Autoload\Creator $classMapService */
-        $classMapService = $this->service('TickTackk\DeveloperTools:Autoload\Creator', $addOn->getInstalledAddOn());
+        /** @var \TickTackk\DeveloperTools\Service\FakeComposer\Creator $classMapService */
+        $classMapService = $this->service('TickTackk\DeveloperTools:FakeComposer\Creator', $addOn->getInstalledAddOn());
         $classMapService->build();
 
         return $this->redirect($this->buildLink('add-ons/developer-options', $addOn->getInstalledAddOn()));
