@@ -17,6 +17,7 @@ class FakeComposer
      */
     protected static function getNamespaces()
     {
+        /** @noinspection PhpTraditionalSyntaxArrayLiteralInspection */
         return array (
   'Prophecy\\' => 
   array (
@@ -30,6 +31,7 @@ class FakeComposer
      */
     protected static function getPsr4()
     {
+        /** @noinspection PhpTraditionalSyntaxArrayLiteralInspection */
         return array (
   'Bit3\\GitPhp\\' => 
   array (
@@ -61,6 +63,7 @@ class FakeComposer
      */
     protected static function getClassMap()
     {
+        /** @noinspection PhpTraditionalSyntaxArrayLiteralInspection */
         return array (
   'PharIo\\Manifest\\Exception' => 'src\\addons\\TickTackk\\DeveloperTools\\vendor\\phar-io/manifest\\src\\exceptions\\Exception.php',
   'PharIo\\Manifest\\InvalidApplicationNameException' => 'src\\addons\\TickTackk\\DeveloperTools\\vendor\\phar-io/manifest\\src\\exceptions\\InvalidApplicationNameException.php',
@@ -591,6 +594,7 @@ class FakeComposer
      */
     protected static function getRequiredFiles()
     {
+        /** @noinspection PhpTraditionalSyntaxArrayLiteralInspection */
         return array (
   0 => 'src/addons/TickTackk/DeveloperTools/vendor/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
 );
