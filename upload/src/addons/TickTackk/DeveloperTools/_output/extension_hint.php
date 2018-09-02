@@ -21,5 +21,6 @@ namespace TickTackk\DeveloperTools\XF\Repository
 
 namespace TickTackk\DeveloperTools\XF\Service\AddOn
 {
+	class XFCP_JsMinifier extends \XF\Service\AddOn\JsMinifier {}
 	class XFCP_ReleaseBuilder extends \XF\Service\AddOn\ReleaseBuilder {}
 }
