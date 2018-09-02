@@ -65,4 +65,19 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
             '_tests'
         ], parent::getExcludedDirectories());
     }
+
+    /**
+     * @param $fileName
+     *
+     * @return bool
+     */
+    protected function isExcludedFileName($fileName)
+    {
+        if (in_array($fileName, ['git.json', 'dev.json']))
+        {
+            return true;
+        }
+
+        return parent::isExcludedFileName($fileName);
+    }
 }
