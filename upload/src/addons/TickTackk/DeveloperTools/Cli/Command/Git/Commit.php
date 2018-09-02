@@ -200,15 +200,11 @@ class Commit extends Command
         }
 
         $globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
+        $globalGitIgnore = explode("\n", $globalGitIgnore);
+        $addOnGitIgnore = !empty($developerOptions['gitignore']) ? explode("\n", $developerOptions['gitignore']) : [];
+        $gitIgnoreLines = array_unique(array_merge($globalGitIgnore, $addOnGitIgnore));
 
-        if (!empty($developerOptions['gitignore']))
-        {
-            File::writeFile($repoRoot . $ds . '.gitignore', $developerOptions['gitignore'], false);
-        }
-        else if (!empty($globalGitIgnore))
-        {
-            File::writeFile($repoRoot . $ds . '.gitignore', $globalGitIgnore, false);
-        }
+        File::writeFile($repoRoot . $ds . '.gitignore', implode("\n", $gitIgnoreLines), false);
 
         $git->add()->execute('*');
 
