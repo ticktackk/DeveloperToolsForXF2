@@ -11,6 +11,9 @@
     "XF-Repository-AddOn_TickTackk-DeveloperTools-XF-Repository-AddOn.json": {
         "hash": "d6902728b83f9878eb75ae787cdb4902"
     },
+    "XF-Service-AddOn-JsMinifier_TickTackk-DeveloperTools-XF-Service-AddOn-JsMinifier.json": {
+        "hash": "1bafb39ee156803439c0cb0652a250af"
+    },
     "XF-Service-AddOn-ReleaseBuilder_TickTackk-DeveloperTools-XF-Service-AddOn-ReleaseBuilder.json": {
         "hash": "dd1a7196ee5f82a13ee1c6168c3d1b8f"
     }
