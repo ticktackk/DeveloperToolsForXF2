@@ -16,7 +16,7 @@ class AddOn extends XFCP_AddOn
      * @param \XF\Entity\AddOn $addOn
      * @param array            $input
      */
-    public function exportDeveloperOptions(\XF\Entity\AddOn $addOn, array $input)
+    public function exportDeveloperOptions(\XF\Entity\AddOn $addOn, array $input) : void
     {
         $this->writeConfigForDeveloperTools($addOn, 'dev.json', $input);
     }
@@ -25,7 +25,7 @@ class AddOn extends XFCP_AddOn
      * @param \XF\Entity\AddOn $addOn
      * @param array            $input
      */
-    public function exportGitConfiguration(\XF\Entity\AddOn $addOn, array $input)
+    public function exportGitConfiguration(\XF\Entity\AddOn $addOn, array $input) : void
     {
         $this->writeConfigForDeveloperTools($addOn, 'git.json', $input);
     }
@@ -35,7 +35,7 @@ class AddOn extends XFCP_AddOn
      * @param string           $fileName
      * @param array            $input
      */
-    protected function writeConfigForDeveloperTools(\XF\Entity\AddOn $addOnEntity, $fileName, array $input)
+    protected function writeConfigForDeveloperTools(\XF\Entity\AddOn $addOnEntity, $fileName, array $input) : void
     {
         $addOn = new \XF\AddOn\AddOn($addOnEntity);
         $jsonPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . $fileName;
@@ -48,7 +48,7 @@ class AddOn extends XFCP_AddOn
      *
      * @return array|mixed
      */
-    public function getDeveloperOptions(\XF\Entity\AddOn $addOn)
+    public function getDeveloperOptions(\XF\Entity\AddOn $addOn) : array
     {
         return $this->readConfigForDeveloperTools($addOn, 'dev.json');
     }
@@ -58,7 +58,7 @@ class AddOn extends XFCP_AddOn
      *
      * @return array|mixed
      */
-    public function getGitConfigurations(\XF\Entity\AddOn $addOn)
+    public function getGitConfigurations(\XF\Entity\AddOn $addOn) : array
     {
         return $this->readConfigForDeveloperTools($addOn, 'git.json');
     }
@@ -69,7 +69,7 @@ class AddOn extends XFCP_AddOn
      *
      * @return array|mixed
      */
-    protected function readConfigForDeveloperTools(\XF\Entity\AddOn $addOnEntity, $fileName)
+    protected function readConfigForDeveloperTools(\XF\Entity\AddOn $addOnEntity, $fileName) : array
     {
         $addOn = new \XF\AddOn\AddOn($addOnEntity);
         $jsonPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . $fileName;

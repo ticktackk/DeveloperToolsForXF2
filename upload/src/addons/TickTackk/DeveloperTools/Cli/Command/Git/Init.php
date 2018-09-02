@@ -19,7 +19,7 @@ class Init extends Command
 {
     use AddOnActionTrait;
 
-    protected function configure()
+    protected function configure() : void
     {
         $this
             ->setName('ticktackk-devtools:git-init')
@@ -38,7 +38,7 @@ class Init extends Command
      * @return int
      */
     /** @noinspection PhpMissingParentCallCommonInspection */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $id = $input->getArgument('id');
 
@@ -55,7 +55,7 @@ class Init extends Command
 
         if (is_dir($repoRoot))
         {
-            $output->writeln("Add-on repository directory has already been initialized.");
+            $output->writeln('Add-on repository directory has already been initialized.');
             return 1;
         }
 
@@ -64,7 +64,7 @@ class Init extends Command
         $git = new GitRepository($repoRoot);
         $git->init()->execute();
 
-        $output->writeln(["", "Successfully initialized git."]);
+        $output->writeln(['', 'Successfully initialized git.']);
         return 0;
     }
 }

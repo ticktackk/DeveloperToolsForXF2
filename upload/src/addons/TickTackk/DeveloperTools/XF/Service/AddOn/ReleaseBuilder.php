@@ -11,7 +11,7 @@ use XF\Util\File;
  */
 class ReleaseBuilder extends XFCP_ReleaseBuilder
 {
-    protected function prepareFilesToCopy()
+    protected function prepareFilesToCopy() : void
     {
         parent::prepareFilesToCopy();
 
@@ -44,7 +44,7 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
     /**
      * @throws \XF\PrintableException
      */
-    public function performBuildTasks()
+    public function performBuildTasks() : void
     {
         parent::performBuildTasks();
 
@@ -58,7 +58,7 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
     /**
      * @return array
      */
-    protected function getExcludedDirectories()
+    protected function getExcludedDirectories() : array
     {
         return array_merge([
             '_repo',
@@ -71,9 +71,9 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
      *
      * @return bool
      */
-    protected function isExcludedFileName($fileName)
+    protected function isExcludedFileName($fileName) : bool
     {
-        if (in_array($fileName, ['git.json', 'dev.json']))
+        if (\in_array($fileName, ['git.json', 'dev.json']))
         {
             return true;
         }

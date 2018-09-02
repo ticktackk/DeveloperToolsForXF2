@@ -17,7 +17,7 @@ class RebuildFakeComposer extends Command
 {
     use AddOnActionTrait;
 
-    protected function configure()
+    protected function configure() : void
     {
         $this
             ->setName('ticktackk-devtools:rebuild-fake-composer')
@@ -36,7 +36,7 @@ class RebuildFakeComposer extends Command
      * @return int|null
      * @throws \XF\PrintableException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : ? int
     {
         $addOnId = $input->getArgument('id');
         $addOn = $this->checkEditableAddOn($addOnId, $error);

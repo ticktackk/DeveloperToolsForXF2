@@ -40,7 +40,7 @@ class AddOn extends XFCP_AddOn
      *
      * @return Structure
      */
-    public static function getStructure(Structure $structure)
+    public static function getStructure(Structure $structure) : Structure
     {
         $structure = parent::getStructure($structure);
 

@@ -10,9 +10,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use XF\Util\File;
 
+/**
+ * Class ClassExtension
+ *
+ * @package TickTackk\DeveloperTools\Cli\Command\AddOn
+ */
 class ClassExtension extends Command
 {
-	protected function configure()
+	protected function configure() : void
 	{
 		$this
 			->setName('ticktackk-devtools:create-class-extension')
@@ -31,7 +36,14 @@ class ClassExtension extends Command
         ;
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int|null
+     * @throws \XF\PrintableException
+     */
+	protected function execute(InputInterface $input, OutputInterface $output) : ? int
     {
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
@@ -39,10 +51,10 @@ class ClassExtension extends Command
         $addOnId = $input->getArgument('id');
         if (!$addOnId)
         {
-            $question = new Question("<question>Enter the ID for the add-on:</question> ");
+            $question = new Question('<question>Enter the ID for the add-on:</question>');
             $question->setValidator($this->getAddOnQuestionFieldValidator('addon_id'));
             $addOnId = $helper->ask($input, $output, $question);
-            $output->writeln("");
+            $output->writeln('');
         }
 
         $addOnObj = new \XF\AddOn\AddOn($addOnId);
@@ -51,7 +63,7 @@ class ClassExtension extends Command
 
         if (!file_exists($jsonPath))
         {
-            $output->writeln("<error>The addon.json file must exist at {$jsonPath}.</error>");
+            $output->writeln('<error>The addon.json file must exist at {$jsonPath}.</error>');
 
             return 1;
         }
@@ -59,14 +71,11 @@ class ClassExtension extends Command
         $class = $input->getArgument('class');
         if (!$class)
         {
-            $question = new Question("<question>Enter the class to extend:</question> ");
+            $question = new Question('<question>Enter the class to extend:</question>');
             $class = $helper->ask($input, $output, $question);
-            $output->writeln("");
+            $output->writeln('');
         }
-        $class = \str_replace('//','/', $class);
-        $class = \str_replace('/','\\', $class);
-        $class = \str_replace('_','\\', $class);
-        $class = \str_replace('\\\\','\\', $class);
+        $class = \str_replace(['//', '/', '_', '\\\\'], ['/', '\\', '\\', '\\'], $class);
         $class = trim($class);
         $fromClass = trim($class, '\\');
         $fromClassPath = \str_replace( '\\', DIRECTORY_SEPARATOR, $fromClass);
@@ -74,13 +83,13 @@ class ClassExtension extends Command
         $toClassPath = $addOnObj->getAddOnDirectory() . DIRECTORY_SEPARATOR . $fromClassPath;
         $outputPath = $toClassPath . '.php';
 
-        File::createDirectory(dirname($toClassPath), false);
+        File::createDirectory(\dirname($toClassPath), false);
 
         if (!file_exists($outputPath))
         {
             $className = basename($fromClassPath);
-            $namespace = dirname(\str_replace( '\\', DIRECTORY_SEPARATOR, $toClass));
-            $isEntity = basename($namespace) == 'Entity';
+            $namespace = \dirname(\str_replace( '\\', DIRECTORY_SEPARATOR, $toClass));
+            $isEntity = basename($namespace) === 'Entity';
             $namespace = \str_replace(DIRECTORY_SEPARATOR, '\\', $namespace);
 
             $contents = '';
@@ -159,7 +168,7 @@ TEMPLATE;
 	 *
 	 * @return \Closure
 	 */
-	protected function getAddOnQuestionFieldValidator($key)
+	protected function getAddOnQuestionFieldValidator($key) : callable
 	{
 		return function($value) use($key)
 		{

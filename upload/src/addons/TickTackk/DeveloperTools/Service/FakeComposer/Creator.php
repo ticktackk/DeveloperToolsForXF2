@@ -34,7 +34,7 @@ class Creator extends AbstractService
     /**
      * @param AddOnEntity $addOn
      */
-    public function setAddOn(AddOnEntity $addOn)
+    public function setAddOn(AddOnEntity $addOn) : void
     {
         $this->addOn = new AddOn($addOn);
     }
@@ -42,7 +42,7 @@ class Creator extends AbstractService
     /**
      * @return AddOn
      */
-    public function getAddOn()
+    public function getAddOn() : AddOn
     {
         return $this->addOn;
     }
@@ -50,7 +50,7 @@ class Creator extends AbstractService
     /**
      * @throws \XF\PrintableException
      */
-    public function build()
+    public function build() : void
     {
         $ds = DIRECTORY_SEPARATOR;
         $addOnRoot = $this->getAddOn()->getAddOnDirectory();
@@ -66,7 +66,7 @@ class Creator extends AbstractService
 
         $cleanPath = function ($path, $contentPath, $trim = true) use($vendorDir, $ds)
         {
-            $cleanedPath = str_replace('\\', '/', utf8_substr($vendorDir, utf8_strlen(\XF::getRootDirectory() . $ds)) . '/' . dirname($path) . '/' . $contentPath);
+            $cleanedPath = str_replace('\\', '/', utf8_substr($vendorDir, utf8_strlen(\XF::getRootDirectory() . $ds)) . '/' . \dirname($path) . '/' . $contentPath);
             return $trim ? trim($cleanedPath, '/') : $cleanedPath;
         };
 
@@ -101,7 +101,7 @@ class Creator extends AbstractService
                 {
                     foreach ($composerContents['autoload']['classmap'] AS $contentPath)
                     {
-                        $src = rtrim($vendorDir . $ds . dirname($info['path']) . $ds . str_replace('/', $ds, $contentPath), $ds);
+                        $src = rtrim($vendorDir . $ds . \dirname($info['path']) . $ds . str_replace('/', $ds, $contentPath), $ds);
                         if (is_dir($src))
                         {
                             $this->getClassMapsFromDir($src, $classMap);
@@ -234,7 +234,7 @@ class FakeComposer
      * @param       $directory
      * @param array $classMap
      */
-    protected function getClassMapsFromDir($directory, array &$classMap)
+    protected function getClassMapsFromDir($directory, array &$classMap) : void
     {
         $iterator = $this->getFileIterator($directory);
 
@@ -264,7 +264,7 @@ class FakeComposer
                 {
                     case T_NAMESPACE:
                         $index += 2;
-                        while (isset($tokens[$index]) && is_array($tokens[$index]))
+                        while (isset($tokens[$index]) && \is_array($tokens[$index]))
                         {
                             $namespace .= $tokens[$index++][1];
                         }

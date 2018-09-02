@@ -7,6 +7,10 @@ namespace TickTackk\DeveloperTools\XF\Service\AddOn;
  */
 class JsMinifier extends XFCP_JsMinifier
 {
+    /**
+     * @return bool|null|string
+     * @throws \ErrorException
+     */
     public function minify()
     {
         $xfRoot = \XF::getSourceDirectory();

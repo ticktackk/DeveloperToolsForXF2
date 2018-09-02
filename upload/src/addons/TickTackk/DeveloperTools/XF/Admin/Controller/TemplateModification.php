@@ -127,11 +127,12 @@ class TemplateModification extends XFCP_TemplateModification
         return $response;
     }
 
+
     /**
      * @return \XF\Mvc\Reply\View
      * @throws \XF\Mvc\Reply\Exception
      */
-    public function actionAutoComplete()
+    public function actionAutoComplete() : \XF\Mvc\Reply\View
     {
         $type = $this->filter('type', 'str');
 
@@ -175,7 +176,7 @@ class TemplateModification extends XFCP_TemplateModification
      * @return \XF\Mvc\Reply\View
      * @throws \XF\Mvc\Reply\Exception
      */
-    public function actionContents()
+    public function actionContents() : \XF\Mvc\Reply\View
     {
         $type = $this->filter('type', 'str');
 
@@ -311,8 +312,9 @@ class TemplateModification extends XFCP_TemplateModification
     /**
      * @return \XF\Repository\Style
      */
-    protected function getStyleRepo()
+    protected function getStyleRepo() : \XF\Repository\Style
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository('XF:Style');
     }
 }

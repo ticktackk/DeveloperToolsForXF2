@@ -24,7 +24,7 @@ class Commit extends Command
 {
     use AddOnActionTrait;
 
-    protected function configure()
+    protected function configure() : void
     {
         $this
             ->setName('ticktackk-devtools:git-commit')
@@ -49,7 +49,7 @@ class Commit extends Command
      * @return int|null
      * @throws \Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : ? int
     {
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
@@ -275,9 +275,9 @@ class Commit extends Command
         $commitMessage = $input->getOption('message');
         if (!$commitMessage)
         {
-            $question = new Question("<question>Commit summary:</question> ");
+            $question = new Question('<question>Commit summary:</question>');
             $commitMessage = $helper->ask($input, $output, $question);
-            $output->writeln("");
+            $output->writeln('');
         }
 
         try
@@ -318,6 +318,7 @@ class Commit extends Command
     protected function standardizePath($rootPath, $path)
     {
         $ds = DIRECTORY_SEPARATOR;
+        /** @noinspection PregQuoteUsageInspection */
         return preg_replace('#^' . preg_quote(rtrim($rootPath, $ds) . $ds) . '#', '', $path, 1);
     }
 
@@ -326,7 +327,7 @@ class Commit extends Command
      *
      * @return bool
      */
-    protected function isPartOfExcludedDirectoryForRepo($path)
+    protected function isPartOfExcludedDirectoryForRepo($path) : bool
     {
         foreach ($this->getExcludedDirectoriesForRepo() AS $dir)
         {
