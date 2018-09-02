@@ -8,7 +8,7 @@ Developer tools for XenForo 2
 - Test template modification against specific style
 - PHPUnit framework integration allows you to test add-on before releasing or pushing the new changes to VCS
 - Ability to use packages made using composer without composer itself
-- Available global configration
+- Available global configuration
   - Git name
   - Git email
   - .gitignore file contents
@@ -30,5 +30,5 @@ Developer tools for XenForo 2
 | `ticktackk-devtools:phpunit` | Runs PHPUnit tests for an add-on |
 | `ticktackk-devtools:rebuild-fake-composer` | Rebuilds `FakeComposer.php` file for an add-on |
  
-## Features
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details
