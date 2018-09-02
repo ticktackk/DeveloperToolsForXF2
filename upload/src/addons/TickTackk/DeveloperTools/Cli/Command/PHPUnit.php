@@ -91,7 +91,7 @@ class PHPUnit extends Command
             }
         }
 
-        $output->writeln(['', 'All tests passed.']);
+        $output->writeln(['', 'All tests passed.', '']);
         return 0;
     }
 
