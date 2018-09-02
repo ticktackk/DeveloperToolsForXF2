@@ -19,7 +19,7 @@ class BetterExport extends Command
 {
     use AddOnActionTrait;
 
-    protected function configure()
+    protected function configure() : void
     {
         $this
             ->setName('ticktackk-devtools:better-export')
@@ -84,7 +84,7 @@ class BetterExport extends Command
      * @throws \Exception
      */
     /** @noinspection PhpMissingParentCallCommonInspection */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : ? int
     {
         $id = $input->getArgument('id');
 

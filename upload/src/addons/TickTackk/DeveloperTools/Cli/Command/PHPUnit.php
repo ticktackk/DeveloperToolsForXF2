@@ -2,15 +2,11 @@
 
 namespace TickTackk\DeveloperTools\Cli\Command;
 
-use PHPUnit\Util\TestDox\TextResultPrinter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use XF\Cli\Command\AddOnActionTrait;
-use PHPUnit\Framework\TestResult;
-use PHPUnit\Framework\TestFailure;
-use Symfony\Component\Console\Helper\ProgressIndicator;
 
 /**
  * Class Tests
@@ -21,7 +17,7 @@ class PHPUnit extends Command
 {
     use AddOnActionTrait;
 
-    protected function configure()
+    protected function configure() : void
     {
         $this
             ->setName('ticktackk-devtools:phpunit')
@@ -38,9 +34,8 @@ class PHPUnit extends Command
      * @param OutputInterface $output
      *
      * @return int|null
-     * @throws \ReflectionException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : ? int
     {
         $addOnId = $input->getArgument('id');
         $addOn = $this->checkEditableAddOn($addOnId, $error);
@@ -64,7 +59,8 @@ class PHPUnit extends Command
 
         if ($suite)
         {
-            if (!count($suite->tests()))
+            /** @noinspection PhpUndefinedMethodInspection */
+            if (!\count($suite->tests()))
             {
                 $output->writeln(['', 'No tests available.']);
                 return 0;
@@ -107,9 +103,9 @@ class PHPUnit extends Command
      * @param                 $testFailedMessage
      * @param array           $errors
      */
-    protected function writeTestDetails(OutputInterface $output, $testFailedMessage, array $errors)
+    protected function writeTestDetails(OutputInterface $output, $testFailedMessage, array $errors) : void
     {
-        if (count($errors))
+        if (\count($errors))
         {
             $output->writeln(['', $testFailedMessage, '']);
 

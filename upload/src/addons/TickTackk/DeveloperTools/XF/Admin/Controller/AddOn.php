@@ -64,7 +64,7 @@ class AddOn extends XFCP_AddOn
      * @throws \XF\Mvc\Reply\Exception
      * @throws \XF\PrintableException
      */
-    public function actionRebuildFakeComposer(ParameterBag $parameterBag)
+    public function actionRebuildFakeComposer(ParameterBag $parameterBag) : \XF\Mvc\Reply\Redirect
     {
         /** @noinspection PhpUndefinedFieldInspection */
         $addOn = $this->assertAddOnAvailable($parameterBag->addon_id_url);
