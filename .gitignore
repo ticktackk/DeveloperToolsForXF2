@@ -4,3 +4,4 @@ hashes.json
 /.idea/
 .DS_Store
 git.json
+closure-compiler-*.jar
