@@ -52,6 +52,13 @@ class PHPUnit extends Command
 
         $addOnDirectory = $addOn->getAddOnDirectory();
         $testRoot = $addOnDirectory . DIRECTORY_SEPARATOR . '_tests';
+
+        if (!is_dir($testRoot))
+        {
+            $output->writeln(['', 'No tests available.']);
+            return 0;
+        }
+
         $phpunit = new \PHPUnit\TextUI\TestRunner();
         $suite = $phpunit->getTest($testRoot, '', 'Test.php');
 
