@@ -14,8 +14,6 @@ use Bit3\GitPhp\GitException;
 use Bit3\GitPhp\GitRepository;
 use XF\Cli\Command\AddOnActionTrait;
 use XF\Util\File;
-use PHPUnit\TextUI\TestRunner;
-use PHPUnit\Exception as PHPUnitException;
 
 /**
  * Class Commit
@@ -149,6 +147,7 @@ class Commit extends Command
         {
             if ($developerOptions['parse_additional_files'])
             {
+                /** @noinspection PhpUndefinedFieldInspection */
                 $additionalFiles = $addOn->additional_files;
                 foreach ((array)$additionalFiles AS $additionalFile)
                 {
