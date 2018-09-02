@@ -104,6 +104,7 @@ TEMPLATE;
                 $contents = <<<TEMPLATE
     /**
      * @param Structure \$structure
+     *
      * @return Structure
      */
     public static function getStructure(Structure \$structure)
@@ -124,7 +125,11 @@ namespace {$namespace};
 {$useStatements}
 
 /**
+ * Class {$className}
+ * 
  * Extends \\{$fromClass}
+ *
+ * @package {$namespace}
  */
 class {$className} extends XFCP_{$className}
 {
