@@ -43,18 +43,6 @@ class FakeComposer
   array (
     0 => 'src/addons/TickTackk/DeveloperTools/vendor/doctrine/instantiator/src/Doctrine/Instantiator',
   ),
-  'Noodlehaus\\' => 
-  array (
-    0 => 'src/addons/TickTackk/DeveloperTools/vendor/hassankhan/config/src',
-  ),
-  'Codedungeon\\PHPCliColors\\' => 
-  array (
-    0 => 'src/addons/TickTackk/DeveloperTools/vendor/mikeerickson/php-cli-colors/src',
-  ),
-  'Codedungeon\\PHPUnitPrettyResultPrinter\\' => 
-  array (
-    0 => 'src/addons/TickTackk/DeveloperTools/vendor/mikeerickson/phpunit-pretty-result-printer/src',
-  ),
   'DeepCopy\\' => 
   array (
     0 => 'src/addons/TickTackk/DeveloperTools/vendor/myclabs/deep-copy/src/DeepCopy',
@@ -64,14 +52,6 @@ class FakeComposer
     0 => 'src/addons/TickTackk/DeveloperTools/vendor/phpdocumentor/reflection-common/src',
     1 => 'src/addons/TickTackk/DeveloperTools/vendor/phpdocumentor/reflection-docblock/src',
     2 => 'src/addons/TickTackk/DeveloperTools/vendor/phpdocumentor/type-resolver/src',
-  ),
-  'Symfony\\Polyfill\\Ctype\\' => 
-  array (
-    0 => 'src/addons/TickTackk/DeveloperTools/vendor/symfony/polyfill-ctype',
-  ),
-  'Symfony\\Component\\Yaml\\' => 
-  array (
-    0 => 'src/addons/TickTackk/DeveloperTools/vendor/symfony/yaml',
   ),
 );
     }
@@ -613,7 +593,6 @@ class FakeComposer
     {
         return array (
   0 => 'src/addons/TickTackk/DeveloperTools/vendor/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
-  1 => 'src/addons/TickTackk/DeveloperTools/vendor/symfony/polyfill-ctype/bootstrap.php',
 );
     }
     
