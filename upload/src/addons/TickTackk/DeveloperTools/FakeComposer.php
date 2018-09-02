@@ -619,7 +619,14 @@ class FakeComposer
 
         foreach (self::getRequiredFiles() AS $filePath)
         {
-            require $filePath;
+            if (file_exists($filePath) && is_readable($filePath))
+            {
+                require $filePath;
+            }
+            else
+            {
+                throw new \InvalidArgumentException("{$filePath} does not exist.");
+            }
         }
     }
 }
