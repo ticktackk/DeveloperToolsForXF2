@@ -142,80 +142,78 @@ class Commit extends Command
         $rootPath = \XF::getRootDirectory();
         $filesRoot = $addOn->getFilesDirectory();
         $developerOptions = $addOnEntity->DeveloperOptions;
+        $gitConfigurations = $addOnEntity->GitConfigurations;
 
-        if ($developerOptions)
+        if (!empty($developerOptions['parse_additional_files']))
         {
-            if ($developerOptions['parse_additional_files'])
+            /** @noinspection PhpUndefinedFieldInspection */
+            $additionalFiles = $addOn->additional_files;
+            foreach ((array)$additionalFiles AS $additionalFile)
             {
-                /** @noinspection PhpUndefinedFieldInspection */
-                $additionalFiles = $addOn->additional_files;
-                foreach ((array)$additionalFiles AS $additionalFile)
+                $filePath = $filesRoot . $ds . $additionalFile;
+                if (file_exists($filePath))
                 {
-                    $filePath = $filesRoot . $ds . $additionalFile;
-                    if (file_exists($filePath))
+                    $root = $filesRoot;
+                }
+                else
+                {
+                    $filePath = $rootPath . $ds . $additionalFile;
+                    if (!file_exists($filePath))
                     {
-                        $root = $filesRoot;
+                        continue;
                     }
-                    else
+                    $root = $rootPath;
+                }
+
+                if (is_dir($filePath))
+                {
+                    $filesIterator = $this->getFileIterator($filePath);
+                    foreach ($filesIterator AS $file)
                     {
-                        $filePath = $rootPath . $ds . $additionalFile;
-                        if (!file_exists($filePath))
+                        $stdPath = $this->standardizePath($root, $file->getPathname());
+                        if (!$file->isDir())
                         {
-                            continue;
+                            File::copyFile($file->getPathname(), $uploadRoot . $ds . $stdPath, false);
                         }
-                        $root = $rootPath;
                     }
-
-                    if (is_dir($filePath))
-                    {
-                        $filesIterator = $this->getFileIterator($filePath);
-                        foreach ($filesIterator AS $file)
-                        {
-                            $stdPath = $this->standardizePath($root, $file->getPathname());
-                            if (!$file->isDir())
-                            {
-                                File::copyFile($file->getPathname(), $uploadRoot . $ds . $stdPath, false);
-                            }
-                        }
-                    } else
-                    {
-                        $stdPath = $this->standardizePath($root, $filePath);
-                        File::copyFile($filePath, $uploadRoot . $ds . $stdPath, false);
-                    }
-                }
-            }
-
-            if (!empty($developerOptions['license']))
-            {
-                $licenseFileInRepoRoot = $repoRoot . $ds . 'LICENSE.md';
-                if (file_exists($licenseFileInRepoRoot) && is_readable($licenseFileInRepoRoot))
+                } else
                 {
-                    unlink($licenseFileInRepoRoot);
+                    $stdPath = $this->standardizePath($root, $filePath);
+                    File::copyFile($filePath, $uploadRoot . $ds . $stdPath, false);
                 }
-
-                File::writeFile($repoRoot . $ds . 'LICENSE.md', $developerOptions['license'], false);
             }
+        }
 
-            if (!empty($developerOptions['readme']))
+        if (!empty($developerOptions['license']))
+        {
+            $licenseFileInRepoRoot = $repoRoot . $ds . 'LICENSE.md';
+            if (file_exists($licenseFileInRepoRoot) && is_readable($licenseFileInRepoRoot))
             {
-                $readMeMarkdownFileInRepoRoot = $repoRoot . $ds . 'README.md';
-                if (file_exists($readMeMarkdownFileInRepoRoot) && is_readable($readMeMarkdownFileInRepoRoot))
-                {
-                    unlink($readMeMarkdownFileInRepoRoot);
-                }
-
-                File::writeFile($readMeMarkdownFileInRepoRoot, $developerOptions['readme'], false);
+                unlink($licenseFileInRepoRoot);
             }
 
-            if (!empty($developerOptions['gitignore']))
+            File::writeFile($repoRoot . $ds . 'LICENSE.md', $developerOptions['license'], false);
+        }
+
+        if (!empty($developerOptions['readme']))
+        {
+            $readMeMarkdownFileInRepoRoot = $repoRoot . $ds . 'README.md';
+            if (file_exists($readMeMarkdownFileInRepoRoot) && is_readable($readMeMarkdownFileInRepoRoot))
             {
-                File::writeFile($srcRoot . $ds . '.gitignore', $developerOptions['gitignore'], false);
+                unlink($readMeMarkdownFileInRepoRoot);
             }
+
+            File::writeFile($readMeMarkdownFileInRepoRoot, $developerOptions['readme'], false);
+        }
+
+        if (!empty($developerOptions['gitignore']))
+        {
+            File::writeFile($srcRoot . $ds . '.gitignore', $developerOptions['gitignore'], false);
         }
 
         $git->add()->execute('*');
 
-        if (empty($developerOptions['git']['name']) || empty($developerOptions['git']['email']))
+        if (empty($gitConfigurations['name']) || empty($gitConfigurations['email']))
         {
             $options = \XF::app()->options();
             $globalGitName = $options->developerTools_git_username;
@@ -223,8 +221,8 @@ class Commit extends Command
 
             if (!empty($globalGitName) && !empty($globalGitEmail))
             {
-                $developerOptions['git']['name'] = $options->developerTools_git_username;
-                $developerOptions['git']['email'] = $options->developerTools_git_email;
+                $gitConfigurations['name'] = $options->developerTools_git_username;
+                $gitConfigurations['email'] = $options->developerTools_git_email;
             }
             else
             {
@@ -236,27 +234,27 @@ class Commit extends Command
         try
         {
             $existingGitName = $git->config()->get('user.name')->execute();
-            if ($existingGitName !== $developerOptions['git']['name'])
+            if ($existingGitName !== $gitConfigurations['name'])
             {
-                $git->config()->replaceAll('user.name', $developerOptions['git']['name']);
+                $git->config()->replaceAll('user.name', $gitConfigurations['name']);
             }
         }
         catch (GitException $e)
         {
-            $git->config()->add('user.name', $developerOptions['git']['name'])->execute();
+            $git->config()->add('user.name', $gitConfigurations['name'])->execute();
         }
 
         try
         {
             $existingGitEmail = $git->config()->get('user.email')->execute();
-            if ($existingGitEmail !== $developerOptions['git']['email'])
+            if ($existingGitEmail !== $gitConfigurations['email'])
             {
-                $git->config()->replaceAll('user.email', $developerOptions['git']['email']);
+                $git->config()->replaceAll('user.email', $gitConfigurations['email']);
             }
         }
         catch (GitException $e)
         {
-            $git->config()->add('user.email', $developerOptions['git']['email'])->execute();
+            $git->config()->add('user.email', $gitConfigurations['email'])->execute();
         }
 
         try
