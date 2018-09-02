@@ -147,6 +147,7 @@ class FakeComposer
      */
     protected static function getNamespaces()
     {
+        /** @noinspection PhpTraditionalSyntaxArrayLiteralInspection */
         return ' . $exportedNamespaces . ';
     }
 
@@ -155,6 +156,7 @@ class FakeComposer
      */
     protected static function getPsr4()
     {
+        /** @noinspection PhpTraditionalSyntaxArrayLiteralInspection */
         return ' . $exportedPsr4 . ';
     }
 
@@ -163,6 +165,7 @@ class FakeComposer
      */
     protected static function getClassMap()
     {
+        /** @noinspection PhpTraditionalSyntaxArrayLiteralInspection */
         return ' . $exportedClassMap . ';
     }
 
@@ -171,6 +174,7 @@ class FakeComposer
      */
     protected static function getRequiredFiles()
     {
+        /** @noinspection PhpTraditionalSyntaxArrayLiteralInspection */
         return ' . $exportedRequiredFiles . ';
     }
     
