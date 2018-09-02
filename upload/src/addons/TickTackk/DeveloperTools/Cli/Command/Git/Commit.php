@@ -80,13 +80,6 @@ class Commit extends Command
             $command->run($childInput, $output);
         }
 
-        $globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
-
-        if (!empty($globalGitIgnore))
-        {
-            File::writeFile($repoRoot . $ds . '.gitignore', $globalGitIgnore, false);
-        }
-
         try
         {
             $customSubDir = $git->config()->get('custom.subdir')->execute();
@@ -206,9 +199,15 @@ class Commit extends Command
             File::writeFile($readMeMarkdownFileInRepoRoot, $developerOptions['readme'], false);
         }
 
+        $globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
+
         if (!empty($developerOptions['gitignore']))
         {
-            File::writeFile($srcRoot . $ds . '.gitignore', $developerOptions['gitignore'], false);
+            File::writeFile($repoRoot . $ds . '.gitignore', $developerOptions['gitignore'], false);
+        }
+        else if (!empty($globalGitIgnore))
+        {
+            File::writeFile($repoRoot . $ds . '.gitignore', $globalGitIgnore, false);
         }
 
         $git->add()->execute('*');
