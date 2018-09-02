@@ -13,8 +13,6 @@ Developer tools for XenForo 2
   - Git email
   - .gitignore file contents
   - Directories to exclude for VCS purposes 
-  - License.md
-  - Readme.md
 - Available configuration per add-on
   - Git name
   - Git email
