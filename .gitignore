@@ -3,3 +3,4 @@ _data
 hashes.json
 /.idea/
 .DS_Store
+git.json
