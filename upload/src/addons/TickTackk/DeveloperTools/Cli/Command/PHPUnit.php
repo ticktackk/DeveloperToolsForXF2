@@ -2,15 +2,15 @@
 
 namespace TickTackk\DeveloperTools\Cli\Command;
 
+use PHPUnit\Util\TestDox\TextResultPrinter;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
 use XF\Cli\Command\AddOnActionTrait;
+use PHPUnit\Framework\TestResult;
+use PHPUnit\Framework\TestFailure;
+use Symfony\Component\Console\Helper\ProgressIndicator;
 
 /**
  * Class Tests
@@ -25,7 +25,7 @@ class PHPUnit extends Command
     {
         $this
             ->setName('ticktackk-devtools:phpunit')
-            ->setDescription('')
+            ->setDescription('Runs PHPUnit tests for an add-on')
             ->addArgument(
                 'id',
                 InputArgument::REQUIRED,
@@ -53,24 +53,64 @@ class PHPUnit extends Command
         $addOnDirectory = $addOn->getAddOnDirectory();
         $testRoot = $addOnDirectory . DIRECTORY_SEPARATOR . '_tests';
         $phpunit = new \PHPUnit\TextUI\TestRunner();
-        $printer = new \Codedungeon\PHPUnitPrettyResultPrinter\Printer();
-        $phpunit->setPrinter($printer);
+        $suite = $phpunit->getTest($testRoot, '', 'Test.php');
 
-        $output->writeln(['', 'Running tests...']);
-        try
+        if ($suite)
         {
-            $suite = $phpunit->getTest($testRoot, '', 'Test.php');
-            if ($suite)
+            if (!count($suite->tests()))
             {
-                $phpunit->doRun($suite, [], false);
+                $output->writeln(['', 'No tests available.']);
+                return 0;
+            }
+
+            $output->writeln(['', 'Running tests...']);
+
+            $testResult = $suite->run();
+
+            $output->writeln(['', 'All tests ran.']);
+
+            if (!$testResult->wasSuccessful())
+            {
+                if (!empty($testResult->errors()))
+                {
+                    $this->writeTestDetails($output, 'Tests that have errors:', $testResult->errors());
+                }
+
+                if (!empty($testResult->failures()))
+                {
+                    $this->writeTestDetails($output, 'Tests that have failed:', $testResult->failures());
+                }
+
+                if (!empty($testResult->warnings()))
+                {
+                    $this->writeTestDetails($output, 'Tests that have warnings:', $testResult->failures());
+                }
+
+                $output->writeln(['', 'Test failed. Aborting now.']);
+                return 1;
             }
         }
-        catch (\PHPUnit\Exception $e)
-        {
-            $output->writeln(['', $e->getMessage()]);
-            return 1;
-        }
 
+        $output->writeln(['', 'All tests passed.']);
         return 0;
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param                 $testFailedMessage
+     * @param array           $errors
+     */
+    protected function writeTestDetails(OutputInterface $output, $testFailedMessage, array $errors)
+    {
+        if (count($errors))
+        {
+            $output->writeln(['', $testFailedMessage, '']);
+
+            /** @var \PHPUnit\Framework\TestFailure $error */
+            foreach ($errors AS $error)
+            {
+                $output->writeln($error->getTestName() . ' => ' . $error->exceptionMessage());
+            }
+        }
     }
 }
