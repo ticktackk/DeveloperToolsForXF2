@@ -32,15 +32,11 @@ class AddOn extends XFCP_AddOn
 
         if ($this->isPost())
         {
-            $input = $this->filter([
-                'license' => 'str',
-                'gitignore' => 'str',
-                'readme' => 'str',
-                'parse_additional_files' => 'bool',
-                'git' => 'array-string'
-            ]);
+            $developerOptions = $this->filter('dev', 'array');
+            $gitConfiguration = $this->filter('git', 'array');
 
-            $addOnRepo->exportDeveloperOptions($addOn->getInstalledAddOn(), $input);
+            $addOnRepo->exportDeveloperOptions($addOn->getInstalledAddOn(), $developerOptions);
+            $addOnRepo->exportGitConfiguration($addOn->getInstalledAddOn(), $gitConfiguration);
 
             return $this->redirect($this->buildLink('add-ons'));
         }
@@ -50,6 +46,7 @@ class AddOn extends XFCP_AddOn
             ->where('callback_method', 'appSetup')
             ->where('addon_id', $addOn->getAddOnId())
             ->fetchOne();
+
         $fakeComposerFile = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . 'FakeComposer.php';
         $fakeComposerFileUsable = file_exists($fakeComposerFile) && is_readable($fakeComposerFile);
 
