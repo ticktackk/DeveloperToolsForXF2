@@ -1,14 +1,36 @@
 # DeveloperToolsForXF2
+Developer tools for XenForo 2
  
- Developer tools for XenForo 2
+## Features
+- Display order for
+  - Option group and Option
+  - Permission group and Permission
+- Test template modification against specific style
+- PHPUnit framework integration allows you to test add-on before releasing or pushing the new changes to VCS
+- Ability to use packages made using composer without composer itself
+- Available global configration
+  - Git name
+  - Git email
+  - .gitignore file contents
+  - Directories to exclude for VCS purposes 
+  - License.md
+  - Readme.md
+- Available configuration per add-on
+  - Git name
+  - Git email
+  - .gitignore file contents
+  - License.md
+  - Readme.md
+
+## CLI Commands
+
+| Option | Description |
+| ------ | ----------- |
+| `ticktackk-devtools:better-export` | Exports the XML files for an add-on and applies class properties to type hint columns, getters and relations |
+| `ticktackk-devtools:git-init` | Initialize an add-on for VCS |
+| `ticktackk-devtools:git-commit` | Copies changes made to the add-on to repository and then finally commits the changes |
+| `ticktackk-devtools:phpunit` | Runs PHPUnit tests for an add-on |
+| `ticktackk-devtools:rebuild-fake-composer` | Rebuilds `FakeComposer.php` file for an add-on |
  
- ## Features
- 
- - Display order next to option group under Setup > Options
- - Display order next to permission interface title and permission
- - Developer Options under drop down menu for every add-on allows you to specify what the contents of LICENSE, .gitignore and README.md file should be
- - Upon running CLI command `xf-addon:build-release [addon_id]` a new directory is added into the add-on directory named "_repo" which can be used for VCS (Version Control System)
- 
- ## License
- 
- This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+## Features
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
