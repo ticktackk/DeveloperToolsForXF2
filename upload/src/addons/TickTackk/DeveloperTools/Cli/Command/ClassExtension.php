@@ -98,7 +98,7 @@ class ClassExtension extends Command
             if ($isEntity)
             {
                 $useStatements =  <<<TEMPLATE
-use XF\Mvc\Entity\Entity;
+\n\nuse XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 TEMPLATE;
                 $contents = <<<TEMPLATE
@@ -120,9 +120,7 @@ TEMPLATE;
             $template = <<<TEMPLATE
 <?php
 
-namespace {$namespace};
-
-{$useStatements}
+namespace {$namespace};{$useStatements}
 
 /**
  * Class {$className}
