@@ -16,7 +16,7 @@ Developer tools for XenForo 2
 - Available configuration per add-on
   - Git name
   - Git email
-  - .gitignore file contents
+  - .gitignore file contents (appended after global .gitignore contents)
   - License.md
   - Readme.md
 
@@ -29,6 +29,8 @@ Developer tools for XenForo 2
 | `ticktackk-devtools:git-commit` | Copies changes made to the add-on to repository and then finally commits the changes |
 | `ticktackk-devtools:phpunit` | Runs PHPUnit tests for an add-on |
 | `ticktackk-devtools:rebuild-fake-composer` | Rebuilds `FakeComposer.php` file for an add-on |
+| `ticktackk-devtools:create-class-extension` | Creates an class-extension for an add-on and writes out a basic template file. |
+| `ticktackk-devtools:seed` | Runs all the seeds to fill your forum with dummy data. Also supports running specific seed file. |
  
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details
