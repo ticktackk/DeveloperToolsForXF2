@@ -38,7 +38,7 @@ class AddOn extends XFCP_AddOn
             $addOnRepo->exportDeveloperOptions($addOn->getInstalledAddOn(), $developerOptions);
             $addOnRepo->exportGitConfiguration($addOn->getInstalledAddOn(), $gitConfiguration);
 
-            return $this->redirect($this->buildLink('add-ons', $addOn->getInstalledAddOn()));
+            return $this->redirect($this->buildLink('add-ons/developer-options', $addOn->getInstalledAddOn()));
         }
 
         $fakeComposerCELExists = $this->finder('XF:CodeEventListener')
