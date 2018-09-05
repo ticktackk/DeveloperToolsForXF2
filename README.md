@@ -31,6 +31,9 @@ Developer tools for XenForo 2
 | `ticktackk-devtools:rebuild-fake-composer` | Rebuilds `FakeComposer.php` file for an add-on |
 | `ticktackk-devtools:create-class-extension` | Creates an class-extension for an add-on and writes out a basic template file. |
 | `ticktackk-devtools:seed` | Runs all the seeds to fill your forum with dummy data. Also supports running specific seed file. |
+
+## Scripts
+There are some wrapper scripts under `scripts` directory provided by @Xon which can be helpful.
  
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details
