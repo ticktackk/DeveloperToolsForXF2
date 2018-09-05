@@ -45,6 +45,10 @@ class FakeComposer
   array (
     0 => 'src/addons/TickTackk/DeveloperTools/vendor/doctrine/instantiator/src/Doctrine/Instantiator',
   ),
+  'Faker\\' => 
+  array (
+    0 => 'src/addons/TickTackk/DeveloperTools/vendor/fzaninotto/Faker/src/Faker',
+  ),
   'DeepCopy\\' => 
   array (
     0 => 'src/addons/TickTackk/DeveloperTools/vendor/myclabs/deep-copy/src/DeepCopy',
