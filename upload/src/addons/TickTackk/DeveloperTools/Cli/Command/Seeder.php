@@ -80,17 +80,21 @@ class Seeder extends Command
     {
         if (!empty($specificSeed))
         {
-            return [$addOn->prepareAddOnIdForClass() . '\\Seed\\' . $specificSeed];
+            return [$addOn->prepareAddOnIdForClass() . '\\Seeds\\' . $specificSeed];
         }
 
         $ds = DIRECTORY_SEPARATOR;
-        $filesIterator = $this->getFileIterator($addOn->getAddOnDirectory() . $ds . 'Seed');
+        $filesIterator = $this->getFileIterator($addOn->getAddOnDirectory() . $ds . '_Seeds');
         $classes = [];
         foreach ($filesIterator AS $file)
         {
-            if ($file->isFile() && $file->getFilename() !== 'AbstractSeed.php' && $this->isSeed($file->getFilename()))
+            if ($file->isFile() && $file->getFilename() !== 'AbstractSeed.php' &&
+                $this->isSeed($file->getFilename()) &&
+                is_readable($file->getPathname())
+            )
             {
-                $className = str_replace($ds, '\\', utf8_substr($file->getPathname(), utf8_strlen(\XF::getAddOnDirectory() . $ds)));
+                require $file->getPathname();
+                $className = str_ireplace([$ds, '_seeds', '\\\\'], ['\\', '', ':'], utf8_substr($file->getPathname(), utf8_strlen(\XF::getAddOnDirectory() . $ds)));
                 $classes[] = substr($className, 0, utf8_strlen($className) - 4);
             }
         }
