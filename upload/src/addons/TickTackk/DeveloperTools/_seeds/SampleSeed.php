@@ -1,8 +1,9 @@
 <?php
 
-namespace TickTackk\DeveloperTools\Seed;
+namespace TickTackk\DeveloperTools\Seeds;
 
 use XF\Mvc\Entity\Entity;
+use TickTackk\DeveloperTools\Seed\AbstractSeed;
 
 /**
  * Class SampleSeed

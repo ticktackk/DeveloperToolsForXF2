@@ -31,7 +31,7 @@ class Listener
     {
         $app->container()->factory('seed', function($class, array $params, Container $c) use ($app)
         {
-            $class = \XF::stringToClass($class, '\%s\Seed\%s');
+            $class = \XF::stringToClass($class, '\%s\Seeds\%s');
             $class = $app->extendClass($class);
 
             array_unshift($params, $app);
