@@ -194,16 +194,20 @@ class FakeComposer
         }
 
         \XF::$autoLoader->addClassMap(self::getClassMap());
+        
+        $xfRoot = \XF::getRootDirectory();
 
         foreach (self::getRequiredFiles() AS $filePath)
         {
-            if (file_exists($filePath) && is_readable($filePath))
+            $_filePath = $xfRoot . DIRECTORY_SEPARATOR . $filePath;
+            
+            if (file_exists($_filePath) && is_readable($_filePath))
             {
-                require $filePath;
+                require $_filePath;
             }
             else
             {
-                throw new \InvalidArgumentException("{$filePath} does not exist.");
+                throw new \InvalidArgumentException("{$_filePath} does not exist.");
             }
         }
     }
