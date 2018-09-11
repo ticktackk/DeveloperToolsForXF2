@@ -621,8 +621,12 @@ class FakeComposer
 
         \XF::$autoLoader->addClassMap(self::getClassMap());
 
+        $xfRoot = \XF::getRootDirectory();
+
         foreach (self::getRequiredFiles() AS $filePath)
         {
+            $filePath = $xfRoot . DIRECTORY_SEPARATOR . $filePath;
+
             if (file_exists($filePath) && is_readable($filePath))
             {
                 require $filePath;
