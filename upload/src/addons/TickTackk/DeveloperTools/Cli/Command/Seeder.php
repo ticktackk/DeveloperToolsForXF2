@@ -76,7 +76,7 @@ class Seeder extends Command
      *
      * @return array
      */
-    protected function getSeedClasses($specificSeed, AddOn $addOn)
+    protected function getSeedClasses($specificSeed, AddOn $addOn) : array
     {
         if (!empty($specificSeed))
         {
