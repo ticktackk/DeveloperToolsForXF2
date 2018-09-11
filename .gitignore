@@ -4,4 +4,6 @@ hashes.json
 /.idea/
 .DS_Store
 git.json
+_metadata.json
+.phpstorm.meta.php
 closure-compiler-*.jar
