@@ -5,7 +5,7 @@
     "sub_options": [],
     "validation_class": "",
     "validation_method": "",
-    "default_value": "_releases\n_data\nhashes.json\n/.idea/\n.DS_Store",
+    "default_value": "_releases\n_data\nhashes.json\n/.idea/\n.DS_Store\ngit.json\n_metadata.json\n.phpstorm.meta.php",
     "relations": {
         "developerTools": 15
     }
