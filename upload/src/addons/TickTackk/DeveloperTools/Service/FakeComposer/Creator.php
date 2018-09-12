@@ -16,8 +16,20 @@ use XF\Util\File;
  */
 class Creator extends AbstractService
 {
-    /** @var AddOn */
+    /**
+     * @var AddOn
+     */
     protected $addOn;
+
+    /**
+     * @var string
+     */
+    protected $addOnRoot;
+
+    /**
+     * @var string
+     */
+    protected $vendorDir;
 
     /**
      * ClassMap constructor.
@@ -29,6 +41,9 @@ class Creator extends AbstractService
     {
         parent::__construct($app);
         $this->setAddOn($addOn);
+
+        $this->addOnRoot = $this->getAddOn()->getAddOnDirectory();
+        $this->vendorDir = $this->addOnRoot . DIRECTORY_SEPARATOR . 'vendor';
     }
 
     /**
@@ -48,85 +63,180 @@ class Creator extends AbstractService
     }
 
     /**
+     * @param string $path
+     * @param string $contentPath
+     * @param bool $trim
+     *
+     * @return mixed|string
+     */
+    protected function cleanPath($path, $contentPath, $trim = true)
+    {
+        $sharedPath = utf8_substr($path, utf8_strlen(\XF::getRootDirectory()) + 1) . DIRECTORY_SEPARATOR . $contentPath;
+        $cleanedPath = str_replace('\\', '/', $sharedPath);
+        return $trim ? trim($cleanedPath, '/') : $cleanedPath;
+    }
+
+    /**
+     * @param string $path
+     * @param array $jsonContents
+     *
+     * @return array
+     */
+    protected function getNamespacesFromComposer($path, array $jsonContents) : array
+    {
+        if (empty($jsonContents['autoload']['psr-0']))
+        {
+            return [];
+        }
+
+        $namespaces = [];
+
+        foreach ($jsonContents['autoload']['psr-0'] AS $namespace => $contentPath)
+        {
+            $namespaces[$namespace][] = $this->cleanPath($path, $contentPath);
+        }
+
+        return $namespaces;
+    }
+
+    /**
+     * @param       $path
+     * @param array $jsonContents
+     * @param array $existingPsr4Arr
+     *
+     * @return array
+     */
+    protected function getPsr4FromComposer($path, array $jsonContents, array &$existingPsr4Arr = null) : array
+    {
+        if (empty($jsonContents['autoload']['psr-4']))
+        {
+            return [];
+        }
+
+        $psr4 = [];
+
+        foreach ($jsonContents['autoload']['psr-4'] AS $namespace => $directoryList)
+        {
+            foreach ((array) $directoryList AS $contentPath)
+            {
+                $finalPath = $this->cleanPath($path, $contentPath);
+                $psr4[$namespace][] = $finalPath;
+                if ($existingPsr4Arr !== null)
+                {
+                    $existingPsr4Arr[$namespace][] = $finalPath;
+                }
+            }
+        }
+
+        return $psr4;
+    }
+
+    /**
+     * @param string $path
+     * @param array $jsonContents
+     *
+     * @return array
+     */
+    protected function getClassMapFromComposer($path, array $jsonContents) : array
+    {
+        if (empty($jsonContents['autoload']['classmap']))
+        {
+            return [];
+        }
+
+        $ds = DIRECTORY_SEPARATOR;
+
+        $classMap = [];
+
+        foreach ($jsonContents['autoload']['classmap'] AS $contentPath)
+        {
+            $src = rtrim($path . $ds . str_replace('/', $ds, $contentPath), $ds);
+
+            if (is_dir($src))
+            {
+                $this->getClassMapsFromDir($src, $classMap);
+            }
+        }
+
+        return $classMap;
+    }
+
+    /**
+     * @param string $path
+     * @param array $jsonContents
+     *
+     * @return array
+     */
+    protected function getRequireFilesFromComposer($path, array $jsonContents) : array
+    {
+        if (empty($jsonContents['autoload']['files']))
+        {
+            return [];
+        }
+
+        $requiredFiles = [];
+
+        foreach ($jsonContents['autoload']['files'] AS $requiredFile)
+        {
+            $requiredFiles[] = $this->cleanPath($path, $requiredFile, false);
+        }
+
+        return $requiredFiles;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return string
+     */
+    protected function exportData(array $data) : string
+    {
+        $exported = var_export($data, true);
+        return var_export($data, true);
+    }
+
+    /**
      * @throws \XF\PrintableException
      */
     public function build() : void
     {
-        $ds = DIRECTORY_SEPARATOR;
-        $addOnRoot = $this->getAddOn()->getAddOnDirectory();
-        $vendorDir = $addOnRoot . $ds . 'vendor';
-
         $namespaces = [];
         $psr4 = [];
         $classMap = [];
         $requiredFiles = [];
 
-        $local = new Local($vendorDir);
-        $localFs = new Filesystem($local);
+        /** @var \RecursiveIteratorIterator|\SplFileInfo[] $files */
+        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->vendorDir,
+            \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
 
-        $cleanPath = function ($path, $contentPath, $trim = true) use($vendorDir, $ds)
+        foreach ($files AS $file)
         {
-            $cleanedPath = str_replace('\\', '/', utf8_substr($vendorDir, utf8_strlen(\XF::getRootDirectory() . $ds)) . '/' . \dirname($path) . '/' . $contentPath);
-            return $trim ? trim($cleanedPath, '/') : $cleanedPath;
-        };
-
-        foreach ($localFs->listContents('', true) AS $info)
-        {
-            if ($info['type'] === 'file' && $info['basename'] === 'composer.json')
+            if (!$file->isFile())
             {
-                $composerContents = json_decode(file_get_contents(
-                    $vendorDir . $ds . $info['path']
-                ), true);
+                continue;
+            }
 
-                if (!empty($composerContents['autoload']['psr-0']))
-                {
-                    foreach ($composerContents['autoload']['psr-0'] AS $namespace => $contentPath)
-                    {
-                        $namespaces[$namespace][] = $cleanPath($info['path'], $contentPath);
-                    }
-                }
+            if ($file->getFilename() === 'composer.json')
+            {
+                $composerContents = json_decode(file_get_contents($file->getPathname()), true);
 
-                if (!empty($composerContents['autoload']['psr-4']))
-                {
-                    foreach ($composerContents['autoload']['psr-4'] AS $namespace => $directoryList)
-                    {
-                        foreach ((array) $directoryList AS $contentPath)
-                        {
-                            $psr4[$namespace][] = $cleanPath($info['path'], $contentPath);
-                        }
-                    }
-                }
-
-                if (!empty($composerContents['autoload']['classmap']))
-                {
-                    foreach ($composerContents['autoload']['classmap'] AS $contentPath)
-                    {
-                        $src = rtrim($vendorDir . $ds . \dirname($info['path']) . $ds . str_replace('/', $ds, $contentPath), $ds);
-                        if (is_dir($src))
-                        {
-                            $this->getClassMapsFromDir($src, $classMap);
-                        }
-                    }
-                }
-
-                if (!empty($composerContents['autoload']['files']))
-                {
-                    foreach ($composerContents['autoload']['files'] AS $file)
-                    {
-                        $requiredFiles[] = $cleanPath($info['path'], $file, false);
-                    }
-                }
+                $namespaces += $this->getNamespacesFromComposer($file->getPath(), $composerContents);
+                $this->getPsr4FromComposer($file->getPath(), $composerContents, $psr4);
+                $classMap += $this->getClassMapFromComposer($file->getPath(), $composerContents);
+                $requiredFiles += $this->getRequireFilesFromComposer($file->getPath(), $composerContents);
             }
         }
 
         $addOn = $this->getAddOn();
 
-        $fakeComposerPath = $addOnRoot . $ds . 'FakeComposer.php';
+        $fakeComposerPath = $this->addOnRoot . DIRECTORY_SEPARATOR . 'FakeComposer.php';
 
-        $exportedNamespaces = var_export($namespaces, true);
-        $exportedPsr4 = var_export($psr4, true);
-        $exportedClassMap = var_export($classMap, true);
-        $exportedRequiredFiles = var_export($requiredFiles, true);
+        $exportedNamespaces = $this->exportData($namespaces);
+        $exportedPsr4 = $this->exportData($psr4);
+        $exportedClassMap = $this->exportData($classMap);
+        $exportedRequiredFiles = $this->exportData($requiredFiles);
 
         $fakeComposerContent = '<?php
 
