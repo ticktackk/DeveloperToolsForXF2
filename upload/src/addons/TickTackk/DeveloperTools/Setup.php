@@ -21,7 +21,7 @@ class Setup extends AbstractSetup
     use StepRunnerUpgradeTrait;
     use StepRunnerUninstallTrait;
 
-    public function upgrade1000033Step1()
+    public function upgrade1000033Step1() : void
     {
         $addOns = $this->app->finder('XF:AddOn')
             ->whereOr([
@@ -63,7 +63,7 @@ class Setup extends AbstractSetup
         }
     }
 
-    public function upgrade1000033Step2()
+    public function upgrade1000033Step2() : void
     {
         $this->schemaManager()->alterTable('xf_addon', function (Alter $table)
         {

@@ -3,8 +3,6 @@
 namespace TickTackk\DeveloperTools;
 
 use XF\Mvc\Entity\Entity;
-use XF\Mvc\Entity\Manager;
-use XF\Mvc\Entity\Structure;
 use XF\Container;
 
 /**
