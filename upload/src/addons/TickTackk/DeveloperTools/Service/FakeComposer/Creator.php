@@ -191,7 +191,6 @@ class Creator extends AbstractService
      */
     protected function exportData(array $data) : string
     {
-        $exported = var_export($data, true);
         return var_export($data, true);
     }
 
@@ -205,12 +204,7 @@ class Creator extends AbstractService
         $classMap = [];
         $requiredFiles = [];
 
-        /** @var \RecursiveIteratorIterator|\SplFileInfo[] $files */
-        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->vendorDir,
-            \FilesystemIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::SELF_FIRST
-        );
-
+        $files = $this->getFileIterator($this->vendorDir);
         foreach ($files AS $file)
         {
             if (!$file->isFile())
@@ -229,8 +223,20 @@ class Creator extends AbstractService
             }
         }
 
-        $addOn = $this->getAddOn();
+        $this->createFakeComposer($namespaces, $psr4, $classMap, $requiredFiles);
+    }
 
+    /**
+     * @param array $namespaces
+     * @param array $psr4
+     * @param array $classMap
+     * @param array $requiredFiles
+     *
+     * @throws \XF\PrintableException
+     */
+    protected function createFakeComposer(array $namespaces, array $psr4, array $classMap, array $requiredFiles) : void
+    {
+        $addOn = $this->getAddOn();
         $fakeComposerPath = $this->addOnRoot . DIRECTORY_SEPARATOR . 'FakeComposer.php';
 
         $exportedNamespaces = $this->exportData($namespaces);

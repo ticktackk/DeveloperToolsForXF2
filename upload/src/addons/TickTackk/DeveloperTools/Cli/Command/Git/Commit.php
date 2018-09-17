@@ -135,7 +135,6 @@ class Commit extends Command
         $rootPath = \XF::getRootDirectory();
         $filesRoot = $addOn->getFilesDirectory();
         $developerOptions = $addOnEntity->DeveloperOptions;
-        $gitConfigurations = $addOnEntity->GitConfigurations;
 
         if (!empty($developerOptions['parse_additional_files']))
         {
@@ -208,6 +207,7 @@ class Commit extends Command
 
         $git->add()->execute('*');
 
+        $gitConfigurations = $addOnEntity->GitConfigurations;
         if (empty($gitConfigurations['name']) || empty($gitConfigurations['email']))
         {
             $options = \XF::app()->options();
