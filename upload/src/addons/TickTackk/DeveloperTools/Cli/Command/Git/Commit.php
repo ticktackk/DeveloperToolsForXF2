@@ -205,7 +205,7 @@ class Commit extends Command
 
         File::writeFile($repoRoot . $ds . '.gitignore', implode("\n", $gitIgnoreLines), false);
 
-        $git->rm()->cached()->execute('*');
+        $git->rm()->cached()->force()->execute('*');
         $git->add()->execute('*');
 
         $gitConfigurations = $addOnEntity->GitConfigurations;
