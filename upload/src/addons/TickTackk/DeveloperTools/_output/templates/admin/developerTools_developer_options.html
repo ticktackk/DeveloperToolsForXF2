@@ -12,9 +12,9 @@
 	<div class="block-container">
 
 		<div class="block-body">
-			<xf:textboxrow name="git[name]" value="{{ $addOn.DeveloperOptions.git.name ?: $xf.options.developerTools_git_username }}" label="{{ phrase('developerTools_git_name') }}" explain="{{ phrase('developerTools_git_name_explain') }}" />
+			<xf:textboxrow name="git[name]" value="{{ $addOn.GitConfigurations.name ?: $xf.options.developerTools_git_username }}" label="{{ phrase('developerTools_git_name') }}" explain="{{ phrase('developerTools_git_name_explain') }}" />
 			
-			<xf:textboxrow name="git[email]" value="{{ $addOn.DeveloperOptions.git.email ?: $xf.options.developerTools_git_email }}" label="{{ phrase('developerTools_git_email') }}" explain="{{ phrase('developerTools_git_email_explain') }}" />
+			<xf:textboxrow name="git[email]" value="{{ $addOn.GitConfigurations.email ?: $xf.options.developerTools_git_email }}" label="{{ phrase('developerTools_git_email') }}" explain="{{ phrase('developerTools_git_email_explain') }}" />
 			
 			<xf:textarearow name="dev[gitignore]" value="{{ $addOn.DeveloperOptions.gitignore }}" autosize="true" label="{{ phrase('developerTools_contents_for_gitignore') }}" />
 			
