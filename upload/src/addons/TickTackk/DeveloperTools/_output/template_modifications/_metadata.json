@@ -17,6 +17,9 @@
     "admin/developerTools_permission_macros_interface_group.json": {
         "hash": "31b16a7fb1994ed842e2559dc5811dff"
     },
+    "admin/developerTools_template_edit.json": {
+        "hash": "6adcdb15b1c5acdbd05fb74edf52e19d"
+    },
     "admin/developerTools_template_modification_edit_acurl.json": {
         "hash": "a8a330347568834d11ca88393580915a"
     },
