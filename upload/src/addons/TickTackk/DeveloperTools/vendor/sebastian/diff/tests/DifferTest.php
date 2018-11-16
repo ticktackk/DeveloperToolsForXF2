@@ -1,246 +1,462 @@
-<?php
-/**
- * Diff
+<?php declare(strict_types=1);
+/*
+ * This file is part of sebastian/diff.
  *
- * Copyright (c) 2001-2014, Sebastian Bergmann <sebastian@phpunit.de>.
- * All rights reserved.
+ * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
- *
- *   * Neither the name of Sebastian Bergmann nor the names of his
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- * @package    Diff
- * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2001-2014 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
- * @link       http://www.github.com/sebastianbergmann/diff
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace SebastianBergmann\Diff;
 
-use PHPUnit_Framework_TestCase;
-use SebastianBergmann\Diff\LCS\MemoryEfficientImplementation;
-use SebastianBergmann\Diff\LCS\TimeEfficientImplementation;
+use PHPUnit\Framework\TestCase;
+use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 
-class DifferTest extends PHPUnit_Framework_TestCase
+/**
+ * @covers SebastianBergmann\Diff\Differ
+ * @covers SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder
+ *
+ * @uses SebastianBergmann\Diff\MemoryEfficientLongestCommonSubsequenceCalculator
+ * @uses SebastianBergmann\Diff\TimeEfficientLongestCommonSubsequenceCalculator
+ * @uses SebastianBergmann\Diff\Output\AbstractChunkOutputBuilder
+ */
+final class DifferTest extends TestCase
 {
-    const REMOVED = 2;
-    const ADDED = 1;
-    const OLD = 0;
-
     /**
      * @var Differ
      */
     private $differ;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->differ = new Differ;
     }
 
     /**
-     * @param array  $expected
-     * @param string $from
-     * @param string $to
+     * @param array        $expected
+     * @param array|string $from
+     * @param array|string $to
+     *
      * @dataProvider arrayProvider
-     * @covers       SebastianBergmann\Diff\Differ::diffToArray
-     * @covers       SebastianBergmann\Diff\LCS\TimeEfficientImplementation
      */
-    public function testArrayRepresentationOfDiffCanBeRenderedUsingTimeEfficientLcsImplementation(array $expected, $from, $to)
+    public function testArrayRepresentationOfDiffCanBeRenderedUsingTimeEfficientLcsImplementation(array $expected, $from, $to): void
     {
-        $this->assertEquals($expected, $this->differ->diffToArray($from, $to, new TimeEfficientImplementation));
+        $this->assertSame($expected, $this->differ->diffToArray($from, $to, new TimeEfficientLongestCommonSubsequenceCalculator));
     }
 
     /**
      * @param string $expected
      * @param string $from
      * @param string $to
+     *
      * @dataProvider textProvider
-     * @covers       SebastianBergmann\Diff\Differ::diff
-     * @covers       SebastianBergmann\Diff\LCS\TimeEfficientImplementation
      */
-    public function testTextRepresentationOfDiffCanBeRenderedUsingTimeEfficientLcsImplementation($expected, $from, $to)
+    public function testTextRepresentationOfDiffCanBeRenderedUsingTimeEfficientLcsImplementation(string $expected, string $from, string $to): void
     {
-        $this->assertEquals($expected, $this->differ->diff($from, $to, new TimeEfficientImplementation));
+        $this->assertSame($expected, $this->differ->diff($from, $to, new TimeEfficientLongestCommonSubsequenceCalculator));
     }
 
     /**
-     * @param array  $expected
-     * @param string $from
-     * @param string $to
+     * @param array        $expected
+     * @param array|string $from
+     * @param array|string $to
+     *
      * @dataProvider arrayProvider
-     * @covers       SebastianBergmann\Diff\Differ::diffToArray
-     * @covers       SebastianBergmann\Diff\LCS\MemoryEfficientImplementation
      */
-    public function testArrayRepresentationOfDiffCanBeRenderedUsingMemoryEfficientLcsImplementation(array $expected, $from, $to)
+    public function testArrayRepresentationOfDiffCanBeRenderedUsingMemoryEfficientLcsImplementation(array $expected, $from, $to): void
     {
-        $this->assertEquals($expected, $this->differ->diffToArray($from, $to, new MemoryEfficientImplementation));
+        $this->assertSame($expected, $this->differ->diffToArray($from, $to, new MemoryEfficientLongestCommonSubsequenceCalculator));
     }
 
     /**
      * @param string $expected
      * @param string $from
      * @param string $to
+     *
      * @dataProvider textProvider
-     * @covers       SebastianBergmann\Diff\Differ::diff
-     * @covers       SebastianBergmann\Diff\LCS\MemoryEfficientImplementation
      */
-    public function testTextRepresentationOfDiffCanBeRenderedUsingMemoryEfficientLcsImplementation($expected, $from, $to)
+    public function testTextRepresentationOfDiffCanBeRenderedUsingMemoryEfficientLcsImplementation(string $expected, string $from, string $to): void
     {
-        $this->assertEquals($expected, $this->differ->diff($from, $to, new MemoryEfficientImplementation));
+        $this->assertSame($expected, $this->differ->diff($from, $to, new MemoryEfficientLongestCommonSubsequenceCalculator));
     }
 
-    /**
-     * @covers SebastianBergmann\Diff\Differ::diff
-     */
-    public function testCustomHeaderCanBeUsed()
+    public function testTypesOtherThanArrayAndStringCanBePassed(): void
     {
-        $differ = new Differ('CUSTOM HEADER');
-
-        $this->assertEquals(
-            "CUSTOM HEADER@@ @@\n-a\n+b\n",
-            $differ->diff('a', 'b')
+        $this->assertSame(
+            "--- Original\n+++ New\n@@ @@\n-1\n+2\n",
+            $this->differ->diff(1, 2)
         );
     }
 
-    public function arrayProvider()
+    public function testArrayDiffs(): void
     {
-        return array(
-            array(
-                array(
-                    array('a', self::REMOVED),
-                    array('b', self::ADDED)
-                ),
+        $this->assertSame(
+            '--- Original
++++ New
+@@ @@
+-one
++two
+',
+            $this->differ->diff(['one'], ['two'])
+        );
+    }
+
+    public function arrayProvider(): array
+    {
+        return [
+            [
+                [
+                    ['a', Differ::REMOVED],
+                    ['b', Differ::ADDED],
+                ],
                 'a',
-                'b'
-            ),
-            array(
-                array(
-                    array('ba', self::REMOVED),
-                    array('bc', self::ADDED)
-                ),
+                'b',
+            ],
+            [
+                [
+                    ['ba', Differ::REMOVED],
+                    ['bc', Differ::ADDED],
+                ],
                 'ba',
-                'bc'
-            ),
-            array(
-                array(
-                    array('ab', self::REMOVED),
-                    array('cb', self::ADDED)
-                ),
-                'ab',
-                'cb'
-            ),
-            array(
-                array(
-                    array('abc', self::REMOVED),
-                    array('adc', self::ADDED)
-                ),
-                'abc',
-                'adc'
-            ),
-            array(
-                array(
-                    array('ab', self::REMOVED),
-                    array('abc', self::ADDED)
-                ),
-                'ab',
-                'abc'
-            ),
-            array(
-                array(
-                    array('bc', self::REMOVED),
-                    array('abc', self::ADDED)
-                ),
                 'bc',
-                'abc'
-            ),
-            array(
-                array(
-                    array('abc', self::REMOVED),
-                    array('abbc', self::ADDED)
-                ),
+            ],
+            [
+                [
+                    ['ab', Differ::REMOVED],
+                    ['cb', Differ::ADDED],
+                ],
+                'ab',
+                'cb',
+            ],
+            [
+                [
+                    ['abc', Differ::REMOVED],
+                    ['adc', Differ::ADDED],
+                ],
                 'abc',
-                'abbc'
-            ),
-            array(
-                array(
-                    array('abcdde', self::REMOVED),
-                    array('abcde', self::ADDED)
-                ),
+                'adc',
+            ],
+            [
+                [
+                    ['ab', Differ::REMOVED],
+                    ['abc', Differ::ADDED],
+                ],
+                'ab',
+                'abc',
+            ],
+            [
+                [
+                    ['bc', Differ::REMOVED],
+                    ['abc', Differ::ADDED],
+                ],
+                'bc',
+                'abc',
+            ],
+            [
+                [
+                    ['abc', Differ::REMOVED],
+                    ['abbc', Differ::ADDED],
+                ],
+                'abc',
+                'abbc',
+            ],
+            [
+                [
+                    ['abcdde', Differ::REMOVED],
+                    ['abcde', Differ::ADDED],
+                ],
                 'abcdde',
-                'abcde'
-            )
-        );
+                'abcde',
+            ],
+            'same start' => [
+                [
+                    [17, Differ::OLD],
+                    ['b', Differ::REMOVED],
+                    ['d', Differ::ADDED],
+                ],
+                [30 => 17, 'a' => 'b'],
+                [30 => 17, 'c' => 'd'],
+            ],
+            'same end' => [
+                [
+                    [1, Differ::REMOVED],
+                    [2, Differ::ADDED],
+                    ['b', Differ::OLD],
+                ],
+                [1 => 1, 'a' => 'b'],
+                [1 => 2, 'a' => 'b'],
+            ],
+            'same start (2), same end (1)' => [
+                [
+                    [17, Differ::OLD],
+                    [2, Differ::OLD],
+                    [4, Differ::REMOVED],
+                    ['a', Differ::ADDED],
+                    [5, Differ::ADDED],
+                    ['x', Differ::OLD],
+                ],
+                [30 => 17, 1 => 2, 2 => 4, 'z' => 'x'],
+                [30 => 17, 1 => 2, 3 => 'a', 2 => 5, 'z' => 'x'],
+            ],
+            'same' => [
+                [
+                    ['x', Differ::OLD],
+                ],
+                ['z' => 'x'],
+                ['z' => 'x'],
+            ],
+            'diff' => [
+                [
+                    ['y', Differ::REMOVED],
+                    ['x', Differ::ADDED],
+                ],
+                ['x' => 'y'],
+                ['z' => 'x'],
+            ],
+            'diff 2' => [
+                [
+                    ['y', Differ::REMOVED],
+                    ['b', Differ::REMOVED],
+                    ['x', Differ::ADDED],
+                    ['d', Differ::ADDED],
+                ],
+                ['x' => 'y', 'a' => 'b'],
+                ['z' => 'x', 'c' => 'd'],
+            ],
+            'test line diff detection' => [
+                [
+                    [
+                        "#Warning: Strings contain different line endings!\n",
+                        Differ::DIFF_LINE_END_WARNING,
+                    ],
+                    [
+                        "<?php\r\n",
+                        Differ::REMOVED,
+                    ],
+                    [
+                        "<?php\n",
+                        Differ::ADDED,
+                    ],
+                ],
+                "<?php\r\n",
+                "<?php\n",
+            ],
+            'test line diff detection in array input' => [
+                [
+                    [
+                        "#Warning: Strings contain different line endings!\n",
+                        Differ::DIFF_LINE_END_WARNING,
+                    ],
+                    [
+                        "<?php\r\n",
+                        Differ::REMOVED,
+                    ],
+                    [
+                        "<?php\n",
+                        Differ::ADDED,
+                    ],
+                ],
+                ["<?php\r\n"],
+                ["<?php\n"],
+            ],
+        ];
     }
 
-    public function textProvider()
+    public function textProvider(): array
     {
-        return array(
-            array(
+        return [
+            [
                 "--- Original\n+++ New\n@@ @@\n-a\n+b\n",
                 'a',
-                'b'
-            ),
-            array(
-                "--- Original\n+++ New\n@@ @@\n-ba\n+bc\n",
-                'ba',
-                'bc'
-            ),
-            array(
-                "--- Original\n+++ New\n@@ @@\n-ab\n+cb\n",
-                'ab',
-                'cb'
-            ),
-            array(
-                "--- Original\n+++ New\n@@ @@\n-abc\n+adc\n",
-                'abc',
-                'adc'
-            ),
-            array(
-                "--- Original\n+++ New\n@@ @@\n-ab\n+abc\n",
-                'ab',
-                'abc'
-            ),
-            array(
-                "--- Original\n+++ New\n@@ @@\n-bc\n+abc\n",
-                'bc',
-                'abc'
-            ),
-            array(
-                "--- Original\n+++ New\n@@ @@\n-abc\n+abbc\n",
-                'abc',
-                'abbc'
-            ),
-            array(
-                "--- Original\n+++ New\n@@ @@\n-abcdde\n+abcde\n",
-                'abcdde',
-                'abcde'
-            ),
+                'b',
+            ],
+            [
+                "--- Original\n+++ New\n@@ @@\n-A\n+A1\n B\n",
+                "A\nB",
+                "A1\nB",
+            ],
+            [
+                <<<EOF
+--- Original
++++ New
+@@ @@
+ a
+-b
++p
+ c
+ d
+ e
+@@ @@
+ g
+ h
+ i
+-j
++w
+ k
+
+EOF
+            ,
+                "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\n",
+                "a\np\nc\nd\ne\nf\ng\nh\ni\nw\nk\n",
+            ],
+            [
+                <<<EOF
+--- Original
++++ New
+@@ @@
+-A
++B
+ 1
+ 2
+ 3
+
+EOF
+            ,
+                "A\n1\n2\n3\n4\n5\n6\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n",
+                "B\n1\n2\n3\n4\n5\n6\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n",
+            ],
+            [
+                "--- Original\n+++ New\n@@ @@\n #Warning: Strings contain different line endings!\n-<?php\r\n+<?php\n A\n",
+                "<?php\r\nA\n",
+                "<?php\nA\n",
+            ],
+            [
+                "--- Original\n+++ New\n@@ @@\n #Warning: Strings contain different line endings!\n-a\r\n+\n+c\r\n",
+                "a\r\n",
+                "\nc\r",
+            ],
+        ];
+    }
+
+    public function testDiffToArrayInvalidFromType(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('#^"from" must be an array or string\.$#');
+
+        $this->differ->diffToArray(null, '');
+    }
+
+    public function testDiffInvalidToType(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('#^"to" must be an array or string\.$#');
+
+        $this->differ->diffToArray('', new \stdClass);
+    }
+
+    /**
+     * @param array  $expected
+     * @param string $input
+     *
+     * @dataProvider provideSplitStringByLinesCases
+     */
+    public function testSplitStringByLines(array $expected, string $input): void
+    {
+        $reflection = new \ReflectionObject($this->differ);
+        $method     = $reflection->getMethod('splitStringByLines');
+        $method->setAccessible(true);
+
+        $this->assertSame($expected, $method->invoke($this->differ, $input));
+    }
+
+    public function provideSplitStringByLinesCases(): array
+    {
+        return [
+            [
+                [],
+                '',
+            ],
+            [
+                ['a'],
+                'a',
+            ],
+            [
+                ["a\n"],
+                "a\n",
+            ],
+            [
+                ["a\r"],
+                "a\r",
+            ],
+            [
+                ["a\r\n"],
+                "a\r\n",
+            ],
+            [
+                ["\n"],
+                "\n",
+            ],
+            [
+                ["\r"],
+                "\r",
+            ],
+            [
+                ["\r\n"],
+                "\r\n",
+            ],
+            [
+                [
+                    "A\n",
+                    "B\n",
+                    "\n",
+                    "C\n",
+                ],
+                "A\nB\n\nC\n",
+            ],
+            [
+                [
+                    "A\r\n",
+                    "B\n",
+                    "\n",
+                    "C\r",
+                ],
+                "A\r\nB\n\nC\r",
+            ],
+            [
+                [
+                    "\n",
+                    "A\r\n",
+                    "B\n",
+                    "\n",
+                    'C',
+                ],
+                "\nA\r\nB\n\nC",
+            ],
+        ];
+    }
+
+    public function testConstructorNull(): void
+    {
+        $this->assertAttributeInstanceOf(
+            UnifiedDiffOutputBuilder::class,
+            'outputBuilder',
+            new Differ(null)
         );
+    }
+
+    public function testConstructorString(): void
+    {
+        $this->assertAttributeInstanceOf(
+            UnifiedDiffOutputBuilder::class,
+            'outputBuilder',
+            new Differ("--- Original\n+++ New\n")
+        );
+    }
+
+    public function testConstructorInvalidArgInt(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/^Expected builder to be an instance of DiffOutputBuilderInterface, <null> or a string, got integer "1"\.$/');
+
+        new Differ(1);
+    }
+
+    public function testConstructorInvalidArgObject(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/^Expected builder to be an instance of DiffOutputBuilderInterface, <null> or a string, got instance of "SplFileInfo"\.$/');
+
+        new Differ(new \SplFileInfo(__FILE__));
     }
 }
