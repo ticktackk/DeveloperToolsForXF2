@@ -1,0 +1,9 @@
+{
+    "template": "template_edit",
+    "description": "View Modifications link",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<div class=\"block-outer-opposite\">",
+    "replace": "$0\n<xf:if is=\"$modificationCount\">\n<span>\n<a href=\"{{ link('templates/view-modifications', $template) }}\" data-xf-click=\"overlay\">View {$modificationCount|number} Template Modifications</a>\n</span>\n</xf:if>"
+}

@@ -8,6 +8,11 @@ use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\Redirect;
 use XF\Mvc\View;
 
+/**
+ * Class TemplateModification
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class TemplateModification extends XFCP_TemplateModification
 {
     /**
@@ -96,10 +101,12 @@ class TemplateModification extends XFCP_TemplateModification
             {
                 return $this->error(\XF::phrase('developerTools_requested_template_for_selected_style_could_not_be_found'));
             }
-            else if (!$templateForMasterStyle && !$templateForStyle)
+
+            if (!$templateForMasterStyle && !$templateForStyle)
             {
                 return $this->error(\XF::phrase('requested_template_not_found'));
             }
+
             /** @noinspection PhpUndefinedFieldInspection */
             $content = $templateForStyle->template;
 
@@ -120,7 +127,12 @@ class TemplateModification extends XFCP_TemplateModification
         return $response;
     }
 
-    public function actionAutoComplete()
+
+    /**
+     * @return \XF\Mvc\Reply\View
+     * @throws \XF\Mvc\Reply\Exception
+     */
+    public function actionAutoComplete() : \XF\Mvc\Reply\View
     {
         $type = $this->filter('type', 'str');
 
@@ -160,7 +172,11 @@ class TemplateModification extends XFCP_TemplateModification
         return $response;
     }
 
-    public function actionContents()
+    /**
+     * @return \XF\Mvc\Reply\View
+     * @throws \XF\Mvc\Reply\Exception
+     */
+    public function actionContents() : \XF\Mvc\Reply\View
     {
         $type = $this->filter('type', 'str');
 
@@ -192,6 +208,11 @@ class TemplateModification extends XFCP_TemplateModification
         return $response;
     }
 
+    /**
+     * @param ParameterBag $params
+     *
+     * @return Redirect|\XF\Mvc\Reply\Reroute
+     */
     public function actionSave(ParameterBag $params)
     {
         $response = parent::actionSave($params);
@@ -222,44 +243,48 @@ class TemplateModification extends XFCP_TemplateModification
         return $response;
     }
 
+    /**
+     * @param \XF\Entity\TemplateModification $modification
+     *
+     * @return \XF\Mvc\Reply\Error|\XF\Mvc\Reply\View
+     * @throws \XF\Mvc\Reply\Exception
+     */
     protected function templateModificationAddEdit(\XF\Entity\TemplateModification $modification)
     {
         $response = parent::templateModificationAddEdit($modification);
 
         /** @var \XF\Entity\TemplateModification $_modification_ */
-        if ($_modification = $response->getParam('modification'))
+        $_modification = $response->getParam('modification');
+        if ($_modification && $_modification->type === 'public')
         {
-            if ($_modification->type == 'public')
+            if ($_modification->Template && !$this->request->exists('style_id'))
             {
-                if ($_modification->Template && !$this->request->exists('style_id'))
-                {
-                    $styleId = $_modification->Template->style_id;
-                }
-                else
-                {
-                    $styleId = $this->filter('style_id', 'uint');
-                }
-
-                $style = $this->assertStyleExists($styleId);
-                $styleTree = $this->getStyleRepo()->getStyleTree();
-                $response->setParam('styleTree', $styleTree);
-                $response->setParam('style', $style);
-
-                $modificationRouteParams = [
-                    'type' => $_modification->type,
-                ];
-
-                $modificationRouteType = 'add';
-
-                if ($_modification->modification_id)
-                {
-                    $modificationRouteType = 'edit/' . $_modification->modification_id;
-                    $modificationRouteParams = [];
-                }
-
-                $response->setParam('modificationRouteParams', $modificationRouteParams);
-                $response->setParam('modificationRouteType', $modificationRouteType);
+                $styleId = $_modification->Template->style_id;
             }
+            else
+            {
+                $styleId = $this->filter('style_id', 'uint');
+            }
+
+            $style = $this->assertStyleExists($styleId);
+            $styleTree = $this->getStyleRepo()->getStyleTree();
+            $response->setParam('styleTree', $styleTree);
+            $response->setParam('style', $style);
+
+            $modificationRouteParams = [
+                'type' => $_modification->type,
+            ];
+
+            $modificationRouteType = 'add';
+
+            if ($_modification->modification_id)
+            {
+                $modificationRouteType = 'edit/' . $_modification->modification_id;
+                $modificationRouteParams = [];
+            }
+
+            $response->setParam('modificationRouteParams', $modificationRouteParams);
+            $response->setParam('modificationRouteType', $modificationRouteType);
         }
 
         return $response;
@@ -276,7 +301,7 @@ class TemplateModification extends XFCP_TemplateModification
      */
     protected function assertStyleExists($id, $with = null, $phraseKey = null)
     {
-        if ($id === 0 || $id === "0")
+        if ($id === 0 || $id === '0')
         {
             return $this->getStyleRepo()->getMasterStyle();
         }
@@ -287,9 +312,9 @@ class TemplateModification extends XFCP_TemplateModification
     /**
      * @return \XF\Repository\Style
      */
-    protected function getStyleRepo()
+    protected function getStyleRepo() : \XF\Repository\Style
     {
-        /** @noinspection PhpUndefinedFieldInspection */
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository('XF:Style');
     }
 }

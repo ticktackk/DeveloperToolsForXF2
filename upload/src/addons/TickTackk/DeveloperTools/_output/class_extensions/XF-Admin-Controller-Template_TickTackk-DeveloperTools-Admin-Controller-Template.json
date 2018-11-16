@@ -1,0 +1,6 @@
+{
+    "from_class": "XF\\Admin\\Controller\\Template",
+    "to_class": "TickTackk\\DeveloperTools\\XF\\Admin\\Controller\\Template",
+    "execute_order": 10,
+    "active": true
+}

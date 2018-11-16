@@ -10,11 +10,16 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use XF\Cli\Command\AddOnActionTrait;
 
+/**
+ * Class BetterExport
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class BetterExport extends Command
 {
     use AddOnActionTrait;
 
-    protected function configure()
+    protected function configure() : void
     {
         $this
             ->setName('ticktackk-devtools:better-export')
@@ -29,6 +34,12 @@ class BetterExport extends Command
                 's',
                 InputOption::VALUE_NONE,
                 'Skip \'xf-dev:export\' command'
+            )
+            ->addOption(
+                'skip-tests',
+                't',
+                InputOption::VALUE_NONE,
+                'Skip \'ticktackk-devtools:phpunit\' command'
             )
             ->addOption(
                 'release',
@@ -72,7 +83,8 @@ class BetterExport extends Command
      * @return int|null
      * @throws \Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    protected function execute(InputInterface $input, OutputInterface $output) : ? int
     {
         $id = $input->getArgument('id');
 
@@ -91,8 +103,7 @@ class BetterExport extends Command
         $command->run($childInput, $output);
 
         $entityPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . 'Entity';
-        $entityDirExists = is_dir($entityPath);
-        if ($entityDirExists)
+        if (is_dir($entityPath))
         {
             $command = $this->getApplication()->find('xf-dev:entity-class-properties');
             $childInput = new ArrayInput([
@@ -111,6 +122,21 @@ class BetterExport extends Command
                 '--addon' => $addOn->getAddOnId()
             ]);
             $command->run($childInput, $output);
+        }
+
+        $skipTests = $input->getOption('skip-tests');
+        if (!$skipTests)
+        {
+            $command = $this->getApplication()->find('ticktackk-devtools:phpunit');
+            $childInput = new ArrayInput([
+                'command' => 'ticktackk-devtools:phpunit',
+                'id' => $addOn->getAddOnId()
+            ]);
+            $phpUnitResult = $command->run($childInput, $output);
+            if ($phpUnitResult !== 0)
+            {
+                return $phpUnitResult;
+            }
         }
 
         $release = $input->getOption('release');

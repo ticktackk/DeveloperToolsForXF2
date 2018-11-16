@@ -7,15 +7,20 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use TickTackk\DeveloperTools\Git\GitRepository;
+use Bit3\GitPhp\GitRepository;
 use XF\Cli\Command\AddOnActionTrait;
 use XF\Util\File;
 
+/**
+ * Class Push
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class Push extends Command
 {
     use AddOnActionTrait;
 
-    protected function configure()
+    protected function configure() : void
     {
         $this
             ->setName('ticktackk-devtools:git-push')
@@ -47,7 +52,8 @@ class Push extends Command
      *
      * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    protected function execute(InputInterface $input, OutputInterface $output) : ? int
     {
         $id = $input->getArgument('id');
 
@@ -67,7 +73,7 @@ class Push extends Command
         $git = new GitRepository($repoRoot);
         if (!$git->isInitialized())
         {
-            $output->writeln(["", "Git directory must be initialized"]);
+            $output->writeln(['', 'Git directory must be initialized']);
             return 0;
         }
     
@@ -78,13 +84,13 @@ class Push extends Command
         if ($branch)
         {
             $git->push()->execute($repo, $branch);
-            $output->writeln(["", "Successfully pushed to {$repo}/{$branch}."]);
+            $output->writeln(['', "Successfully pushed to {$repo}/{$branch}."]);
             
         }
         else
         {
             $git->push()->execute($repo);
-            $output->writeln(["", "Successfully pushed to {$repo}."]);
+            $output->writeln(['', "Successfully pushed to {$repo}."]);
         }
 
         return 0;

@@ -1,0 +1,6 @@
+{
+    "from_class": "XF\\Service\\AddOn\\JsMinifier",
+    "to_class": "TickTackk\\DeveloperTools\\XF\\Service\\AddOn\\JsMinifier",
+    "execute_order": 10,
+    "active": true
+}

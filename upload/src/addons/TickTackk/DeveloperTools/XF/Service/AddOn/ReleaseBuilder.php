@@ -4,37 +4,81 @@ namespace TickTackk\DeveloperTools\XF\Service\AddOn;
 
 use XF\Util\File;
 
+/**
+ * Class ReleaseBuilder
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class ReleaseBuilder extends XFCP_ReleaseBuilder
 {
-    protected function prepareFilesToCopy()
+    protected function prepareFilesToCopy() : void
     {
         parent::prepareFilesToCopy();
-    
+
         $addOn = $this->addOn;
         $ds = DIRECTORY_SEPARATOR;
         $buildUploadRoot = $addOn->getBuildDirectory();
-    
-        $addOnId = $this->addOn->getAddOnId();
-        $addOn = $this->em()->findOne('XF:AddOn', ['addon_id' => $addOnId]);
-    
-        if (!empty($addOn->devTools_license))
+        /** @var \TickTackk\DeveloperTools\XF\Entity\AddOn $addOnEntity */
+        $addOnEntity = $this->addOn->getInstalledAddOn();
+
+        if ($addOnEntity)
         {
-            File::writeFile($buildUploadRoot . $ds . 'LICENSE.md', $addOn->devTools_license, false);
+            $developerOptions = $addOnEntity->DeveloperOptions;
+            if (!empty($developerOptions['license']))
+            {
+                File::writeFile($buildUploadRoot . $ds . 'LICENSE.md', $developerOptions['license'], false);
+            }
+
+            if (!empty($developerOptions['readme']))
+            {
+                File::writeFile($buildUploadRoot . $ds . 'README.md', $developerOptions['readme'], false);
+            }
+
+            if (file_exists($buildUploadRoot . $ds . 'dev.json'))
+            {
+                unlink($buildUploadRoot . $ds . 'dev.json');
+            }
         }
-    
-        if (!empty($addOn->devTools_readme_md))
+    }
+
+    /**
+     * @throws \XF\PrintableException
+     */
+    public function performBuildTasks() : void
+    {
+        parent::performBuildTasks();
+
+        $dataPath = $this->addOnRoot . DIRECTORY_SEPARATOR . '_data';
+        if (is_dir($dataPath))
         {
-            File::writeFile($buildUploadRoot . $ds . 'README.md', $addOn->devTools_readme_md, false);
+            File::deleteDirectory($dataPath);
         }
     }
 
     /**
      * @return array
      */
-    protected function getExcludedDirectories()
+    protected function getExcludedDirectories() : array
     {
         return array_merge([
-            '_repo'
+            '_repo',
+            '_tests',
+            '_seeds'
         ], parent::getExcludedDirectories());
+    }
+
+    /**
+     * @param $fileName
+     *
+     * @return bool
+     */
+    protected function isExcludedFileName($fileName) : bool
+    {
+        if (\in_array($fileName, ['git.json', 'dev.json']))
+        {
+            return true;
+        }
+
+        return parent::isExcludedFileName($fileName);
     }
 }

@@ -6,15 +6,20 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use TickTackk\DeveloperTools\Git\GitRepository;
 use XF\Cli\Command\AddOnActionTrait;
 use XF\Util\File;
+use Bit3\GitPhp\GitRepository;
 
+/**
+ * Class Init
+ *
+ * @package TickTackk\DeveloperTools
+ */
 class Init extends Command
 {
     use AddOnActionTrait;
 
-    protected function configure()
+    protected function configure() : void
     {
         $this
             ->setName('ticktackk-devtools:git-init')
@@ -32,7 +37,8 @@ class Init extends Command
      *
      * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $id = $input->getArgument('id');
 
@@ -49,7 +55,7 @@ class Init extends Command
 
         if (is_dir($repoRoot))
         {
-            $output->writeln("Add-on repository directory has already been initialized.");
+            $output->writeln('Add-on repository directory has already been initialized.');
             return 1;
         }
 
@@ -58,7 +64,7 @@ class Init extends Command
         $git = new GitRepository($repoRoot);
         $git->init()->execute();
 
-        $output->writeln(["", "Successfully initialized git."]);
+        $output->writeln(['', 'Successfully initialized git.']);
         return 0;
     }
 }

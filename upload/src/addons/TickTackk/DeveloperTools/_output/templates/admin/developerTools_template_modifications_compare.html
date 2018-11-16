@@ -1,0 +1,37 @@
+<xf:title>{$template->title} - {{ count($activeMods)|number }}/{{ count($mods)|number }} Template Modifications</xf:title>
+
+<xf:page option="breadcrumbPath" value="styles" />
+<xf:breadcrumb href="{{ link('styles/templates', $template->Style, {'type': $template.type}) }}">{$style.title} - {{ phrase('templates') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('templates/edit', $template, {'type': $template.type}) }}">{$template.title}</xf:breadcrumb>
+
+<xf:css src="public:diff.less" />
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body block-row block-body--contained">
+			<xf:form action="{{ link('templates/view-modifications', $template) }}" 
+					 class="block" 
+					 ajax="{{ $_xfWithData ? 'true' : '' }}" >
+				<xf:checkboxrow rowtype="fullWidth noLabel">
+					<xf:foreach loop="$mods" value="$mod">
+						<xf:option name="id[]" 
+								   value="{$mod.modification_id}" 
+								   checked="{{ $activeMods.{$mod.modification_id} ? 'checked' : '' }}" 
+								   label="{{ $mod.addon_id ? $mod.addon_id . ' - ' : '' }}{{ $mod.modification_key }} - {{ $mod.description }} (<a href='{{ link('template-modifications/edit', $mod) }}'>Edit</a>)" 
+								   >
+							<xf:hint>{$status.{$mod->modification_id}}</xf:hint>
+						</xf:option>
+					</xf:foreach>
+				</xf:checkboxrow>
+				<xf:hiddenval name="reload">1</xf:hiddenval>
+				<xf:submitrow rowtype="simple" submit="Reload" />
+			</xf:form>
+			<ol class="diffList diffList--code">
+				<xf:foreach loop="$diffs" value="$diff">
+					<xf:set var="$diffHtml">{{ $diff.1|join('<br />') }}</xf:set>
+					<li class="diffList-line diffList-line--{$diff.0}">{{ trim($diffHtml) !== '' ? $diffHtml : '&nbsp;' }}</li>
+				</xf:foreach>
+			</ol>
+		</div>
+	</div>
+</div>
