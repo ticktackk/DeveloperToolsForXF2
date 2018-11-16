@@ -42,6 +42,12 @@ class BetterExport extends Command
                 'Skip \'ticktackk-devtools:phpunit\' command'
             )
             ->addOption(
+                'move',
+                'm',
+                InputOption::VALUE_NONE,
+                'Run \'ticktackk-devtools:git-move\' command'
+            )
+            ->addOption(
                 'release',
                 'r',
                 InputOption::VALUE_NONE,
@@ -138,7 +144,18 @@ class BetterExport extends Command
                 return $phpUnitResult;
             }
         }
-
+        
+        $move = $input->getOption('move');
+        if ($move)
+        {
+            $command = $this->getApplication()->find('ticktackk-devtools:git-move');
+            $childInput = new ArrayInput([
+                'command' => 'ticktackk-devtools:git-move',
+                'id' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
+        }
+        
         $release = $input->getOption('release');
         if ($release)
         {
