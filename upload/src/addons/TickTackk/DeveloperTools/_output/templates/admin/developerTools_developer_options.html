@@ -26,8 +26,11 @@
 			
 			<hr class="formRowSep" />
 			
-			<xf:checkboxrow name="dev[parse_additional_files]" explain="{{ phrase('developerTools_parse_additional_files_explain') }}">
-				<xf:option value="1" selected="{$addOn.DeveloperOptions.parse_additional_files}">{{ phrase('developerTools_parse_additional_files') }}</xf:option>
+			<xf:checkboxrow>
+				<xf:option name="dev[parse_additional_files]" value="1" selected="{$addOn.DeveloperOptions.parse_additional_files}"
+						   hint="{{ phrase('developerTools_parse_additional_files_explain') }}">
+					{{ phrase('developerTools_parse_additional_files') }}
+				</xf:option>
 			</xf:checkboxrow>
 		</div>
 
