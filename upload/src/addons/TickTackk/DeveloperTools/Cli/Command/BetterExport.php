@@ -145,23 +145,23 @@ class BetterExport extends Command
             }
         }
         
-        $move = $input->getOption('move');
-        if ($move)
-        {
-            $command = $this->getApplication()->find('ticktackk-devtools:git-move');
-            $childInput = new ArrayInput([
-                'command' => 'ticktackk-devtools:git-move',
-                'id' => $addOn->getAddOnId()
-            ]);
-            $command->run($childInput, $output);
-        }
-        
         $release = $input->getOption('release');
         if ($release)
         {
             $command = $this->getApplication()->find('xf-addon:build-release');
             $childInput = new ArrayInput([
                 'command' => 'xf-addon:build-release',
+                'id' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
+        }
+
+        $move = $input->getOption('move');
+        if ($move)
+        {
+            $command = $this->getApplication()->find('ticktackk-devtools:git-move');
+            $childInput = new ArrayInput([
+                'command' => 'ticktackk-devtools:git-move',
                 'id' => $addOn->getAddOnId()
             ]);
             $command->run($childInput, $output);
