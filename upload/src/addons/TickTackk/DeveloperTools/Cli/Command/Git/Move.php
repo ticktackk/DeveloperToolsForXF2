@@ -63,7 +63,10 @@ class Move extends Command
 			]);
 			$command->run($childInput, $output);
 		}
-		
+	
+		$developerOptions = $addOnEntity->DeveloperOptions;
+		$gitConfigurations = $addOnEntity->GitConfigurations;
+	
 		$globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
 		$globalGitIgnore = explode("\n", $globalGitIgnore);
 		$addOnGitIgnore = !empty($developerOptions['gitignore']) ? explode("\n", $developerOptions['gitignore']) : [];
@@ -116,8 +119,6 @@ class Move extends Command
 		$srcRoot = $uploadRoot . $ds . 'src' . $ds . 'addons' . $ds . $addOn->prepareAddOnIdForPath();
 		$rootPath = \XF::getRootDirectory();
 		$filesRoot = $addOn->getFilesDirectory();
-		$developerOptions = $addOnEntity->DeveloperOptions;
-		$gitConfigurations = $addOnEntity->GitConfigurations;
 	
 		$filesIterator = $this->getFileIterator($addOnDirectory);
 		foreach ($filesIterator AS $file)
