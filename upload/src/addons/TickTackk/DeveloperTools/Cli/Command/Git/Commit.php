@@ -13,7 +13,6 @@ use Symfony\Component\Console\Question\Question;
 use Bit3\GitPhp\GitException;
 use Bit3\GitPhp\GitRepository;
 use XF\Cli\Command\AddOnActionTrait;
-use XF\Util\File;
 
 /**
  * Class Commit
@@ -59,28 +58,21 @@ class Commit extends Command
             return 1;
         }
 	
-		$command = $this->getApplication()->find('ticktackk-devtools:git-move');
-		$childInput = new ArrayInput([
-			'command' => 'ticktackk-devtools:git-move',
-			'id' => $addOn->getAddOnId()
-		]);
-		$command->run($childInput, $output);
+        $addOnDirectory = $addOn->getAddOnDirectory();
+        $ds = DIRECTORY_SEPARATOR;
 	
-		$addOnDirectory = $addOn->getAddOnDirectory();
-		$ds = DIRECTORY_SEPARATOR;
+        $repoRoot = $addOnDirectory . $ds . '_repo';
 	
-		$repoRoot = $addOnDirectory . $ds . '_repo';
-	
-		$git = new GitRepository($repoRoot);
-		if (!$git->isInitialized())
-		{
-			$command = $this->getApplication()->find('ticktackk-devtools:git-init');
-			$childInput = new ArrayInput([
-				'command' => 'ticktackk-devtools:git-init',
-				'id' => $addOn->getAddOnId()
-			]);
-			$command->run($childInput, $output);
-		}
+        $git = new GitRepository($repoRoot);
+        if (!$git->isInitialized())
+        {
+            $command = $this->getApplication()->find('ticktackk-devtools:git-init');
+            $childInput = new ArrayInput([
+                'command' => 'ticktackk-devtools:git-init',
+                'id' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
+        }
 		
         if (empty($git->status()->getIndexStatus()))
         {
