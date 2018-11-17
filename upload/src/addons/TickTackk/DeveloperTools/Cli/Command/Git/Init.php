@@ -53,16 +53,16 @@ class Init extends Command
         $ds = DIRECTORY_SEPARATOR;
         $repoRoot = $addOnDirectory . $ds . '_repo';
 
-        if (is_dir($repoRoot))
+        if (!is_dir($repoRoot))
         {
-            $output->writeln('Add-on repository directory has already been initialized.');
-            return 1;
+            File::createDirectory($repoRoot);
         }
 
-        File::createDirectory($repoRoot);
-
         $git = new GitRepository($repoRoot);
-        $git->init()->execute();
+        if (!$git->isInitialized())
+        {
+            $git->init()->execute();
+        }
 
         $output->writeln(['', 'Successfully initialized git.']);
         return 0;
