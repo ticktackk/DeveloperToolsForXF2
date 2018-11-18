@@ -41,43 +41,9 @@ class AddOn extends XFCP_AddOn
             return $this->redirect($this->buildLink('add-ons/developer-options', $addOn->getInstalledAddOn()));
         }
 
-        $fakeComposerCELExists = $this->finder('XF:CodeEventListener')
-            ->where('callback_class', $addOn->prepareAddOnIdForClass() . '\\FakeComposer')
-            ->where('callback_method', 'appSetup')
-            ->where('addon_id', $addOn->getAddOnId())
-            ->fetchOne();
-
-        $fakeComposerFile = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . 'FakeComposer.php';
-        $fakeComposerFileUsable = file_exists($fakeComposerFile) && is_readable($fakeComposerFile);
-
         $viewParams = [
             'addOn' => $addOn,
-            'allowFakeComposerRebuild' => $fakeComposerCELExists && $fakeComposerFileUsable
         ];
         return $this->view('TickTackk\DeveloperTools\XF:AddOn\DeveloperOptions', 'developerTools_developer_options', $viewParams);
-    }
-
-    /**
-     * @param ParameterBag $parameterBag
-     *
-     * @return \XF\Mvc\Reply\Redirect
-     * @throws \XF\Mvc\Reply\Exception
-     * @throws \XF\PrintableException
-     */
-    public function actionRebuildFakeComposer(ParameterBag $parameterBag) : \XF\Mvc\Reply\Redirect
-    {
-        /** @noinspection PhpUndefinedFieldInspection */
-        $addOn = $this->assertAddOnAvailable($parameterBag->addon_id_url);
-
-        if (!$addOn->canEdit())
-        {
-            return $this->noPermission();
-        }
-
-        /** @var \TickTackk\DeveloperTools\Service\FakeComposer\Creator $classMapService */
-        $classMapService = $this->service('TickTackk\DeveloperTools:FakeComposer\Creator', $addOn->getInstalledAddOn());
-        $classMapService->build();
-
-        return $this->redirect($this->buildLink('add-ons/developer-options', $addOn->getInstalledAddOn()));
     }
 }
