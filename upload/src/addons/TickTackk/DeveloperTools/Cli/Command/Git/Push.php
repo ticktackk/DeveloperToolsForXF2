@@ -3,6 +3,7 @@
 namespace TickTackk\DeveloperTools\Cli\Command\Git;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -51,6 +52,7 @@ class Push extends Command
      * @param OutputInterface $output
      *
      * @return int
+     * @throws \Exception
      */
     /** @noinspection PhpMissingParentCallCommonInspection */
     protected function execute(InputInterface $input, OutputInterface $output) : ? int
@@ -73,8 +75,12 @@ class Push extends Command
         $git = new GitRepository($repoRoot);
         if (!$git->isInitialized())
         {
-            $output->writeln(['', 'Git directory must be initialized']);
-            return 0;
+            $command = $this->getApplication()->find('ticktackk-devtools:git-init');
+            $childInput = new ArrayInput([
+                'command' => 'ticktackk-devtools:git-init',
+                'id' => $addOn->getAddOnId()
+            ]);
+	    $command->run($childInput, $output);
         }
     
         $repo = $input->getOption('repo');
