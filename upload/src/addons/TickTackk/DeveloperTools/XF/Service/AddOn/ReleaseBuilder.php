@@ -42,20 +42,6 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
     }
 
     /**
-     * @throws \XF\PrintableException
-     */
-    public function performBuildTasks() : void
-    {
-        parent::performBuildTasks();
-
-        $dataPath = $this->addOnRoot . DIRECTORY_SEPARATOR . '_data';
-        if (is_dir($dataPath))
-        {
-            File::deleteDirectory($dataPath);
-        }
-    }
-
-    /**
      * @return array
      */
     protected function getExcludedDirectories() : array
