@@ -1,0 +1,5 @@
+By default, DevTools will look for your Git repository in the <code>_repo</code> folder inside your addon's directory. This setting lets you change the repository location.<br />
+<br />
+Enter either the full path, or a path relative to the XF2 root.<br />
+<br />
+See <a href="https://xenforo.com/xf2-docs/dev/development-tools/#customizing-the-build-process" target="_blank" rel="noopener">this page</a> (the "exec" part of <code>build.json</code>) for replacement variables you can use.

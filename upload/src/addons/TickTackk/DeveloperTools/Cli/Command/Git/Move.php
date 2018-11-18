@@ -9,12 +9,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Bit3\GitPhp\GitException;
 use Bit3\GitPhp\GitRepository;
-use XF\Cli\Command\AddOnActionTrait;
 use XF\Util\File;
+use XF\Cli\Command\AddOnActionTrait;
+use TickTackk\DeveloperTools\Cli\Command\DevToolsActionTrait;
 
 class Move extends Command
 {
     use AddOnActionTrait;
+    use DevToolsActionTrait;
 
     protected function configure()
     {
@@ -51,7 +53,10 @@ class Move extends Command
 		$addOnDirectory = $addOn->getAddOnDirectory();
 		$ds = DIRECTORY_SEPARATOR;
 	
-		$repoRoot = $addOnDirectory . $ds . '_repo';
+		$developerOptions = $addOnEntity->DeveloperOptions;
+		$gitConfigurations = $addOnEntity->GitConfigurations;
+	
+		$repoRoot = $this->getAddOnRepoDir($addOn);
 	
 		$git = new GitRepository($repoRoot);
 		if (!$git->isInitialized())
@@ -64,9 +69,6 @@ class Move extends Command
 			$command->run($childInput, $output);
 		}
 	
-		$developerOptions = $addOnEntity->DeveloperOptions;
-		$gitConfigurations = $addOnEntity->GitConfigurations;
-	
 		$globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
 		$globalGitIgnore = explode("\n", $globalGitIgnore);
 		$addOnGitIgnore = !empty($developerOptions['gitignore']) ? explode("\n", $developerOptions['gitignore']) : [];
@@ -76,10 +78,9 @@ class Move extends Command
 	
 		try
 		{
-			$customSubDir = $git->config()->get('custom.subdir')->execute();
-			if (!empty($customSubDir))
+			if (!empty($gitConfigurations['custom_subdir']))
 			{
-				$repoRoot .= ($ds . $customSubDir);
+				$repoRoot .= ($ds . $gitConfigurations['custom_subdir']);
 			}
 		}
 		catch (GitException $e)

@@ -1,0 +1,1 @@
+If you want files from this add-on to be copied to a custom sub-directory of your repository root, enter its folder name here.
