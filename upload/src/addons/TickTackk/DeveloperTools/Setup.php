@@ -23,42 +23,41 @@ class Setup extends AbstractSetup
 
     public function upgrade1000033Step1() : void
     {
-        $addOns = $this->app->finder('XF:AddOn')
-            ->whereOr([
-                ['devTools_license', '<>', ''],
-                ['devTools_gitignore', '<>', ''],
-                ['devTools_readme_md', '<>', ''],
-                ['devTools_parse_additional_files', '=', true]
-            ])
-            ->where('addon_id', '<>', [
-                'XF',
-                'XFRM',
-                'XFMG'
-            ])
-            ->fetch();
+    	$addOns = $this->db()->fetchAll("
+    		SELECT * FROM xf_addon
+    		WHERE (
+    			devTools_license <> ''
+    			OR devTools_gitignore <> ''
+    			OR devTools_readme_md <> ''
+    			OR devTools_parse_additional_files <> ''
+    		)
+    			AND addon_id NOT IN('XF', 'XFRM', 'XFMG')
+    	");
 
-        if ($addOns->count())
+        if (count($addOns))
         {
-            /** @var \TickTackk\DeveloperTools\XF\Repository\AddOn $addOnRepo */
-            $addOnRepo = $this->app->repository('XF:AddOn');
-
             $options = $this->app->options();
             $gitName = $options->developerTools_git_username;
             $gitEmail = $options->developerTools_git_email;
 
-            /** @var \XF\Entity\AddOn $addOn */
             foreach ($addOns AS $addOn)
             {
-                $addOnRepo->exportDeveloperOptions($addOn, [
-                    'license' => $addOn->get('devTools_license'),
-                    'gitignore' => $addOn->get('devTools_gitignore'),
-                    'readme' => $addOn->get('devTools_readme_md'),
-                    'parse_additional_files' => $addOn->get('devTools_parse_additional_files'),
-                    'git' => [
-                        'name' => $gitName,
-                        'email' => $gitEmail
-                    ]
-                ]);
+            	$addOnEntity = \XF::em()->find('XF:AddOn', $addOn['addon_id']);
+	
+				$addOn = new \XF\AddOn\AddOn($addOnEntity);
+				$jsonPath = $addOn->getAddOnDirectory();
+	
+				File::writeFile($jsonPath . DIRECTORY_SEPARATOR . 'dev.json', Json::jsonEncodePretty([
+					'gitignore' => $addOn['devTools_gitignore'],
+					'license' => $addOn['devTools_license'],
+					'readme' => $addOn['devTools_readme_md'],
+					'parse_additional_files' => (bool)$addOn['devTools_parse_additional_files']
+				]), false);
+	
+				File::writeFile($jsonPath . DIRECTORY_SEPARATOR . 'git.json', Json::jsonEncodePretty([
+					'name' => $gitName,
+					'email' => $gitEmail
+				]), false);
             }
         }
     }

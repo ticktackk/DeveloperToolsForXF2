@@ -1,13 +1,5 @@
 <xf:title>{{ phrase('developerTools_developer_options_for_x_add_on', {'addon_title': $addOn.title}) }}</xf:title>
 
-<xf:if is="$allowFakeComposerRebuild">
-	<xf:pageaction>
-		<xf:button href="{{ link('add-ons/rebuild-fake-composer', $addOn, {'t': csrf_token()}) }}" icon="add">
-			{{ phrase('developerTools_rebuild_fake_composer') }}
-		</xf:button>
-	</xf:pageaction>
-</xf:if>
-
 <xf:form action="{{ link('add-ons/developer-options', $addOn) }}" ajax="true" class="block">
 	<div class="block-container">
 
@@ -26,8 +18,11 @@
 			
 			<hr class="formRowSep" />
 			
-			<xf:checkboxrow name="dev[parse_additional_files]" explain="{{ phrase('developerTools_parse_additional_files_explain') }}">
-				<xf:option value="1" selected="{$addOn.DeveloperOptions.parse_additional_files}">{{ phrase('developerTools_parse_additional_files') }}</xf:option>
+			<xf:checkboxrow>
+				<xf:option name="dev[parse_additional_files]" value="1" selected="{$addOn.DeveloperOptions.parse_additional_files}"
+						   hint="{{ phrase('developerTools_parse_additional_files_explain') }}">
+					{{ phrase('developerTools_parse_additional_files') }}
+				</xf:option>
 			</xf:checkboxrow>
 		</div>
 
