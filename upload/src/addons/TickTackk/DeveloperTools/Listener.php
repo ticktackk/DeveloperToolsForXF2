@@ -23,6 +23,17 @@ class Listener
     }
 
     /**
+    * @param \XF\App $app
+    */
+    public static function appSetup(\XF\App $app) : void
+    {
+        Composer::autoloadNamespaces($app);
+        Composer::autoloadPsr4($app);
+        Composer::autoloadClassmap($app);
+        Composer::autoloadFiles($app);
+    }
+	
+    /**
      * @param \XF\Cli\App $app
      */
     public static function appCliSetup(\XF\Cli\App $app) : void

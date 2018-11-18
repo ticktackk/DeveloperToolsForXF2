@@ -1,13 +1,5 @@
 <xf:title>{{ phrase('developerTools_developer_options_for_x_add_on', {'addon_title': $addOn.title}) }}</xf:title>
 
-<xf:if is="$allowFakeComposerRebuild">
-	<xf:pageaction>
-		<xf:button href="{{ link('add-ons/rebuild-fake-composer', $addOn, {'t': csrf_token()}) }}" icon="add">
-			{{ phrase('developerTools_rebuild_fake_composer') }}
-		</xf:button>
-	</xf:pageaction>
-</xf:if>
-
 <xf:form action="{{ link('add-ons/developer-options', $addOn) }}" ajax="true" class="block">
 	<div class="block-container">
 
