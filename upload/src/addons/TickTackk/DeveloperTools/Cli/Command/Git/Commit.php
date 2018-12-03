@@ -2,6 +2,8 @@
 
 namespace TickTackk\DeveloperTools\Cli\Command\Git;
 
+use Bit3\GitPhp\GitException;
+use Bit3\GitPhp\GitRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -10,9 +12,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use Bit3\GitPhp\GitException;
-use Bit3\GitPhp\GitRepository;
 use XF\Cli\Command\AddOnActionTrait;
+use TickTackk\DeveloperTools\Cli\Command\DevToolsActionTrait;
 
 /**
  * Class Commit
@@ -22,6 +23,7 @@ use XF\Cli\Command\AddOnActionTrait;
 class Commit extends Command
 {
     use AddOnActionTrait;
+    use DevToolsActionTrait;
 
     protected function configure() : void
     {
@@ -58,10 +60,8 @@ class Commit extends Command
             return 1;
         }
 	
-        $addOnDirectory = $addOn->getAddOnDirectory();
-        $ds = DIRECTORY_SEPARATOR;
-	
-        $repoRoot = $addOnDirectory . $ds . '_repo';
+        $repoRoot = $this->getAddOnRepoDir($addOn);
+
 	
         $git = new GitRepository($repoRoot);
         if (!$git->isInitialized())
@@ -83,10 +83,10 @@ class Commit extends Command
         $commitMessage = $input->getOption('message');
         if (!$commitMessage)
         {
-			/** @var QuestionHelper $helper */
-			$helper = $this->getHelper('question');
+            /** @var QuestionHelper $helper */
+            $helper = $this->getHelper('question');
 	
-			$question = new Question('<question>Commit summary:</question> ');
+            $question = new Question('<question>Commit summary:</question> ');
             $commitMessage = $helper->ask($input, $output, $question);
             $output->writeln('');
         }

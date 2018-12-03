@@ -7,7 +7,7 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller
 {
 	class XFCP_AddOn extends \XF\Admin\Controller\AddOn {}
 	class XFCP_TemplateModification extends \XF\Admin\Controller\TemplateModification {}
-    class XFCP_Template extends \XF\Admin\Controller\Template {}
+	class XFCP_Template extends \XF\Admin\Controller\Template {}
 }
 
 namespace TickTackk\DeveloperTools\XF\Entity

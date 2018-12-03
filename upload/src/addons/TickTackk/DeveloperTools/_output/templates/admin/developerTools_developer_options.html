@@ -10,6 +10,10 @@
 			
 			<xf:textarearow name="dev[gitignore]" value="{{ $addOn.DeveloperOptions.gitignore }}" autosize="true" label="{{ phrase('developerTools_contents_for_gitignore') }}" />
 			
+			<xf:textboxrow name="git[custom_repo]" value="{$addOn.GitConfigurations.custom_repo}" label="{{ phrase('developerTools_git_custom_repo') }}" explain="{{ phrase('developerTools_git_custom_repo_explain') }}" />
+
+			<xf:textboxrow name="git[custom_subdir]" value="{$addOn.GitConfigurations.custom_subdir}" label="{{ phrase('developerTools_git_custom_subdir') }}" explain="{{ phrase('developerTools_git_custom_subdir_explain') }}" />
+
 			<hr class="formRowSep" />
 			
 			<xf:textarearow name="dev[license]" value="{{ $addOn.DeveloperOptions.license }}" autosize="true" label="{{ phrase('developerTools_contents_for_license') }}" />
