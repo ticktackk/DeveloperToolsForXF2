@@ -35,7 +35,7 @@ class User extends AbstractSeed
 
         $dob = explode('-', $faker->dateTimeThisCentury->format('d-m-Y'));
         $registrationService->setDob($dob[0], $dob[1], $dob[2]);
-        $registrationService->skipEmailConfirmation(true);
+        $registrationService->skipEmailConfirmation();
 
         if ($registrationService->validate($errors))
         {

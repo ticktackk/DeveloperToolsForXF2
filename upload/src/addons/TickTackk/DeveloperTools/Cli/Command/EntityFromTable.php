@@ -18,6 +18,11 @@ use XF\Cli\Command\AddOnActionTrait;
 use XF\Cli\Command\Development\RequiresDevModeTrait;
 use XF\Util\File;
 
+/**
+ * Class EntityFromTable
+ *
+ * @package TickTackk\DeveloperTools\Cli\Command\AddOn
+ */
 class EntityFromTable extends Command
 {
     use AddOnActionTrait, RequiresDevModeTrait;
@@ -52,6 +57,12 @@ class EntityFromTable extends Command
         ;
     }
 
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         /** @var QuestionHelper $helper */
@@ -60,10 +71,10 @@ class EntityFromTable extends Command
         $addOnId = $input->getArgument('id');
         if (!$addOnId)
         {
-            $question = new Question("<question>Enter the ID for the add-on:</question> ");
+            $question = new Question('<question>Enter the ID for the add-on:</question> ');
             $question->setValidator($this->getAddOnQuestionFieldValidator('addon_id'));
             $addOnId = $helper->ask($input, $output, $question);
-            $output->writeln("");
+            $output->writeln('');
         }
 
         $manager = \XF::app()->addOnManager();
@@ -78,17 +89,17 @@ class EntityFromTable extends Command
         $table = $input->getArgument('table');
         if (!$table)
         {
-            $question = new Question("<question>Enter the table to extend:</question> ");
+            $question = new Question('<question>Enter the table to extend:</question> ');
             $table = $helper->ask($input, $output, $question);
-            $output->writeln("");
+            $output->writeln('');
         }
 
         $name = $input->getArgument('RelationName');
         if (!$name)
         {
-            $question = new Question("<question>Enter the relationship name for the entity:</question> ");
+            $question = new Question('<question>Enter the relationship name for the entity:</question> ');
             $name = $helper->ask($input, $output, $question);
-            $output->writeln("");
+            $output->writeln('');
         }
 
         $addOnId = $addOn->getAddOnId();
@@ -133,7 +144,7 @@ class EntityFromTable extends Command
         {
             $primaryKey[] = var_export($column['Column_name'], true);
         }
-        if (count($primaryKey) == 1)
+        if (count($primaryKey) === 1)
         {
             $primaryKey = $primaryKey[0];
         }
@@ -146,7 +157,7 @@ class EntityFromTable extends Command
         foreach ($tableColDefinition as $colDefinition)
         {
             $fieldData = [];
-            list($type, $len, $allowedValues) = $this->parseSqlType($colDefinition['Type']);
+            [$type, $len, $allowedValues] = $this->parseSqlType($colDefinition['Type']);
             $fieldData['type'] = $type;
             if ($len)
             {
@@ -174,7 +185,7 @@ class EntityFromTable extends Command
                     case 'self::UINT':
                         if (\is_scalar($default))
                         {
-                            $default = intval($default);
+                            $default = (int) $default;
                         }
                         break;
                     case 'self::FLOAT':
@@ -184,7 +195,7 @@ class EntityFromTable extends Command
                         }
                         break;
                     case 'self::BOOL':
-                        $default = intval($default) ? true : false;
+                        $default = (int) $default ? true : false;
                         break;
                 }
 
@@ -199,11 +210,11 @@ class EntityFromTable extends Command
             $definition = [];
             foreach ($fieldData as $key => $value)
             {
-                $definition[] = var_export($key, true) . " => " . $value;
+                $definition[] = var_export($key, true) . ' => ' . $value;
             }
-            $definition = implode($definition, ", ");
+            $definition = implode($definition, ', ');
 
-            $columns .= "            " . var_export($colDefinition['Field'], true) . " => [" . $definition . "],\n";
+            $columns .= '            ' . var_export($colDefinition['Field'], true) . ' => [' . $definition . "],\n";
         }
 
 
@@ -263,7 +274,7 @@ echo $template."\n\n";
         if (\preg_match('#^([^\(]+)\s*(?:\(([^\)]+)\)){0,1}\s*(unsigned){0,1}$#i', $sqlType, $matches))
         {
             $proposedType = \utf8_strtolower($matches[1]);
-            $proposedLen = empty($matches[2]) ? null : intval($matches[2]);
+            $proposedLen = empty($matches[2]) ? null : (int) $matches[2];
             $isUnsigned = !empty($matches[3]);
             switch ($proposedType)
             {
@@ -294,7 +305,7 @@ echo $template."\n\n";
                     break;
                 case 'varbinary':
                     $type = 'self::BINARY';
-                    $len = $proposedLen ? $proposedLen : null;
+                    $len = $proposedLen ?: null;
                     break;
                 case 'longtext':
                     $type = 'self::STR';
@@ -310,7 +321,7 @@ echo $template."\n\n";
                     break;
                 case 'varchar':
                     $type = 'self::STR';
-                    $len = $proposedLen ? $proposedLen : null;
+                    $len = $proposedLen ?: null;
                     break;
                 case 'bool':
                 case 'boolean':
@@ -381,7 +392,7 @@ echo $template."\n\n";
         try
         {
             $processHelper->mustRun($output, $process, null, function ($type, $data) use ($output) {
-                if ($type == Process::OUT)
+                if ($type === Process::OUT)
                 {
                     $output->write($data);
                 }
@@ -405,7 +416,7 @@ echo $template."\n\n";
      * @param $key
      * @return \Closure
      */
-    protected function getAddOnQuestionFieldValidator($key)
+    protected function getAddOnQuestionFieldValidator($key) : callable
     {
         return function ($value) use ($key) {
             $addOn = \XF::em()->create('XF:AddOn');

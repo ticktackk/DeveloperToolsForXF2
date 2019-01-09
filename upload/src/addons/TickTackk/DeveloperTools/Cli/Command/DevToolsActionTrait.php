@@ -2,6 +2,11 @@
 
 namespace TickTackk\DeveloperTools\Cli\Command;
 
+/**
+ * Trait DevToolsActionTrait
+ *
+ * @package TickTackk\DeveloperTools\Cli\Command
+ */
 trait DevToolsActionTrait
 {
 	/**
@@ -37,7 +42,7 @@ trait DevToolsActionTrait
 				return $value;
 			}, $gitConfigurations['custom_repo']);
 			
-			if (substr($repoRoot, 0, -1) !== '/')
+			if (utf8_substr($repoRoot, 0, -1) !== '/')
 			{
 				$repoRoot = \XF\Util\File::canonicalizePath($repoRoot);
 			}

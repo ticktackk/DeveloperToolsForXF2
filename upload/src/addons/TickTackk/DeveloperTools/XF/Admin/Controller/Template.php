@@ -12,6 +12,11 @@ use XF\Mvc\Reply\View;
  */
 class Template extends XFCP_Template
 {
+    /**
+     * @param ParameterBag $params
+     *
+     * @return \XF\Mvc\Reply\Error|View
+     */
     public function actionEdit(ParameterBag $params)
     {
         $reply = parent::actionEdit($params);
@@ -36,6 +41,11 @@ class Template extends XFCP_Template
         return $reply;
     }
 
+    /**
+     * @param ParameterBag $params
+     *
+     * @return View
+     */
     public function actionViewModifications(ParameterBag $params)
     {
         /** @noinspection PhpUndefinedFieldInspection */

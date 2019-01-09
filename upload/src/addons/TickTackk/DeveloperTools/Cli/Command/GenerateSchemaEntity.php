@@ -9,6 +9,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use XF\Cli\Command\Development\RequiresDevModeTrait;
 use XF\Mvc\Entity\Entity;
 
+/**
+ * Class GenerateSchemaEntity
+ *
+ * @package TickTackk\DeveloperTools\Cli\Command\AddOn
+ */
 class GenerateSchemaEntity extends Command
 {
     use RequiresDevModeTrait;
@@ -26,12 +31,18 @@ class GenerateSchemaEntity extends Command
             );
     }
 
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $id = $input->getArgument('id');
         if (!$id || !preg_match('#^[a-z0-9_\\\\]+:[a-z0-9_\\\\]+$#i', $id))
         {
-            $output->writeln("Identifier in the form of Prefix:Type must be provided.");
+            $output->writeln('Identifier in the form of Prefix:Type must be provided.');
 
             return 1;
         }
@@ -59,7 +70,7 @@ class GenerateSchemaEntity extends Command
 
         foreach ($columns AS $columnName => $column)
         {
-            $length = isset($column['maxLength']) ? $column['maxLength'] : null;
+            $length = $column['maxLength'] ?? null;
             $type = $this->resolveTypeDefaults($entity, $column['type'], $unsigned, $allowedDefault, $length);
 
             if ($length !== null)
@@ -68,7 +79,7 @@ class GenerateSchemaEntity extends Command
                 {
                     if ($length <= 255)
                     {
-                        if ($length == 255)
+                        if ($length === 255)
                         {
                             $length = null;
                         }
@@ -76,7 +87,7 @@ class GenerateSchemaEntity extends Command
                     }
                     else if ($length <= 65536)
                     {
-                        if ($length == 65536)
+                        if ($length === 65536)
                         {
                             $length = null;
                         }
@@ -84,7 +95,7 @@ class GenerateSchemaEntity extends Command
                     }
                     else if ($length > 4294967295)
                     {
-                        if ($length == 4294967295)
+                        if ($length === 4294967295)
                         {
                             $length = null;
                         }
@@ -94,7 +105,7 @@ class GenerateSchemaEntity extends Command
             }
             else
             {
-                if ($type == 'varchar')
+                if ($type === 'varchar')
                 {
                     $type = 'text';
                     $allowedDefault = false;
@@ -137,7 +148,7 @@ class GenerateSchemaEntity extends Command
                 $string .= '->nullable(true)';
             }
 
-            if (isset($column['default']) && $allowedDefault)
+            if ($allowedDefault && isset($column['default']))
             {
                 if ($column['default'] === \XF::$time)
                 {
@@ -192,7 +203,7 @@ class GenerateSchemaEntity extends Command
 });
 FUNCTION;
 
-        $output->writeln(["", $sm, ""]);
+        $output->writeln(['', $sm, '']);
 
         return 0;
     }
@@ -230,17 +241,17 @@ FUNCTION;
             case $entity::STR:
                 if($length)
                 {
-                    if ($length == 65535)
+                    if ($length === 65535)
                     {
                         $length = null;
                         return 'text';
                     }
-                    if ($length == 16777215)
+                    if ($length === 16777215)
                     {
                         $length = null;
                         return 'mediumtext';
                     }
-                    if ($length == 4294967295)
+                    if ($length === 4294967295)
                     {
                         $length = null;
                         return 'longtext';
@@ -251,17 +262,17 @@ FUNCTION;
             case $entity::BINARY:
                 if($length)
                 {
-                    if ($length == 65535)
+                    if ($length === 65535)
                     {
                         $length = null;
                         return 'blob';
                     }
-                    if ($length == 16777215)
+                    if ($length === 16777215)
                     {
                         $length = null;
                         return 'mediumblob';
                     }
-                    if ($length == 4294967295)
+                    if ($length === 4294967295)
                     {
                         $length = null;
                         return 'longblob';

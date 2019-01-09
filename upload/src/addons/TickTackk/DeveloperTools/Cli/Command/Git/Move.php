@@ -13,12 +13,17 @@ use XF\Util\File;
 use XF\Cli\Command\AddOnActionTrait;
 use TickTackk\DeveloperTools\Cli\Command\DevToolsActionTrait;
 
+/**
+ * Class Move
+ *
+ * @package TickTackk\DeveloperTools\Cli\Command\Git
+ */
 class Move extends Command
 {
     use AddOnActionTrait;
     use DevToolsActionTrait;
 
-    protected function configure()
+    protected function configure() : void
     {
         $this
             ->setName('ticktackk-devtools:git-move')
@@ -37,7 +42,7 @@ class Move extends Command
 	 * @return int
 	 * @throws \Exception
 	 */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
 		$addOnId = $input->getArgument('id');
 		$addOn = $this->checkEditableAddOn($addOnId, $error);
@@ -269,7 +274,7 @@ class Move extends Command
 			return 1;
 		}
 
-        $output->writeln(["", "Successfully copied files."]);
+        $output->writeln(['', 'Successfully copied files.']);
         return 0;
     }
 
@@ -288,13 +293,24 @@ class Move extends Command
         );
     }
 
+    /**
+     * @param $rootPath
+     * @param $path
+     *
+     * @return string|string[]|null
+     */
     protected function standardizePath($rootPath, $path)
     {
         $ds = DIRECTORY_SEPARATOR;
         return preg_replace('#^' . preg_quote(rtrim($rootPath, $ds) . $ds) . '#', '', $path, 1);
     }
 
-    protected function isPartOfExcludedDirectoryForRepo($path)
+    /**
+     * @param $path
+     *
+     * @return bool
+     */
+    protected function isPartOfExcludedDirectoryForRepo($path) : bool
     {
         foreach ($this->getExcludedDirectoriesForRepo() AS $dir)
         {
@@ -306,6 +322,9 @@ class Move extends Command
         return false;
     }
 
+    /**
+     * @return array[]|false|string[]
+     */
     protected function getExcludedDirectoriesForRepo()
     {
         return preg_split('/\r?\n/', \XF::options()->developerTools_excluded_directories, -1, PREG_SPLIT_NO_EMPTY);
