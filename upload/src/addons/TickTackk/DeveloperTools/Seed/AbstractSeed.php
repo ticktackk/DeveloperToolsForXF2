@@ -3,6 +3,7 @@
 namespace TickTackk\DeveloperTools\Seed;
 
 use XF\Mvc\Entity\Entity;
+use XF\Mvc\Entity\Finder;
 use XF\PrintableException;
 
 /**
@@ -99,5 +100,27 @@ abstract class AbstractSeed
     public function finder(string $identifier) : \XF\Mvc\Entity\Finder
     {
         return $this->app->finder($identifier);
+    }
+
+    /**
+     * @param string      $identifier
+     * @param string|null $orderBy
+     * @param int         $limit
+     *
+     * @return array|int|string|null
+     */
+    public function randomEntityId(string $identifier, ?string $orderBy, int $limit = 1)
+    {
+        $items =  $this->finder($identifier)
+            ->order($orderBy ?: Finder::ORDER_RANDOM)
+            ->limit($limit)
+            ->fetch();
+
+        if (!$items->count())
+        {
+            return null;
+        }
+
+        return $limit === 1 ? $items->first()->getEntityId() : $items->keys();
     }
 }
