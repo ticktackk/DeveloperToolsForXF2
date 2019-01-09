@@ -1,23 +1,24 @@
 <?php
 
-namespace TickTackk\DeveloperTools\Seeds;
+namespace TickTackk\DeveloperTools\Seed;
 
 use XF\Mvc\Entity\Entity;
-use TickTackk\DeveloperTools\Seed\AbstractSeed;
 
 /**
- * Class SampleSeed
+ * Class User
  *
- * @package TickTackk\DeveloperTools\Seeds
+ * @package TickTackk\DeveloperTools\Seed
  */
-class SampleSeed extends AbstractSeed
+class User extends AbstractSeed
 {
+    protected $limit = 100000;
+
     /**
      * @param array|null $errors
      *
      * @return array|bool|Entity
      */
-    public function _seed(array &$errors = null)
+    protected function seedInternal(array &$errors = null)
     {
         $faker = $this->faker();
 
@@ -35,6 +36,7 @@ class SampleSeed extends AbstractSeed
         $dob = explode('-', $faker->dateTimeThisCentury->format('d-m-Y'));
         $registrationService->setDob($dob[0], $dob[1], $dob[2]);
         $registrationService->skipEmailConfirmation(true);
+
         if ($registrationService->validate($errors))
         {
             return $registrationService->save();

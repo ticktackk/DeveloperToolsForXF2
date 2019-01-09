@@ -6,11 +6,10 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use TickTackk\DeveloperTools\Seed\SampleSeed;
 use XF\AddOn\AddOn;
 use XF\Cli\Command\AddOnActionTrait;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\ArrayInput;
+use XF\Cli\Command\JobRunnerTrait;
 
 /**
  * Class Seeder
@@ -19,7 +18,7 @@ use Symfony\Component\Console\Input\ArrayInput;
  */
 class Seeder extends Command
 {
-    use AddOnActionTrait;
+    use AddOnActionTrait, JobRunnerTrait;
 
     protected function configure() : void
     {
@@ -57,60 +56,45 @@ class Seeder extends Command
         }
 
         $specificSeed = $input->getOption('specific-seed');
-        $seedClasses = $this->getSeedClasses($specificSeed, $addOn);
-
-        foreach ($seedClasses AS $seedClass)
+        if (!empty($specificSeed))
         {
-            $seed = $this->seed($seedClass);
-            $seed->run();
+            $seeds = [$specificSeed];
+        }
+        else
+        {
+            $seeds = $this->getSeedClasses($addOn);
         }
 
-        $output->writeln(['', 'Successfully seeded.']);
+        $this->setupAndRunJob('tckDevToolsSeed', 'TickTackk\DeveloperTools:Seed', [
+            'seeds' => $seeds
+        ], $output);
+
+        $output->write('Successfully seeded.');
 
         return 0;
     }
 
     /**
-     * @param string $specificSeed
      * @param AddOn $addOn
      *
      * @return array
      */
-    protected function getSeedClasses($specificSeed, AddOn $addOn) : array
+    protected function getSeedClasses(AddOn $addOn) : array
     {
-        if (!empty($specificSeed))
-        {
-            return [$addOn->prepareAddOnIdForClass() . '\\Seeds\\' . $specificSeed];
-        }
-
         $ds = DIRECTORY_SEPARATOR;
-        $filesIterator = $this->getFileIterator($addOn->getAddOnDirectory() . $ds . '_Seeds');
+        $filesIterator = $this->getFileIterator($addOn->getAddOnDirectory() . $ds . 'Seed');
         $classes = [];
+
         foreach ($filesIterator AS $file)
         {
-            if ($file->isFile() && $file->getFilename() !== 'AbstractSeed.php' &&
-                $this->isSeed($file->getFilename()) &&
-                is_readable($file->getPathname())
-            )
+            $fileName = $file->getBasename('.' . $file->getExtension());
+            if ($fileName !== 'AbstractSeed' && is_readable($file->getPathname()))
             {
-                require $file->getPathname();
-                $className = str_ireplace([$ds, '_seeds', '\\\\'], ['\\', '', ':'], utf8_substr($file->getPathname(), utf8_strlen(\XF::getAddOnDirectory() . $ds)));
-                $classes[] = substr($className, 0, utf8_strlen($className) - 4);
+                $classes[] = $addOn->prepareAddOnIdForClass() . ':' . $fileName;
             }
         }
 
         return $classes;
-    }
-
-    /**
-     * @param        $fileName
-     * @param string $seedSuffix
-     *
-     * @return bool
-     */
-    protected function isSeed($fileName, $seedSuffix = 'Seed.php') : bool
-    {
-        return strrpos($fileName, $seedSuffix, 0) === utf8_strlen($fileName) - utf8_strlen($seedSuffix);
     }
 
     /**
@@ -126,20 +110,5 @@ class Seeder extends Command
             ),
             \RecursiveIteratorIterator::SELF_FIRST
         );
-    }
-
-    /**
-     * @param $class
-     *
-     * @return \TickTackk\DeveloperTools\Seed\AbstractSeed
-     */
-    protected function seed($class)
-    {
-        $app = \XF::app();
-
-        $arguments = \func_get_args();
-        unset($arguments[0]);
-
-        return $app->create('seed', $class, $arguments);
     }
 }

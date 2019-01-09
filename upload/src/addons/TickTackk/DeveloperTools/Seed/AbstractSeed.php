@@ -20,21 +20,16 @@ abstract class AbstractSeed
     /**
      * @var int
      */
-    protected $limit;
-
-    /** @var Entity|bool */
-    protected $lastResult;
+    protected $limit = 100;
 
     /**
      * AbstractSeed constructor.
      *
      * @param \XF\App $app
-     * @param int     $limit
      */
-    public function __construct(\XF\App $app, $limit = 10)
+    public function __construct(\XF\App $app)
     {
         $this->app = $app;
-        $this->limit = $limit;
     }
 
     /**
@@ -46,31 +41,34 @@ abstract class AbstractSeed
     }
 
     /**
+     * @return int
+     */
+    public function getLimit() : int
+    {
+        return $this->limit;
+    }
+
+    /**
      * @param array $errors
      *
      * @return Entity|array
      */
-    abstract protected function _seed(array &$errors = null);
+    abstract protected function seedInternal(array &$errors = null);
 
     /**
+     * @return bool|Entity
      * @throws PrintableException
      */
-    public function run() : void
+    public function run()
     {
-        if (!$this->limit)
+        $result = $this->seedInternal($errors);
+
+        if (\is_array($errors) && \count($errors))
         {
-            throw new \InvalidArgumentException('Limit has been set to invalid value.');
+            throw new PrintableException(implode("\n", $errors));
         }
 
-        for ($i = 0; $i <= $this->limit; $i++)
-        {
-            $result = $this->_seed($errors);
-            if ($errors)
-            {
-                throw new PrintableException(implode("\n", $errors));
-            }
-            $this->lastResult = $result;
-        }
+        return $result;
     }
 
     /**
@@ -78,7 +76,7 @@ abstract class AbstractSeed
      *
      * @return \XF\Service\AbstractService
      */
-    public function service($class) : \XF\Service\AbstractService
+    public function service(string $class) : \XF\Service\AbstractService
     {
         return $this->app->service($class);
     }
@@ -88,8 +86,18 @@ abstract class AbstractSeed
      *
      * @return \XF\Mvc\Entity\Repository
      */
-    public function repository($identifier) : \XF\Mvc\Entity\Repository
+    public function repository(string $identifier) : \XF\Mvc\Entity\Repository
     {
         return $this->app->repository($identifier);
+    }
+
+    /**
+     * @param string $identifier
+     *
+     * @return \XF\Mvc\Entity\Finder
+     */
+    public function finder(string $identifier) : \XF\Mvc\Entity\Finder
+    {
+        return $this->app->finder($identifier);
     }
 }
