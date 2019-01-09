@@ -77,7 +77,7 @@ class BetterExport extends Command
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'Branch to push to',
-                null
+                'master'
             )
         ;
     }
