@@ -81,13 +81,20 @@ class Seed extends AbstractJob
     public function getStatusMessage() : string
     {
         $inProgressSeed = $this->data['inProgressSeed'];
+        $done = 0;
+        $limit = 0;
+        if (isset($this->data['seedStats'][$inProgressSeed]))
+        {
+            $done = $this->data['seedStats'][$inProgressSeed]['done'];
+            $limit = $this->data['seedStats'][$inProgressSeed]['limit'];
+        }
 
         return sprintf(
             '%s %s (%d/%d)...',
             'Seeding',
             $inProgressSeed,
-            $this->data['seedStats'][$inProgressSeed]['done'],
-            $this->data['seedStats'][$inProgressSeed]['limit']
+            $done + 1,
+            $limit
         );
     }
 

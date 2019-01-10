@@ -11,6 +11,9 @@ use XF\Mvc\Entity\Entity;
  */
 class User extends AbstractSeed
 {
+    /**
+     * @var int
+     */
     protected $limit = 100000;
 
     /**
