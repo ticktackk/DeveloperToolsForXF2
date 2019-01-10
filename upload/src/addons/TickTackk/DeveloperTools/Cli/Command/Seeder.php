@@ -58,7 +58,7 @@ class Seeder extends Command
         $specificSeed = $input->getOption('specific-seed');
         if (!empty($specificSeed))
         {
-            $seeds = [$specificSeed];
+            $seeds = [$addOn->prepareAddOnIdForClass() . ':' . $specificSeed];
         }
         else
         {
