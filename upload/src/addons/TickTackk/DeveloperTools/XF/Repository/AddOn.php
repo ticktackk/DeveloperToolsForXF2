@@ -37,7 +37,7 @@ class AddOn extends XFCP_AddOn
      */
     protected function writeConfigForDeveloperTools(\XF\Entity\AddOn $addOnEntity, $fileName, array $input) : void
     {
-        $addOn = new \XF\AddOn\AddOn($addOnEntity);
+        $addOn = new \XF\AddOn\AddOn($addOnEntity, $this->app()->addOnManager());
         $jsonPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . $fileName;
 
         File::writeFile($jsonPath, Json::jsonEncodePretty($input), false);
@@ -71,7 +71,7 @@ class AddOn extends XFCP_AddOn
      */
     protected function readConfigForDeveloperTools(\XF\Entity\AddOn $addOnEntity, $fileName) : array
     {
-        $addOn = new \XF\AddOn\AddOn($addOnEntity);
+        $addOn = new \XF\AddOn\AddOn($addOnEntity, $this->app()->addOnManager());
         $jsonPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . $fileName;
 
         if (!file_exists($jsonPath) || !is_readable($jsonPath))

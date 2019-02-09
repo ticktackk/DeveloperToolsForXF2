@@ -44,7 +44,7 @@ class Setup extends AbstractSetup
             {
             	$addOnEntity = \XF::em()->find('XF:AddOn', $addOn['addon_id']);
 	
-				$addOn = new \XF\AddOn\AddOn($addOnEntity);
+				$addOn = new \XF\AddOn\AddOn($addOnEntity, \XF::app()->addOnManager());
 				$jsonPath = $addOn->getAddOnDirectory();
 	
 				File::writeFile($jsonPath . DIRECTORY_SEPARATOR . 'dev.json', Json::jsonEncodePretty([

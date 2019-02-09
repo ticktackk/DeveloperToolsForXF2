@@ -57,7 +57,7 @@ class ClassExtension extends Command
             $output->writeln('');
         }
 
-        $addOnObj = new \XF\AddOn\AddOn($addOnId);
+        $addOnObj = new \XF\AddOn\AddOn($addOnId, \XF::app()->addOnManager());
 
         $jsonPath = $addOnObj->getJsonPath();
 
