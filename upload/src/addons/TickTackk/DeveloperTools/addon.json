@@ -2,8 +2,8 @@
     "legacy_addon_id": "",
     "title": "Developer Tools",
     "description": "Developer tools for XenForo 2",
-    "version_id": 1000035,
-    "version_string": "1.0.0 Beta 5",
+    "version_id": 1010011,
+    "version_string": "1.1.0 Alpha 1",
     "dev": "TickTackk",
     "dev_url": "https://xenforo.com/community/members/batpool52.90375/",
     "faq_url": "",
@@ -14,13 +14,14 @@
     },
     "require": {
         "XF": [
-            2000010,
-            "XenForo 2.0.0+"
+            2010070,
+            "XenForo 2.1.0+"
         ],
         "php": [
             "7.1.0",
             "PHP 7.1.0+"
         ]
     },
-    "icon": "fa-terminal"
+    "icon": "fa-laptop-code",
+	"composer_autoload": "_vendor/composer"
 }
