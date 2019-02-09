@@ -48,8 +48,7 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
     {
         return array_merge([
             '_repo',
-            '_tests',
-            '_seeds'
+            '_tests'
         ], parent::getExcludedDirectories());
     }
 
