@@ -210,7 +210,12 @@ class EntityFromTable extends Command
             $definition = [];
             foreach ($fieldData as $key => $value)
             {
-                $definition[] = var_export($key, true) . ' => ' . $value;
+                if (is_array($value))
+                {
+                    $value = var_export($value, true);
+                }
+
+                $definition[] = var_export($key, true) . " => " . $value;
             }
             $definition = implode($definition, ', ');
 
@@ -305,7 +310,7 @@ echo $template."\n\n";
                     break;
                 case 'varbinary':
                     $type = 'self::BINARY';
-                    $len = $proposedLen ?: null;
+                    $len = $proposedLen ? $proposedLen : null;
                     break;
                 case 'longtext':
                     $type = 'self::STR';
@@ -321,7 +326,7 @@ echo $template."\n\n";
                     break;
                 case 'varchar':
                     $type = 'self::STR';
-                    $len = $proposedLen ?: null;
+                    $len = $proposedLen ? $proposedLen : null;
                     break;
                 case 'bool':
                 case 'boolean':
@@ -330,6 +335,7 @@ echo $template."\n\n";
                 case 'int':
                 case 'bigint':
                 case 'shortint':
+                case 'smallint':
                 case 'tinyint':
                     if ($proposedLen === 1)
                     {
@@ -342,14 +348,24 @@ echo $template."\n\n";
                         {
                             $len = $isUnsigned ? 255 : 128;
                         }
-                        else if ($proposedType === 'shortint')
+                        else if ($proposedType === 'shortint' || $proposedType === 'smallint')
                         {
                             $len = $isUnsigned ? 65536 : 32768;
                         }
                     }
                     break;
-                //case 'ENUM':
+                case 'enum':
                 //case 'SET':
+                    $type = 'self::STR';
+                    $allowedValues = explode(',', $matches[2]);
+                    foreach($allowedValues as &$allowedValue)
+                    {
+                        if ($allowedValue && $allowedValue[0] === '\'')
+                        {
+                            $allowedValue = \substr($allowedValue, 1, \strlen($allowedValue) - 2);
+                        }
+                    }
+                    break;
                 default:
                     throw new \RuntimeException("Unknown SQL type: {$sqlType}");
             }

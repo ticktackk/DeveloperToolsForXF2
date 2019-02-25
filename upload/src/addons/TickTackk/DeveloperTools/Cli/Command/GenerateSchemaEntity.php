@@ -70,7 +70,7 @@ class GenerateSchemaEntity extends Command
 
         foreach ($columns AS $columnName => $column)
         {
-            $length = $column['maxLength'] ?? null;
+            $length = (int)($column['maxLength'] ?? null);
             $type = $this->resolveTypeDefaults($entity, $column['type'], $unsigned, $allowedDefault, $length);
 
             if ($length !== null)
@@ -172,7 +172,7 @@ class GenerateSchemaEntity extends Command
             if (isset($column['autoIncrement']))
             {
                 $string .= '->autoIncrement()';
-                //$primaryKeySet = true;
+                $primaryKeySet = true;
             }
 
             $string .= ';';
