@@ -11,6 +11,29 @@ use XF\Mvc\ParameterBag;
  */
 class AddOn extends XFCP_AddOn
 {
+    public function actionBuild(ParameterBag $params)
+    {
+        $addOn = $this->assertAddOnAvailable($params->addon_id_url);
+
+        /** @var \XF\Service\AddOn\ReleaseBuilder $builderService */
+        $builderService = $this->service('XF:AddOn\ReleaseBuilder', $addOn);
+
+        $builderService->build();
+        $builderService->finalizeRelease();
+
+        $this->setResponseType('raw');
+
+        $addOnId = $addOn->prepareAddOnIdForFilename();
+        $versionString = $addOn->prepareVersionForFilename();
+
+        $viewParams = [
+            'fileName' => "$addOnId-$versionString.zip",
+            'releasePath' => $addOn->getReleasePath()
+        ];
+
+        return $this->view('TickTackk\DeveloperTools:Addon\Build', '', $viewParams);
+    }
+
     /**
      * @param ParameterBag $parameterBag
      *

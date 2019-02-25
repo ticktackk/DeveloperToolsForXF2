@@ -1,0 +1,9 @@
+{
+    "template": "addon_controls",
+    "description": "Add a build add-on link to controls.",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:if is=\"$addOn.hasPendingChanges() AND $xf.debug\">\n\t\t\t\t\t<a href=\"{{ link('add-ons/sync-changes', $addOn, {'t': csrf_token()}) }}\" class=\"menu-linkRow\">{{ phrase('sync_changes') }}</a>\n\t\t\t\t</xf:if>",
+    "replace": "$0\n\n<xf:if is=\"$xf.debug\">\n\t<a href=\"{{ link('add-ons/build', $addOn) }}\" class=\"menu-linkRow\">{{ phrase('developerTools_build') }}</a>\n</xf:if>"
+}
