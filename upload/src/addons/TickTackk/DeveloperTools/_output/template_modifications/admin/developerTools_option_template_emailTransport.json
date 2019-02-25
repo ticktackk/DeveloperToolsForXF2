@@ -1,0 +1,9 @@
+{
+    "template": "option_template_emailTransport",
+    "description": "Enable hidden file-based email transport option",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:option value=\"sendmail\"",
+    "replace": "<xf:option value=\"file\" label=\"{{ phrase('file') }}\" data-hide=\"true\">\n\t<xf:dependent>\n\t\t<div class=\"inputGroup\">\n\t\t\t<xf:textbox name=\"{$inputName}[path]\" value=\"{$option.option_value.path}\" placeholder=\"{{ phrase('xdt_email_file_path') }}\" size=\"255\" />\n\t\t</div>\n\t</xf:dependent>\n</xf:option>\n$0"
+}
