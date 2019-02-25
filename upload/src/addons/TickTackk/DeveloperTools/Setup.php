@@ -43,17 +43,24 @@ class Setup extends AbstractSetup
             foreach ($addOns AS $addOn)
             {
             	$addOnEntity = \XF::em()->find('XF:AddOn', $addOn['addon_id']);
-	
-				$addOn = new \XF\AddOn\AddOn($addOnEntity, \XF::app()->addOnManager());
+
+                if (\XF::$versionId >= 2010000)
+                {
+                    $addOn = new \XF\AddOn\AddOn($addOnEntity, \XF::app()->addOnManager());
+                }
+                else
+                {
+                    $addOn = new \XF\AddOn\AddOn($addOnEntity);
+                }
 				$jsonPath = $addOn->getAddOnDirectory();
-	
+
 				File::writeFile($jsonPath . DIRECTORY_SEPARATOR . 'dev.json', Json::jsonEncodePretty([
 					'gitignore' => $addOn['devTools_gitignore'],
 					'license' => $addOn['devTools_license'],
 					'readme' => $addOn['devTools_readme_md'],
 					'parse_additional_files' => (bool)$addOn['devTools_parse_additional_files']
 				]), false);
-	
+
 				File::writeFile($jsonPath . DIRECTORY_SEPARATOR . 'git.json', Json::jsonEncodePretty([
 					'name' => $gitName,
 					'email' => $gitEmail
