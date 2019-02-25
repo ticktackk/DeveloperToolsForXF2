@@ -20,8 +20,18 @@ namespace TickTackk\DeveloperTools\XF\Repository
 	class XFCP_AddOn extends \XF\Repository\AddOn {}
 }
 
+namespace TickTackk\DeveloperTools\XF\Job
+{
+    class XFCP_FileCheck extends \XF\Job\FileCheck {}
+}
+
 namespace TickTackk\DeveloperTools\XF\Service\AddOn
 {
 	class XFCP_JsMinifier extends \XF\Service\AddOn\JsMinifier {}
 	class XFCP_ReleaseBuilder extends \XF\Service\AddOn\ReleaseBuilder {}
+}
+
+namespace TickTackk\DeveloperTools\XF\Template
+{
+    class XFCP_Templater extends \XF\Template\Templater {}
 }

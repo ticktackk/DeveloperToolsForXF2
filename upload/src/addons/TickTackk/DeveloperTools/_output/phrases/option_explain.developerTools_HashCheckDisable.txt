@@ -1,0 +1,1 @@
+For development purposes disabling XF's hash check is required to hotpatch code

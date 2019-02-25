@@ -1,0 +1,6 @@
+{
+    "from_class": "XF\\Job\\FileCheck",
+    "to_class": "TickTackk\\DeveloperTools\\XF\\Job\\FileCheck",
+    "execute_order": 10,
+    "active": true
+}
