@@ -11,6 +11,14 @@ use XF\Mvc\ParameterBag;
  */
 class AddOn extends XFCP_AddOn
 {
+    /**
+     * @param ParameterBag $params
+     *
+     * @return \XF\Mvc\Reply\View
+     * @throws \ErrorException
+     * @throws \XF\Mvc\Reply\Exception
+     * @throws \XF\PrintableException
+     */
     public function actionBuild(ParameterBag $params)
     {
         $addOn = $this->assertAddOnAvailable($params->addon_id_url);
@@ -31,7 +39,7 @@ class AddOn extends XFCP_AddOn
             'releasePath' => $addOn->getReleasePath()
         ];
 
-        return $this->view('TickTackk\DeveloperTools:Addon\Build', '', $viewParams);
+        return $this->view('TickTackk\DeveloperTools\XF:AddOn\Build', '', $viewParams);
     }
 
     /**
