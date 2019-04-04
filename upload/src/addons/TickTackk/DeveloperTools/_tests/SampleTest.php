@@ -7,7 +7,7 @@ namespace TickTackk\DeveloperTools\Tests;
  */
 class SampleTest extends \PHPUnit\Framework\TestCase
 {
-    public function testTrueAssertsTrue()
+    public function testTrueAssertsTrue() : void
     {
         $this->assertEquals(true, true);
     }

@@ -31,7 +31,7 @@ class Setup extends AbstractSetup
     			OR devTools_readme_md <> ''
     			OR devTools_parse_additional_files <> ''
     		)
-    			AND addon_id NOT IN('XF', 'XFRM', 'XFMG')
+    		  AND addon_id NOT IN('XF', 'XFRM', 'XFMG')
     	");
 
         if (count($addOns))
@@ -50,18 +50,19 @@ class Setup extends AbstractSetup
                 }
                 else
                 {
+                    /** @noinspection PhpParamsInspection */
                     $addOn = new \XF\AddOn\AddOn($addOnEntity);
                 }
-				$jsonPath = $addOn->getAddOnDirectory();
 
-				File::writeFile($jsonPath . DIRECTORY_SEPARATOR . 'dev.json', Json::jsonEncodePretty([
+                $addOnDir = $addOn->getAddOnDirectory();
+				File::writeFile($addOnDir . DIRECTORY_SEPARATOR . 'dev.json', Json::jsonEncodePretty([
 					'gitignore' => $addOn['devTools_gitignore'],
 					'license' => $addOn['devTools_license'],
 					'readme' => $addOn['devTools_readme_md'],
 					'parse_additional_files' => (bool)$addOn['devTools_parse_additional_files']
 				]), false);
 
-				File::writeFile($jsonPath . DIRECTORY_SEPARATOR . 'git.json', Json::jsonEncodePretty([
+				File::writeFile($addOnDir . DIRECTORY_SEPARATOR . 'git.json', Json::jsonEncodePretty([
 					'name' => $gitName,
 					'email' => $gitEmail
 				]), false);
