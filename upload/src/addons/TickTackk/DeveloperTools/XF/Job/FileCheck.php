@@ -10,6 +10,8 @@ namespace TickTackk\DeveloperTools\XF\Job;
 class FileCheck extends XFCP_FileCheck
 {
     /**
+     * @noinspection ReturnTypeCanBeDeclaredInspection
+     *
      * @param $maxRunTime
      *
      * @return \XF\Job\JobResult

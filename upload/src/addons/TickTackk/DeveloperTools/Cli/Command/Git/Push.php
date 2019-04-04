@@ -43,8 +43,7 @@ class Push extends Command
                 'branch',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Branch to push to',
-                null
+                'Branch to push to'
             );
     }
 

@@ -46,7 +46,7 @@ class Template extends XFCP_Template
      *
      * @return View
      */
-    public function actionViewModifications(ParameterBag $params)
+    public function actionViewModifications(ParameterBag $params) : View
     {
         /** @noinspection PhpUndefinedFieldInspection */
         $template = $this->assertTemplateExists($params->template_id);
@@ -59,8 +59,8 @@ class Template extends XFCP_Template
             $ids = \array_fill_keys($ids, true);
         }
 
-
         $status = null;
+
         /** @var \XF\Repository\TemplateModification $templateModRepo */
         $templateModRepo = $this->repository('XF:TemplateModification');
         $modifications = $this->finder('XF:TemplateModification')
@@ -91,7 +91,7 @@ class Template extends XFCP_Template
         {
             if (is_numeric($status))
             {
-                return 'Match count:'.$status;
+                return 'Match count:' . $status;
             }
             return $status;
         }, $statuses);

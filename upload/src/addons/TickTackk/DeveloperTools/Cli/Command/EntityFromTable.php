@@ -215,7 +215,7 @@ class EntityFromTable extends Command
                     $value = var_export($value, true);
                 }
 
-                $definition[] = var_export($key, true) . " => " . $value;
+                $definition[] = var_export($key, true) . ' => ' . $value;
             }
             $definition = implode($definition, ', ');
 
@@ -365,6 +365,7 @@ echo $template."\n\n";
                             $allowedValue = \substr($allowedValue, 1, \strlen($allowedValue) - 2);
                         }
                     }
+                    unset($allowedValue);
                     break;
                 default:
                     throw new \RuntimeException("Unknown SQL type: {$sqlType}");

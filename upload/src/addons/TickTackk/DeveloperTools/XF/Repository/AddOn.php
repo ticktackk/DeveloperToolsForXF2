@@ -43,6 +43,7 @@ class AddOn extends XFCP_AddOn
         }
         else
         {
+            /** @noinspection PhpParamsInspection */
             $addOn = new \XF\AddOn\AddOn($addOnEntity);
         }
         $jsonPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . $fileName;
@@ -84,6 +85,7 @@ class AddOn extends XFCP_AddOn
         }
         else
         {
+            /** @noinspection PhpParamsInspection */
             $addOn = new \XF\AddOn\AddOn($addOnEntity);
         }
         $jsonPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . $fileName;

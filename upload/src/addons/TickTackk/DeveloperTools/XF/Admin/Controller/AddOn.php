@@ -3,6 +3,7 @@
 namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
 use XF\Mvc\ParameterBag;
+use XF\Mvc\Reply\View;
 
 /**
  * Class AddOn
@@ -14,13 +15,14 @@ class AddOn extends XFCP_AddOn
     /**
      * @param ParameterBag $params
      *
-     * @return \XF\Mvc\Reply\View
+     * @return View
      * @throws \ErrorException
      * @throws \XF\Mvc\Reply\Exception
      * @throws \XF\PrintableException
      */
-    public function actionBuild(ParameterBag $params)
+    public function actionBuild(ParameterBag $params) : View
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         $addOn = $this->assertAddOnAvailable($params->addon_id_url);
 
         /** @var \XF\Service\AddOn\ReleaseBuilder $builderService */

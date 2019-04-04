@@ -3,20 +3,21 @@
 namespace TickTackk\DeveloperTools\Cli\Command\Phrase;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use XF\Cli\Command\AddOnActionTrait;
-use XF\Util\Xml;
 
+/**
+ * Class AddPhrase
+ *
+ * @package TickTackk\DeveloperTools\Cli\Command\Phrase
+ */
 class AddPhrase extends Command
 {
 	use AddOnActionTrait;
 
-	protected function configure()
+	protected function configure() : void
 	{
 		$this->setName('ticktackk-devtools:add-phrase')
 			->addArgument('id', InputArgument::REQUIRED, 'Add-on ID')
@@ -25,7 +26,14 @@ class AddPhrase extends Command
 			->setAliases(['tdt:phrase']);
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return null|int
+     * @throws \XF\PrintableException
+     */
+	protected function execute(InputInterface $input, OutputInterface $output) : int
 	{
 		$id = $input->getArgument('id');
 
@@ -33,7 +41,6 @@ class AddPhrase extends Command
 		if (!$addOn)
 		{
 			$output->writeln('<error>' . $error . '</error>');
-
 			return 1;
 		}
 
@@ -45,7 +52,7 @@ class AddPhrase extends Command
 		$phrase->language_id = 0;
 		$phrase->save();
 
-		$output->writeln("Done.");
+		$output->writeln('Done.');
 		return 0;
 	}
 }

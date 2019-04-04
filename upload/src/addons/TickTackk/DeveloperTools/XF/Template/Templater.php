@@ -9,6 +9,11 @@ use XF\Template\WatcherInterface;
  */
 class Templater extends XFCP_Templater
 {
+    /**
+     * @noinspection ReturnTypeCanBeDeclaredInspection
+     *
+     * @param WatcherInterface $watcher
+     */
     public function addTemplateWatcher(WatcherInterface $watcher)
     {
         if (\XF::options()->developerTools_TemplaterWatchDisable)

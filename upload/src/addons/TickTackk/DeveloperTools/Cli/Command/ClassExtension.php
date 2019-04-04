@@ -63,6 +63,7 @@ class ClassExtension extends Command
         }
         else
         {
+            /** @noinspection PhpParamsInspection */
             $addOnObj = new \XF\AddOn\AddOn($addOnId);
         }
 
