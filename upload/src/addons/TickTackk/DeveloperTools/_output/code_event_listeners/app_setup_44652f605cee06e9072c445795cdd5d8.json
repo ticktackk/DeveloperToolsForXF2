@@ -1,0 +1,9 @@
+{
+    "event_id": "app_setup",
+    "execute_order": 10,
+    "callback_class": "TickTackk\\DeveloperTools\\Listener",
+    "callback_method": "appSetup",
+    "active": true,
+    "hint": "",
+    "description": "Loads packages from _vendor directory"
+}

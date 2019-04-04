@@ -2,11 +2,11 @@
 
 namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
-use TickTackk\DeveloperTools\Listener;
 use XF\Diff;
 use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\Redirect;
 use XF\Mvc\View;
+use TickTackk\DeveloperTools\XF\Entity\TemplateModification as ExtendedTemplateModificationEntity;
 
 /**
  * Class TemplateModification
@@ -27,6 +27,7 @@ class TemplateModification extends XFCP_TemplateModification
 
         if ($response instanceof View)
         {
+            /** @var ExtendedTemplateModificationEntity $modification */
             $modification = $response->getParam('modification');
 
             if ($modification->Template->exists() && !$this->request->exists('style_id'))
