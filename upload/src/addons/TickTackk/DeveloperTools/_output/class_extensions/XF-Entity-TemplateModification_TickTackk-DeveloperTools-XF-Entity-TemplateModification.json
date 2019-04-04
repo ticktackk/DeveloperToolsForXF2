@@ -1,0 +1,6 @@
+{
+    "from_class": "XF\\Entity\\TemplateModification",
+    "to_class": "TickTackk\\DeveloperTools\\XF\\Entity\\TemplateModification",
+    "execute_order": 10,
+    "active": true
+}

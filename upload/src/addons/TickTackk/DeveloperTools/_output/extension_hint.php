@@ -13,6 +13,7 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller
 namespace TickTackk\DeveloperTools\XF\Entity
 {
 	class XFCP_AddOn extends \XF\Entity\AddOn {}
+	class XFCP_TemplateModification extends \XF\Entity\TemplateModification {}
 }
 
 namespace TickTackk\DeveloperTools\XF\Job
