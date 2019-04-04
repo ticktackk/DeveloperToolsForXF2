@@ -1,14 +1,19 @@
 <?php
 
-namespace NF\XDT\TickTackk\DeveloperTools;
-
-
+namespace TickTackk\DeveloperTools\XF\Job;
 
 /**
- * Extends \XF\Job\FileCheck
+ * Class FileCheck
+ *
+ * @package TickTackk\DeveloperTools\XF\Job
  */
 class FileCheck extends XFCP_FileCheck
 {
+    /**
+     * @param $maxRunTime
+     *
+     * @return \XF\Job\JobResult
+     */
     public function run($maxRunTime)
     {
         if (\XF::options()->developerTools_HashCheckDisable)
