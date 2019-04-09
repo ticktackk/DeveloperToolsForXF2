@@ -2,6 +2,7 @@
 
 namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
+use TickTackk\DeveloperTools\App;
 use XF\Diff;
 use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\Redirect;
@@ -226,7 +227,7 @@ class TemplateModification extends XFCP_TemplateModification
             }
             else
             {
-                $modification = $this->assertTemplateModificationExists(Listener::$modificationId);
+                $modification = $this->assertTemplateModificationExists(App::$modificationId);
             }
 
             if ($this->request->exists('exit'))
