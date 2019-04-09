@@ -28,9 +28,10 @@ Developer tools for XenForo 2
 | `ticktackk-devtools:git-init` | Initialize an add-on for VCS |
 | `ticktackk-devtools:git-commit` | Copies changes made to the add-on to repository and then finally commits the changes |
 | `ticktackk-devtools:phpunit` | Runs PHPUnit tests for an add-on |
-| `ticktackk-devtools:rebuild-fake-composer` | Rebuilds `FakeComposer.php` file for an add-on |
 | `ticktackk-devtools:create-class-extension` | Creates an class-extension for an add-on and writes out a basic template file. |
-| `ticktackk-devtools:seed` | Runs all the seeds to fill your forum with dummy data. Also supports running specific seed file. |
+| `ticktackk-devtools:add-phrase` | Allows creating phrase via CLI. |
+| `ticktackk-devtools:create-entity-from-table` | Creates an XF entity for an add-on from a table. |
+| `ticktackk-devtools:generate-schema-entity` | Identifier for the Entity (Prefix:Type format) |
 
 ## Scripts
 There are some wrapper scripts under `scripts` directory provided by @Xon which can be helpful.
