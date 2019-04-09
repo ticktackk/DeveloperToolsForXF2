@@ -7,10 +7,9 @@
     "dev": "TickTackk",
     "dev_url": "https://xenforo.com/community/members/batpool52.90375/",
     "faq_url": "",
-    "support_url": "https://xenforo.com/community/threads/developer-tools.142109/",
+    "support_url": "https://github.com/ticktackk/DeveloperToolsForXF2/issues",
     "extra_urls": {
-        "Twitter": "https://twitter.com/t1cktackk",
-        "Discord": "https://discord.gg/qdwgUpP"
+        "Twitter": "https://twitter.com/t1cktackk"
     },
     "require": {
         "XF": [
