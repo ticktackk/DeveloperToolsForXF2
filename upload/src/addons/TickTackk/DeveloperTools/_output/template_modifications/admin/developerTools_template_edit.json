@@ -5,5 +5,5 @@
     "enabled": true,
     "action": "str_replace",
     "find": "<div class=\"block-outer-opposite\">",
-    "replace": "$0\n<xf:if is=\"$modificationCount\">\n<span>\n<a href=\"{{ link('templates/view-modifications', $template) }}\" data-xf-click=\"overlay\">View {$modificationCount|number} Template Modifications</a>\n</span>\n</xf:if>"
+    "replace": "$0\n<xf:if is=\"$modificationCount\">\n<span>\n<a href=\"{{ link('templates/view-modifications', $template, {'type':$template.type, 'style_id': $style.style_id}) }}\" data-xf-click=\"overlay\">View {$modificationCount|number} Template Modifications</a>\n</span>\n</xf:if>"
 }

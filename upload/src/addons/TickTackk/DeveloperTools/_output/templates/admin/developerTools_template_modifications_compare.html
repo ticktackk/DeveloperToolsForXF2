@@ -1,23 +1,23 @@
 <xf:title>{$template->title} - {{ count($activeMods)|number }}/{{ count($mods)|number }} Template Modifications</xf:title>
 
 <xf:page option="breadcrumbPath" value="styles" />
-<xf:breadcrumb href="{{ link('styles/templates', $template->Style, {'type': $template.type}) }}">{$style.title} - {{ phrase('templates') }}</xf:breadcrumb>
-<xf:breadcrumb href="{{ link('templates/edit', $template, {'type': $template.type}) }}">{$template.title}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('styles/templates', $style, {'type': $template.type}) }}">{$style.title} - {{ phrase('templates') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('templates/edit', $template, {'type': $template.type, 'style_id': $style.style_id}) }}">{$template.title}</xf:breadcrumb>
 
 <xf:css src="public:diff.less" />
 
 <div class="block">
 	<div class="block-container">
 		<div class="block-body block-row block-body--contained">
-			<xf:form action="{{ link('templates/view-modifications', $template) }}" 
-					 class="block" 
+			<xf:form action="{{ link('templates/view-modifications', $template, {'type': $template.type, 'style_id': $style.style_id}) }}"
+					 class="block"
 					 ajax="{{ $_xfWithData ? 'true' : '' }}" >
 				<xf:checkboxrow rowtype="fullWidth noLabel">
 					<xf:foreach loop="$mods" value="$mod">
-						<xf:option name="id[]" 
-								   value="{$mod.modification_id}" 
-								   checked="{{ $activeMods.{$mod.modification_id} ? 'checked' : '' }}" 
-								   label="{{ $mod.addon_id ? $mod.addon_id . ' - ' : '' }}{{ $mod.modification_key }} - {{ $mod.description }} (<a href='{{ link('template-modifications/edit', $mod) }}'>Edit</a>)" 
+						<xf:option name="id[]"
+								   value="{$mod.modification_id}"
+								   checked="{{ $activeMods.{$mod.modification_id} ? 'checked' : '' }}"
+								   label="{{ $mod.addon_id ? $mod.addon_id . ' - ' : '' }}{{ $mod.modification_key }} - {{ $mod.description }} (<a href='{{ link('template-modifications/edit', $mod) }}'>Edit</a>)"
 								   >
 							<xf:hint>{$status.{$mod->modification_id}}</xf:hint>
 						</xf:option>

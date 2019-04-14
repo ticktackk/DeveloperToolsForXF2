@@ -49,7 +49,13 @@ class Template extends XFCP_Template
     public function actionViewModifications(ParameterBag $params) : View
     {
         /** @noinspection PhpUndefinedFieldInspection */
-        $template = $this->assertTemplateExists($params->template_id);
+        $masterTemplate = $this->assertTemplateExists($params->template_id);
+        $style = $this->assertStyleExists($this->filter('style_id', 'uint'));
+
+        $templateRepo = $this->getTemplateRepo();
+
+        /** @var \XF\Entity\Template $template */
+        $template = $templateRepo->findEffectiveTemplateInStyle($style, $masterTemplate->title, $masterTemplate->type)->fetchOne();
 
         $reload = $this->filter('reload', 'bool');
         $ids = null;
@@ -98,7 +104,7 @@ class Template extends XFCP_Template
 
 
         $viewParams = [
-            'style'       => $template->Style,
+            'style'       => $style,
             'template'    => $template,
             'diffs'       => $diffs,
             'mods'        => $modifications->toArray(),
