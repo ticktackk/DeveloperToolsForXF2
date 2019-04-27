@@ -1,0 +1,9 @@
+{
+    "template": "style_property_edit",
+    "description": "Show style property group in breadcrumb",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:pageaction",
+    "replace": "<xf:breadcrumb href=\"{{ link('styles/style-properties/group', $property.Style, {'group': $property.Group.group_name}) }}\">{$property.Group.title}</xf:breadcrumb>\n\n$0"
+}
