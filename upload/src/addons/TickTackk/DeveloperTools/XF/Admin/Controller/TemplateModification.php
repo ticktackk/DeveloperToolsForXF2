@@ -303,7 +303,7 @@ class TemplateModification extends XFCP_TemplateModification
      */
     protected function assertStyleExists($id, $with = null, $phraseKey = null)
     {
-        if ($id === 0 || $id === '0')
+        if ($id === 0)
         {
             return $this->getStyleRepo()->getMasterStyle();
         }
