@@ -1,9 +1,9 @@
 {
     "template": "template_edit",
-    "description": "View Modifications link",
+    "description": "Add \"View modifications\" link",
     "execution_order": 10,
     "enabled": true,
     "action": "str_replace",
     "find": "<div class=\"block-outer-opposite\">",
-    "replace": "$0\n<xf:if is=\"$modificationCount\">\n<span>\n<a href=\"{{ link('templates/view-modifications', $template, {'type':$template.type, 'style_id': $style.style_id}) }}\" data-xf-click=\"overlay\">View {$modificationCount|number} Template Modifications</a>\n</span>\n</xf:if>"
+    "replace": "$0\n<xf:if is=\"$modificationCount\">\n<span>\n<a href=\"{{ link('templates/view-modifications', $template) }}\" data-xf-click=\"overlay\">{{ phrase('tckDeveloperTools_view_x_template_modifications', {'count': {$modificationCount|number}}) }}</a>\n</span>\n</xf:if>"
 }
