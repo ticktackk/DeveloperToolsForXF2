@@ -1,0 +1,9 @@
+{
+    "template": "template_modification_edit",
+    "description": "Show template modification type in breadcrumb",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:pageaction",
+    "replace": "<xf:breadcrumb href=\"{{ link('template-modifications', null, {'type': $modification.type}) }}\">{{ $modification.TypePhrase }}</xf:breadcrumb>\n\n$0"
+}
