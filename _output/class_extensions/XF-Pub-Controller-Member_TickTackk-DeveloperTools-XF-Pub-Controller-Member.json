@@ -1,0 +1,6 @@
+{
+    "from_class": "XF\\Pub\\Controller\\Member",
+    "to_class": "TickTackk\\DeveloperTools\\XF\\Pub\\Controller\\Member",
+    "execute_order": 10,
+    "active": true
+}

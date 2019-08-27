@@ -9,7 +9,7 @@ indent_size=4
 indent_style=space
 indent_size=4
 
-[{composer.lock,.babelrc,.stylelintrc,.eslintrc,jest.config,.jsb3,*.jsb2,*.bowerrc}]
+[{composer.lock,.babelrc,.stylelintrc,.eslintrc,jest.config,*.jsb3,*.jsb2,*.bowerrc}]
 indent_style=space
 indent_size=2
 

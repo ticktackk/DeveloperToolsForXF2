@@ -1,5 +1,6 @@
 _releases
 _data
+_build
 _vendor
 hashes.json
 /.idea/
@@ -7,4 +8,4 @@ hashes.json
 .phpstorm.meta.php
 _metadata.json
 composer.lock
-git.json
+.php_cs.cache
