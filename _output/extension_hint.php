@@ -27,11 +27,6 @@ namespace TickTackk\DeveloperTools\XF\Mvc
 	class XFCP_Dispatcher extends \XF\Mvc\Dispatcher {}
 }
 
-namespace TickTackk\DeveloperTools\XF\Pub\Controller
-{
-	class XFCP_Member extends \XF\Pub\Controller\Member {}
-}
-
 namespace TickTackk\DeveloperTools\XF\Repository
 {
 	class XFCP_AddOn extends \XF\Repository\AddOn {}
