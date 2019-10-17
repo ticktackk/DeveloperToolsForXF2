@@ -2,6 +2,8 @@
 
 namespace TickTackk\DeveloperTools\XF\Job;
 
+use XF\Job\JobResult;
+
 /**
  * Class FileCheck
  *
@@ -14,7 +16,7 @@ class FileCheck extends XFCP_FileCheck
      *
      * @param $maxRunTime
      *
-     * @return \XF\Job\JobResult
+     * @return JobResult
      */
     public function run($maxRunTime)
     {

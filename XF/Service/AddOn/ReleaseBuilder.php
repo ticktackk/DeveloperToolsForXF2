@@ -4,6 +4,7 @@ namespace TickTackk\DeveloperTools\XF\Service\AddOn;
 
 use XF\Util\File as FileUtil;
 use TickTackk\DeveloperTools\XF\Entity\AddOn as ExtendedAddOnEntity;
+use function in_array;
 
 /**
  * Class ReleaseBuilder
@@ -84,7 +85,7 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
      */
     protected function isExcludedFileName($fileName)
     {
-        if (\in_array($fileName, ['git.json', 'dev.json']))
+        if (in_array($fileName, ['git.json', 'dev.json']))
         {
             return true;
         }

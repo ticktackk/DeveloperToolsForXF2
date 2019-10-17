@@ -64,9 +64,9 @@ class AddOn extends XFCP_AddOn
     }
 
     /**
-     * @param \XF\Entity\AddOn $addOn
+     * @param AddOnEntity $addOn
      *
-     * @return array|mixed
+     * @return array
      */
     public function getGitConfigurations(AddOnEntity $addOn) : array
     {

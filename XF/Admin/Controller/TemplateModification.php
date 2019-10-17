@@ -4,10 +4,18 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
 use TickTackk\DeveloperTools\App;
 use XF\Diff;
+use XF\Mvc\Entity\Entity;
+use XF\Mvc\Entity\Repository;
 use XF\Mvc\ParameterBag;
-use XF\Mvc\Reply\Redirect;
-use XF\Mvc\View;
+use XF\Mvc\Reply\Redirect as RedirectReply;
 use TickTackk\DeveloperTools\XF\Entity\TemplateModification as ExtendedTemplateModificationEntity;
+use XF\Entity\TemplateModification as TemplateModificationEntity;
+use XF\Repository\Style as StyleRepo;
+use XF\Entity\Style as StyleEntity;
+use XF\Mvc\Reply\Exception as ExceptionReply;
+use XF\Mvc\Reply\Error as ErrorReply;
+use XF\Mvc\Reply\View as ViewReply;
+use XF\Mvc\Reply\Reroute as RerouteReply;
 
 /**
  * Class TemplateModification
@@ -19,14 +27,14 @@ class TemplateModification extends XFCP_TemplateModification
     /**
      * @param ParameterBag $params
      *
-     * @return \XF\Mvc\Reply\Error|\XF\Mvc\Reply\View
-     * @throws \XF\Mvc\Reply\Exception
+     * @return ErrorReply|ViewReply
+     * @throws ExceptionReply
      */
     public function actionTest(ParameterBag $params)
     {
         $response = parent::actionTest($params);
 
-        if ($response instanceof View)
+        if ($response instanceof ViewReply)
         {
             /** @var ExtendedTemplateModificationEntity $modification */
             $modification = $response->getParam('modification');
@@ -131,10 +139,10 @@ class TemplateModification extends XFCP_TemplateModification
 
 
     /**
-     * @return \XF\Mvc\Reply\View
-     * @throws \XF\Mvc\Reply\Exception
+     * @return ViewReply
+     * @throws ExceptionReply
      */
-    public function actionAutoComplete() : \XF\Mvc\Reply\View
+    public function actionAutoComplete() : ViewReply
     {
         $type = $this->filter('type', 'str');
 
@@ -175,10 +183,10 @@ class TemplateModification extends XFCP_TemplateModification
     }
 
     /**
-     * @return \XF\Mvc\Reply\View
-     * @throws \XF\Mvc\Reply\Exception
+     * @return ViewReply
+     * @throws ExceptionReply
      */
-    public function actionContents() : \XF\Mvc\Reply\View
+    public function actionContents() : ViewReply
     {
         $type = $this->filter('type', 'str');
 
@@ -213,13 +221,13 @@ class TemplateModification extends XFCP_TemplateModification
     /**
      * @param ParameterBag $params
      *
-     * @return Redirect|\XF\Mvc\Reply\Reroute
+     * @return RedirectReply|RerouteReply
      */
     public function actionSave(ParameterBag $params)
     {
         $response = parent::actionSave($params);
 
-        if ($response instanceof Redirect)
+        if ($response instanceof RedirectReply)
         {
             if ($params['modification_id'])
             {
@@ -246,12 +254,12 @@ class TemplateModification extends XFCP_TemplateModification
     }
 
     /**
-     * @param \XF\Entity\TemplateModification $modification
+     * @param TemplateModificationEntity $modification
      *
-     * @return \XF\Mvc\Reply\Error|\XF\Mvc\Reply\View
-     * @throws \XF\Mvc\Reply\Exception
+     * @return ErrorReply|ViewReply
+     * @throws ExceptionReply
      */
-    protected function templateModificationAddEdit(\XF\Entity\TemplateModification $modification)
+    protected function templateModificationAddEdit(TemplateModificationEntity $modification)
     {
         $response = parent::templateModificationAddEdit($modification);
 
@@ -292,16 +300,15 @@ class TemplateModification extends XFCP_TemplateModification
         return $response;
     }
 
-    /***
-     * @param      $id
-     * @param null $with
-     * @param null $phraseKey
+    /**
+     * @param null|int    $id
+     * @param array|null  $with
+     * @param string|null $phraseKey
      *
-     * @return \XF\Entity\Style|\XF\Mvc\Entity\Entity
-     *
-     * @throws \XF\Mvc\Reply\Exception
+     * @return StyleEntity|Entity
+     * @throws ExceptionReply
      */
-    protected function assertStyleExists($id, $with = null, $phraseKey = null)
+    protected function assertStyleExists(?int $id, array $with = null, string $phraseKey = null)
     {
         if ($id === 0)
         {
@@ -312,11 +319,10 @@ class TemplateModification extends XFCP_TemplateModification
     }
 
     /**
-     * @return \XF\Repository\Style
+     * @return Repository|StyleRepo
      */
-    protected function getStyleRepo() : \XF\Repository\Style
+    protected function getStyleRepo() : StyleRepo
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository('XF:Style');
     }
 }

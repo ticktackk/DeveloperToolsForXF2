@@ -5,7 +5,9 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 use XF\Diff;
 use XF\Entity\TemplateModification;
 use XF\Mvc\ParameterBag;
-use XF\Mvc\Reply\View;
+use XF\Mvc\Reply\View as ViewReply;
+use XF\Mvc\Reply\Error as ErrorReply;
+use function array_fill_keys;
 
 /**
  * Extends \XF\Admin\Controller\Template
@@ -15,13 +17,13 @@ class Template extends XFCP_Template
     /**
      * @param ParameterBag $params
      *
-     * @return \XF\Mvc\Reply\Error|View
+     * @return ErrorReply|ViewReply
      */
     public function actionEdit(ParameterBag $params)
     {
         $reply = parent::actionEdit($params);
 
-        if ($reply instanceof View &&
+        if ($reply instanceof ViewReply &&
             ($template = $reply->getParam('template')))
         {
             /** @var \XF\Entity\Template $template */
@@ -62,7 +64,7 @@ class Template extends XFCP_Template
         if ($reload)
         {
             $ids = $this->filter('id', 'array-uint', []);
-            $ids = \array_fill_keys($ids, true);
+            $ids = array_fill_keys($ids, true);
         }
 
         $status = null;

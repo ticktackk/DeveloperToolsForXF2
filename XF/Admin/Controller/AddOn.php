@@ -3,7 +3,10 @@
 namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
 use XF\Mvc\ParameterBag;
-use XF\Mvc\Reply\View;
+use XF\Mvc\Reply\View as ViewReply;
+use XF\Mvc\Reply\Exception as ExceptionReply;
+use XF\Mvc\Reply\Redirect as RedirectReply;
+use XF\Service\AddOn\ReleaseBuilder as ReleaseBuilderSvc;
 
 /**
  * Class AddOn
@@ -15,17 +18,17 @@ class AddOn extends XFCP_AddOn
     /**
      * @param ParameterBag $params
      *
-     * @return View
+     * @return ViewReply
+     * @throws ExceptionReply
      * @throws \ErrorException
-     * @throws \XF\Mvc\Reply\Exception
      * @throws \XF\PrintableException
      */
-    public function actionBuild(ParameterBag $params) : View
+    public function actionBuild(ParameterBag $params) : ViewReply
     {
         /** @noinspection PhpUndefinedFieldInspection */
         $addOn = $this->assertAddOnAvailable($params->addon_id_url);
 
-        /** @var \XF\Service\AddOn\ReleaseBuilder $builderService */
+        /** @var ReleaseBuilderSvc $builderService */
         $builderService = $this->service('XF:AddOn\ReleaseBuilder', $addOn);
 
         $builderService->build();
@@ -47,8 +50,8 @@ class AddOn extends XFCP_AddOn
     /**
      * @param ParameterBag $parameterBag
      *
-     * @return \XF\Mvc\Reply\Redirect|\XF\Mvc\Reply\View
-     * @throws \XF\Mvc\Reply\Exception
+     * @return RedirectReply|ViewReply
+     * @throws ExceptionReply
      */
     public function actionDeveloperOptions(ParameterBag $parameterBag)
     {

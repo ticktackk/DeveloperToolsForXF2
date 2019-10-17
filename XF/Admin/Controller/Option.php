@@ -4,7 +4,6 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
 use XF\Entity\Option as OptionEntity;
 use XF\Entity\OptionGroup as OptionGroupEntity;
-use XF\Entity\OptionGroupRelation as OptionGroupRelationEntity;
 use XF\Mvc\Entity\ArrayCollection;
 use XF\Mvc\Reply\View;
 
@@ -21,7 +20,7 @@ class Option extends XFCP_Option
      *
      * @return View
      */
-    public function optionAddEdit(\XF\Entity\Option $option, $baseRelations = [])
+    public function optionAddEdit(OptionEntity $option, $baseRelations = [])
     {
         $reply = parent::optionAddEdit($option, $baseRelations);
 

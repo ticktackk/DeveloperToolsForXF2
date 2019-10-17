@@ -2,6 +2,7 @@
 
 namespace TickTackk\DeveloperTools\Cli\Command;
 
+use Closure;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -9,6 +10,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use XF\Util\File;
+use XF\AddOn\AddOn;
+use function dirname;
+use function str_replace;
 
 /**
  * Class ClassExtension
@@ -59,12 +63,12 @@ class ClassExtension extends Command
 
         if (\XF::$versionId >= 2010000)
         {
-            $addOnObj = new \XF\AddOn\AddOn($addOnId, \XF::app()->addOnManager());
+            $addOnObj = new AddOn($addOnId, \XF::app()->addOnManager());
         }
         else
         {
             /** @noinspection PhpParamsInspection */
-            $addOnObj = new \XF\AddOn\AddOn($addOnId);
+            $addOnObj = new AddOn($addOnId);
         }
 
         $jsonPath = $addOnObj->getJsonPath();
@@ -83,22 +87,22 @@ class ClassExtension extends Command
             $class = $helper->ask($input, $output, $question);
             $output->writeln('');
         }
-        $class = \str_replace(['//', '/', '_', '\\\\'], ['/', '\\', '\\', '\\'], $class);
+        $class = str_replace(['//', '/', '_', '\\\\'], ['/', '\\', '\\', '\\'], $class);
         $class = trim($class);
         $fromClass = trim($class, '\\');
-        $fromClassPath = \str_replace( '\\', DIRECTORY_SEPARATOR, $fromClass);
+        $fromClassPath = str_replace( '\\', DIRECTORY_SEPARATOR, $fromClass);
         $toClass = $addOnObj->prepareAddOnIdForClass() . '\\' . $fromClass;
         $toClassPath = $addOnObj->getAddOnDirectory() . DIRECTORY_SEPARATOR . $fromClassPath;
         $outputPath = $toClassPath . '.php';
 
-        File::createDirectory(\dirname($toClassPath), false);
+        File::createDirectory(dirname($toClassPath), false);
 
         if (!file_exists($outputPath))
         {
             $className = basename($fromClassPath);
-            $namespace = \dirname(\str_replace( '\\', DIRECTORY_SEPARATOR, $toClass));
+            $namespace = dirname(str_replace( '\\', DIRECTORY_SEPARATOR, $toClass));
             $isEntity = basename($namespace) === 'Entity';
-            $namespace = \str_replace(DIRECTORY_SEPARATOR, '\\', $namespace);
+            $namespace = str_replace(DIRECTORY_SEPARATOR, '\\', $namespace);
 
             $contents = '';
             $useStatements = '';
@@ -177,7 +181,7 @@ TEMPLATE;
 	/**
 	 * @param $key
 	 *
-	 * @return \Closure
+	 * @return Closure
 	 */
 	protected function getAddOnQuestionFieldValidator($key) : callable
 	{

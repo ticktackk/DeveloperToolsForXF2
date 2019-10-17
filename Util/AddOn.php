@@ -2,6 +2,11 @@
 
 namespace TickTackk\DeveloperTools\Util;
 
+/**
+ * Class AddOn
+ *
+ * @package TickTackk\DeveloperTools\Util
+ */
 class AddOn
 {
     /**

@@ -12,6 +12,7 @@ use Bit3\GitPhp\GitRepository;
 use XF\Util\File;
 use XF\Cli\Command\AddOnActionTrait;
 use TickTackk\DeveloperTools\Cli\Command\DevToolsActionTrait;
+use TickTackk\DeveloperTools\XF\Entity\AddOn as ExtendedAddOnEntity;
 
 /**
  * Class Move
@@ -52,7 +53,7 @@ class Move extends Command
 			return 1;
 		}
 	
-		/** @var \TickTackk\DeveloperTools\XF\Entity\AddOn $addOnEntity */
+		/** @var ExtendedAddOnEntity $addOnEntity */
 		$addOnEntity = $addOn->getInstalledAddOn();
 	
 		$addOnDirectory = $addOn->getAddOnDirectory();

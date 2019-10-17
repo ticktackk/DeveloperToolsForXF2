@@ -2,6 +2,7 @@
 
 namespace TickTackk\DeveloperTools\Cli\Command\AddOn;
 
+use Closure;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -17,6 +18,12 @@ use Symfony\Component\Process\ProcessBuilder;
 use XF\Cli\Command\AddOnActionTrait;
 use XF\Cli\Command\Development\RequiresDevModeTrait;
 use XF\Util\File;
+use function array_key_exists;
+use function file_exists;
+use function is_scalar;
+use function strlen;
+use function substr;
+use function utf8_strtolower;
 
 /**
  * Class EntityFromTable
@@ -106,7 +113,7 @@ class EntityFromTable extends Command
         $filename = $manager->getAddOnPath($addOnId) . DIRECTORY_SEPARATOR . 'Entity' . DIRECTORY_SEPARATOR . $name . '.php';
         $force = $input->getOption('force');
 
-        if (\file_exists($filename))
+        if (file_exists($filename))
         {
             if ($force)
             {
@@ -183,13 +190,13 @@ class EntityFromTable extends Command
                 {
                     case 'self::INT':
                     case 'self::UINT':
-                        if (\is_scalar($default))
+                        if (is_scalar($default))
                         {
                             $default = (int) $default;
                         }
                         break;
                     case 'self::FLOAT':
-                        if (\is_scalar($default))
+                        if (is_scalar($default))
                         {
                             $default = strval(floatval($default)) + 0;
                         }
@@ -202,7 +209,7 @@ class EntityFromTable extends Command
                 $fieldData['default'] = var_export($default, true);
             }
 
-            if (!\array_key_exists('default', $fieldData) && empty($fieldData['nullable']))
+            if (!array_key_exists('default', $fieldData) && empty($fieldData['nullable']))
             {
                 $fieldData['required'] = var_export(true, true);
             }
@@ -278,7 +285,7 @@ echo $template."\n\n";
         $len = $allowedValues = null;
         if (\preg_match('#^([^\(]+)\s*(?:\(([^\)]+)\)){0,1}\s*(unsigned){0,1}$#i', $sqlType, $matches))
         {
-            $proposedType = \utf8_strtolower($matches[1]);
+            $proposedType = utf8_strtolower($matches[1]);
             $proposedLen = empty($matches[2]) ? null : (int) $matches[2];
             $isUnsigned = !empty($matches[3]);
             switch ($proposedType)
@@ -362,7 +369,7 @@ echo $template."\n\n";
                     {
                         if ($allowedValue && $allowedValue[0] === '\'')
                         {
-                            $allowedValue = \substr($allowedValue, 1, \strlen($allowedValue) - 2);
+                            $allowedValue = substr($allowedValue, 1, strlen($allowedValue) - 2);
                         }
                     }
                     unset($allowedValue);
@@ -431,7 +438,7 @@ echo $template."\n\n";
 
     /**
      * @param $key
-     * @return \Closure
+     * @return Closure
      */
     protected function getAddOnQuestionFieldValidator($key) : callable
     {

@@ -2,12 +2,8 @@
 
 namespace TickTackk\DeveloperTools\XF\Mvc;
 
-use XF\Http;
-use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\AbstractReply;
 use XF\Mvc\RouteMatch;
-use XF\App as XFApp;
-use XF\PrintableException;
 
 /**
  * Class Dispatcher
@@ -29,6 +25,11 @@ class Dispatcher extends XFCP_Dispatcher
         return $this->reply;
     }
 
+    /**
+     * @param RouteMatch $match
+     *
+     * @return null|AbstractReply
+     */
     public function dispatchLoop(RouteMatch $match)
     {
         $reply = parent::dispatchLoop($match);

@@ -9,6 +9,13 @@ namespace TickTackk\DeveloperTools\XF;
  */
 class Extension extends \XF\Extension
 {
+    /**
+     * @param string $class
+     * @param null   $fakeBaseClass
+     *
+     * @return string
+     * @throws \Exception
+     */
     public function extendClass($class, $fakeBaseClass = null)
     {
         $class = ltrim($class, '\\');

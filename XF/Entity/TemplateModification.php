@@ -4,6 +4,7 @@ namespace TickTackk\DeveloperTools\XF\Entity;
 
 use TickTackk\DeveloperTools\App;
 use XF\Mvc\Entity\Structure;
+use XF\Phrase;
 
 /**
  * Class TemplateModification
@@ -13,9 +14,9 @@ use XF\Mvc\Entity\Structure;
 class TemplateModification extends XFCP_TemplateModification
 {
     /**
-     * @return \XF\Phrase
+     * @return Phrase
      */
-    public function getTypePhrase() : \XF\Phrase
+    public function getTypePhrase() : Phrase
     {
         return \XF::phrase($this->type);
     }

@@ -5,7 +5,11 @@ namespace TickTackk\DeveloperTools\XF\Template;
 use XF\Template\WatcherInterface;
 
 /**
+ * Class Templater
+ *
  * Extends \XF\Template\Templater
+ *
+ * @package TickTackk\DeveloperTools\XF\Template
  */
 class Templater extends XFCP_Templater
 {

@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use XF\Cli\Command\AddOnActionTrait;
+use XF\Entity\Phrase as PhraseEntity;
 
 /**
  * Class AddPhrase
@@ -44,7 +45,7 @@ class AddPhrase extends Command
 			return 1;
 		}
 
-		/** @var \XF\Entity\Phrase $phrase */
+		/** @var PhraseEntity $phrase */
 		$phrase = \XF::app()->em()->create('XF:Phrase');
 		$phrase->title = $input->getArgument('title');
 		$phrase->phrase_text = $input->getArgument('text');
