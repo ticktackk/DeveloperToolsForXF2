@@ -3,6 +3,7 @@
 namespace TickTackk\DeveloperTools\XF\Template;
 
 use TickTackk\DeveloperTools\Test\BaseTestCase;
+use TickTackk\DeveloperTools\XF\Template\Templater as ExtendedTemplater;
 
 /**
  * Class TemplaterTest
@@ -18,6 +19,7 @@ class TemplaterTest extends BaseTestCase
     {
         $this->app()->options()->developerTools_TemplaterWatchDisable = '0';
 
+        /** @var ExtendedTemplater $templater */
         $templater = $this->app()->templater();
         $oldWatchers = $this->getPropertyAsPublic($templater, 'watchers');
 

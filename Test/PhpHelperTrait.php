@@ -5,6 +5,7 @@ namespace TickTackk\DeveloperTools\Test;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionObject;
+use ReflectionMethod;
 
 /**
  * Trait PhpHelperTrait
@@ -27,6 +28,22 @@ trait PhpHelperTrait
         $property->setAccessible(true);
 
         return $property->getValue($object);
+    }
+
+    /**
+     * @param        $object
+     * @param string $name
+     *
+     * @return ReflectionMethod
+     * @throws ReflectionException
+     */
+    protected static function getMethodAsPublic($object, string $name) : ReflectionMethod
+    {
+        $class = new ReflectionClass($object);
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+
+        return $method;
     }
 
     /**

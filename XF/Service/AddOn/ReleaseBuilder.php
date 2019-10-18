@@ -83,6 +83,8 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
 
     /**
      * @return array
+     *
+     * @noinspection PhpUnused
      */
     protected function getExcludedDirectories()
     {
@@ -96,6 +98,8 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
      * @param $fileName
      *
      * @return bool
+     *
+     * @noinspection PhpUnused
      */
     protected function isExcludedFileName($fileName)
     {
