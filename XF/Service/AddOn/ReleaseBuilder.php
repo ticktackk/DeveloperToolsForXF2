@@ -17,53 +17,67 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
     {
         parent::prepareFilesToCopy();
 
-        $addOn = $this->addOn;
         $ds = \XF::$DS;
-        $buildUploadRoot = $addOn->getBuildDirectory();
+        $buildRoot = $this->buildRoot;
+        $licenseAdded = false;
+        $readmeAdded = false;
 
         /** @var ExtendedAddOnEntity $addOnEntity */
         $addOnEntity = $this->addOn->getInstalledAddOn();
-
-        $licenseAdded = false;
-        $readmeAdded = false;
 
         if ($addOnEntity)
         {
             $developerOptions = $addOnEntity->DeveloperOptions;
             if (!empty($developerOptions['license']))
             {
-                FileUtil::writeFile($buildUploadRoot . $ds . 'LICENSE.md', $developerOptions['license'], false);
+                FileUtil::writeFile($buildRoot . $ds . 'LICENSE.md', $developerOptions['license'], false);
                 $licenseAdded = true;
             }
 
             if (!empty($developerOptions['readme']))
             {
-                FileUtil::writeFile($buildUploadRoot . $ds . 'README.md', $developerOptions['readme'], false);
+                FileUtil::writeFile($buildRoot . $ds . 'README.md', $developerOptions['readme'], false);
                 $readmeAdded = true;
             }
         }
 
-        $addOnRoot = $this->addOnRoot;
-        $copyMarkdownFile = function ($possibleFileName) use($ds, $addOnRoot, $buildUploadRoot)
-        {
-            foreach ((array) $possibleFileName AS $fileName)
-            {
-                $filePath = $addOnRoot . $ds . $fileName;
-                if (file_exists($filePath) && is_readable($filePath))
-                {
-                    FileUtil::copyFile($filePath, $buildUploadRoot . $ds . $filePath);
-                }
-            }
-        };
-
         if (!$licenseAdded)
         {
-            $copyMarkdownFile(['LICENSE', 'LICENSE.md']);
+            $this->copyFileToBuildRoot('LICENSE', ['', 'md', 'txt', 'html']);
         }
 
         if (!$readmeAdded)
         {
-            $copyMarkdownFile(['README', 'README.md']);
+            $this->copyFileToBuildRoot('README', ['', 'md', 'txt', 'html']);
+        }
+    }
+
+    /**
+     * @param array|string $possibleFileName
+     * @param array|string $possibleExtensions
+     */
+    protected function copyFileToBuildRoot($possibleFileName, $possibleExtensions)
+    {
+        $ds = \XF::$DS;
+        $addOnRoot = $this->addOnRoot;
+        $buildRoot = $this->buildRoot;
+
+        foreach ((array) $possibleFileName AS $fileName)
+        {
+            foreach ((array) $possibleExtensions AS $possibleExtension)
+            {
+                $filePath = $addOnRoot . $ds . $fileName;
+                if (!empty($possibleExtension))
+                {
+                    $filePath .= '.' . $possibleExtension;
+                }
+
+                if (file_exists($filePath) && is_readable($filePath))
+                {
+                    FileUtil::copyFile($filePath, $buildRoot . $ds . $filePath);
+                    return;
+                }
+            }
         }
     }
 
