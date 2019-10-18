@@ -77,7 +77,7 @@ class TemplateModification extends XFCP_TemplateModification
                 'addon_id' => 'str'
             ]);
 
-            $modification->bulkSet($input);
+            $modification->bulkSet($input, ['forceSet' => true]);
             $modification->preSave();
 
             $errors = $modification->getErrors();
