@@ -36,12 +36,6 @@ class BetterExport extends Command
                 'Skip \'xf-dev:export\' command'
             )
             ->addOption(
-                'skip-tests',
-                't',
-                InputOption::VALUE_NONE,
-                'Skip \'ticktackk-devtools:phpunit\' command'
-            )
-            ->addOption(
                 'move',
                 'm',
                 InputOption::VALUE_NONE,
@@ -128,21 +122,6 @@ class BetterExport extends Command
                 '--addon' => $addOn->getAddOnId()
             ]);
             $command->run($childInput, $output);
-        }
-
-        $skipTests = $input->getOption('skip-tests');
-        if (!$skipTests)
-        {
-            $command = $this->getApplication()->find('ticktackk-devtools:phpunit');
-            $childInput = new ArrayInput([
-                'command' => 'ticktackk-devtools:phpunit',
-                'id' => $addOn->getAddOnId()
-            ]);
-            $phpUnitResult = $command->run($childInput, $output);
-            if ($phpUnitResult !== 0)
-            {
-                return $phpUnitResult;
-            }
         }
         
         $release = $input->getOption('release');

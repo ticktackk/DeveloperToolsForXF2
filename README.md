@@ -6,7 +6,6 @@ Developer tools for XenForo 2
   - Option group and Option
   - Permission group and Permission
 - Test template modification against specific style
-- PHPUnit framework integration allows you to test add-on before releasing or pushing the new changes to VCS
 - Ability to use packages made using composer without composer itself
 - Available global configuration
   - Git name
@@ -27,7 +26,6 @@ Developer tools for XenForo 2
 | `ticktackk-devtools:better-export` | Exports the XML files for an add-on and applies class properties to type hint columns, getters and relations |
 | `ticktackk-devtools:git-init` | Initialize an add-on for VCS |
 | `ticktackk-devtools:git-commit` | Copies changes made to the add-on to repository and then finally commits the changes |
-| `ticktackk-devtools:phpunit` | Runs PHPUnit tests for an add-on |
 | `ticktackk-devtools:create-class-extension` | Creates an class-extension for an add-on and writes out a basic template file. |
 | `ticktackk-devtools:add-phrase` | Allows creating phrase via CLI. |
 | `ticktackk-devtools:create-entity-from-table` | Creates an XF entity for an add-on from a table. |
