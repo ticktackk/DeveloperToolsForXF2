@@ -6,6 +6,7 @@ use TickTackk\DeveloperTools\App;
 use XF\Diff;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Repository;
+use XF\Mvc\FormAction;
 use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\Redirect as RedirectReply;
 use TickTackk\DeveloperTools\XF\Entity\TemplateModification as ExtendedTemplateModificationEntity;
@@ -219,38 +220,70 @@ class TemplateModification extends XFCP_TemplateModification
     }
 
     /**
+     * @var null|int
+     */
+    protected $lastInsertedTemplateModificationId;
+
+    /**
+     * @param TemplateModificationEntity $modification
+     *
+     * @return FormAction
+     */
+    protected function modificationSaveProcess(TemplateModificationEntity $modification)
+    {
+        $formAction = parent::modificationSaveProcess($modification);
+
+        if ($formAction instanceof FormAction)
+        {
+            $formAction->complete(function () use($modification)
+            {
+                $this->lastInsertedTemplateModificationId = $modification->getEntityId();
+            });
+        }
+
+        return $formAction;
+    }
+
+    /**
      * @param ParameterBag $params
      *
      * @return RedirectReply|RerouteReply
      */
     public function actionSave(ParameterBag $params)
     {
-        $response = parent::actionSave($params);
-
-        if ($response instanceof RedirectReply)
+        try
         {
-            if ($params['modification_id'])
+            $response = parent::actionSave($params);
+
+            if ($response instanceof RedirectReply)
             {
-                $modification = $this->assertTemplateModificationExists($params['modification_id']);
-            }
-            else
-            {
-                $modification = $this->assertTemplateModificationExists(App::$modificationId);
+                if ($params['modification_id'])
+                {
+                    $modification = $this->assertTemplateModificationExists($params['modification_id']);
+                }
+                else
+                {
+                    $modification = $this->assertTemplateModificationExists($this->lastInsertedTemplateModificationId);
+                }
+
+                if ($this->request->exists('exit'))
+                {
+                    $redirect = $this->buildLink('template-modifications', '', ['type' => $modification->type]);
+                }
+                else
+                {
+                    $redirect = $this->buildLink('template-modifications/edit', $modification);
+                }
+
+                return $this->redirect($redirect);
             }
 
-            if ($this->request->exists('exit'))
-            {
-                $redirect = $this->buildLink('template-modifications', '', ['type' => $modification->type]);
-            }
-            else
-            {
-                $redirect = $this->buildLink('template-modifications/edit', $modification);
-            }
-
-            return $this->redirect($redirect);
+            return $response;
         }
-
-        return $response;
+        finally
+        {
+            $this->lastInsertedTemplateModificationId = null;
+        }
     }
 
     /**

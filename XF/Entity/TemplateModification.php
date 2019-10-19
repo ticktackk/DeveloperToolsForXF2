@@ -21,13 +21,6 @@ class TemplateModification extends XFCP_TemplateModification
         return \XF::phrase($this->type);
     }
 
-    protected function _postSave()
-    {
-        parent::_postSave();
-
-        App::$modificationId = $this->modification_id;
-    }
-
     /**
      * @param Structure $structure
      *
