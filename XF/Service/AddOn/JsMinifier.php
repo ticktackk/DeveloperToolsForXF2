@@ -22,7 +22,16 @@ class JsMinifier extends XFCP_JsMinifier
         $jsPath = $this->jsPath;
 
         // from https://developers.google.com/closure/compiler/docs/gettingstarted_app
-        $closureJarPath = $development['closureJar'] ?: $xfRoot . DIRECTORY_SEPARATOR . 'closure-compiler-v20180402.jar';
+        $closureJarPath = $development['closureJar'] ?? null;
+        if ($closureJarPath === null)
+        {
+            $possibleClosureJarPath = $xfRoot . DIRECTORY_SEPARATOR . 'closure-compiler-v20180402.jar';
+            if (file_exists($possibleClosureJarPath))
+            {
+                $closureJarPath = $possibleClosureJarPath;
+            }
+        }
+
         if ($closureJarPath)
         {
             if (!file_exists($closureJarPath))
