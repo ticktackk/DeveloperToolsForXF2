@@ -61,20 +61,38 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
         $ds = \XF::$DS;
         $addOnRoot = $this->addOnRoot;
         $buildRoot = $this->buildRoot;
+        
+        foreach ((array) $possibleFileName AS $fileName)
+        {
+            foreach ((array) $possibleExtensions AS $possibleExtension)
+            {
+                $possibleFileNameFinal= $fileName;
+                if (!empty($possibleExtension))
+                {
+                    $possibleFileNameFinal .= '.' . $possibleExtension;
+                }
+
+                if (file_exists($buildRoot . $ds . $possibleFileNameFinal))
+                {
+                    return;
+                }
+            }
+        }
 
         foreach ((array) $possibleFileName AS $fileName)
         {
             foreach ((array) $possibleExtensions AS $possibleExtension)
             {
-                $filePath = $addOnRoot . $ds . $fileName;
+                $possibleFileNameFinal= $fileName;
                 if (!empty($possibleExtension))
                 {
-                    $filePath .= '.' . $possibleExtension;
+                    $possibleFileNameFinal .= '.' . $possibleExtension;
                 }
+                $filePath = $addOnRoot . $ds . $possibleFileNameFinal;
 
                 if (file_exists($filePath) && is_readable($filePath))
                 {
-                    FileUtil::copyFile($filePath, $buildRoot . $ds . $filePath);
+                    FileUtil::copyFile($filePath, $buildRoot . $ds . $possibleFileNameFinal);
                     return;
                 }
             }
