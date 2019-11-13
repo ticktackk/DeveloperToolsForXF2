@@ -43,12 +43,12 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
 
         if (!$licenseAdded)
         {
-            $this->copyFileToBuildRoot('LICENSE', ['', 'md', 'txt', 'html']);
+            $this->copyFileToBuildRoot('LICENSE', ['md', '', 'txt', 'html']);
         }
 
         if (!$readmeAdded)
         {
-            $this->copyFileToBuildRoot('README', ['', 'md', 'txt', 'html']);
+            $this->copyFileToBuildRoot('README', ['md', '', 'txt', 'html']);
         }
     }
 
