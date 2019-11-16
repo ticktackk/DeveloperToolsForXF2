@@ -2,7 +2,6 @@
 
 namespace TickTackk\DeveloperTools\XF\Entity;
 
-use TickTackk\DeveloperTools\App;
 use XF\Mvc\Entity\Structure;
 use XF\Phrase;
 
