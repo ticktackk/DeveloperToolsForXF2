@@ -1,5 +1,7 @@
 {
     "exec": [
-        "composer install --working-dir=_build/upload/src/addons/{addon_id}/ --no-dev --optimize-autoloader"
+        "composer install --working-dir=_build/upload/src/addons/{addon_id}/ --no-dev --optimize-autoloader",
+        "rm -v -r _build/upload/src/addons/{addon_id}/composer.json",
+        "rm -v -r _build/upload/src/addons/{addon_id}/composer.lock"
     ]
 }
