@@ -13,6 +13,40 @@ use function in_array;
  */
 class ReleaseBuilder extends XFCP_ReleaseBuilder
 {
+    /**
+     * @throws \XF\PrintableException
+     */
+    public function performBuildTasks()
+    {
+        parent::performBuildTasks();
+
+        $addOn = $this->addOn;
+        $buildJson = $addOn->getBuildJson();
+
+        if ($this->buildTasksComplete)
+        {
+            $excludeFiles = $buildJson['exclude_files'] ?? [];
+            $this->excludeFiles((array) $excludeFiles);
+        }
+    }
+
+    /**
+     * @param array $excludedFiles
+     */
+    protected function excludeFiles(array $excludedFiles) : void
+    {
+        $addOnBase = $this->addOnBase;
+
+        foreach ($excludedFiles AS $excludedFile)
+        {
+            $filePath = FileUtil::canonicalizePath($excludedFile, $addOnBase);
+            if (\file_exists($filePath))
+            {
+                \unlink($filePath);
+            }
+        }
+    }
+
     protected function prepareFilesToCopy()
     {
         parent::prepareFilesToCopy();
@@ -106,10 +140,15 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
      */
     protected function getExcludedDirectories()
     {
-        return array_merge([
+        $addOn = $this->addOn;
+        $buildJson = $addOn->getBuildJson();
+
+        $excludedDirectories = $buildJson['exclude_directories'] ?? [];
+
+        return \array_merge([
             '_repo',
             '_tests'
-        ], parent::getExcludedDirectories());
+        ], parent::getExcludedDirectories(), (array) $excludedDirectories);
     }
 
     /**
