@@ -65,24 +65,17 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
             if (!empty($developerOptions['license']))
             {
                 FileUtil::writeFile($buildRoot . $ds . 'LICENSE.md', $developerOptions['license'], false);
-                $licenseAdded = true;
             }
 
             if (!empty($developerOptions['readme']))
             {
                 FileUtil::writeFile($buildRoot . $ds . 'README.md', $developerOptions['readme'], false);
-                $readmeAdded = true;
             }
         }
 
-        if (!$licenseAdded)
+        foreach (['LICENSE', "README", 'CHANGELOG'] AS $fileName)
         {
-            $this->copyFileToBuildRoot('LICENSE', ['md', '', 'txt', 'html']);
-        }
-
-        if (!$readmeAdded)
-        {
-            $this->copyFileToBuildRoot('README', ['md', '', 'txt', 'html']);
+            $this->copyFileToBuildRoot($fileName, ['md', '', 'txt', 'html']);
         }
     }
 
@@ -90,7 +83,7 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
      * @param array|string $possibleFileName
      * @param array|string $possibleExtensions
      */
-    protected function copyFileToBuildRoot($possibleFileName, $possibleExtensions)
+    protected function copyFileToBuildRoot($possibleFileName, $possibleExtensions) : void
     {
         $ds = \XF::$DS;
         $addOnRoot = $this->addOnRoot;
