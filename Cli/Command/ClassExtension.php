@@ -75,7 +75,7 @@ class ClassExtension extends Command
 
         if (!file_exists($jsonPath))
         {
-            $output->writeln('<error>The addon.json file must exist at {$jsonPath}.</error>');
+            $output->writeln(\sprintf('<error>The addon.json file must exist at %s.</error>', $jsonPath));
 
             return 1;
         }
