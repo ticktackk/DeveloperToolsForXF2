@@ -111,15 +111,15 @@ class ClassExtension extends Command
             {
                 $useStatements =  <<<TEMPLATE
 \n\nuse XF\Mvc\Entity\Entity;
-use XF\Mvc\Entity\Structure;
+use XF\Mvc\Entity\Structure as EntityStructure;
 TEMPLATE;
                 $contents = <<<TEMPLATE
     /**
-     * @param Structure \$structure
+     * @param EntityStructure \$structure
      *
      * @return Structure
      */
-    public static function getStructure(Structure \$structure)
+    public static function getStructure(EntityStructure \$structure)
     {
         \$structure = parent::getStructure(\$structure);
     
