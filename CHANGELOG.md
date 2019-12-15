@@ -15,7 +15,7 @@ CHANGELOG
 * **Fixed:** Template modification test failing
 * **Fixed:** "View modifications" failing for templates
 * **Fixed:** Path for `addon.json` is not shown when invalid add-on id is provided for class extension CLI command (#26)
-* **Removed:** Dead class extension
+* **Removed:** Dead class extension and phrases
 * **Removed:** Removed PHPUnit integration which was borderline useless
 * General code changes and improvements
 
