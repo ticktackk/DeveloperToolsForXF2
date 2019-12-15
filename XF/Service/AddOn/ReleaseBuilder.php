@@ -99,7 +99,7 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
                 $filePath = FileUtil::canonicalizePath($possibleFileNameFinal, $addOnRoot);
                 if (\file_exists($filePath) && \is_readable($filePath))
                 {
-                    $destinationPath = FileUtil::canonicalizePath($buildRoot, $possibleFileNameFinal);
+                    $destinationPath = FileUtil::canonicalizePath($possibleFileNameFinal, $buildRoot);
                     FileUtil::copyFile($filePath, $destinationPath);
                     return;
                 }
