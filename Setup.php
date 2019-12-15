@@ -7,8 +7,9 @@ use XF\AddOn\StepRunnerInstallTrait;
 use XF\AddOn\StepRunnerUninstallTrait;
 use XF\AddOn\StepRunnerUpgradeTrait;
 use XF\Db\Schema\Alter;
-use XF\Util\File;
-use XF\Util\Json;
+use XF\Util\File as FileUtil;
+use XF\Util\Json as JsonUtil;
+use XF\AddOn\AddOn;
 
 /**
  * Class Setup
@@ -31,39 +32,30 @@ class Setup extends AbstractSetup
     			OR devTools_readme_md <> ''
     			OR devTools_parse_additional_files <> ''
     		)
-    		  AND addon_id NOT IN('XF', 'XFRM', 'XFMG')
+    		  AND addon_id NOT IN('XF', 'XFRM', 'XFMG', 'XFES', 'XFI')
     	");
 
         if (\count($addOns))
         {
-            $options = $this->app->options();
-            $gitName = $options->developerTools_git_username;
-            $gitEmail = $options->developerTools_git_email;
-
             foreach ($addOns AS $addOn)
             {
                 $addOnEntity = \XF::em()->find('XF:AddOn', $addOn['addon_id']);
 
                 if (\XF::$versionId >= 2010000)
                 {
-                    $addOn = new \XF\AddOn\AddOn($addOnEntity, \XF::app()->addOnManager());
+                    $addOn = new AddOn($addOnEntity, \XF::app()->addOnManager());
                 } else
                 {
                     /** @noinspection PhpParamsInspection */
-                    $addOn = new \XF\AddOn\AddOn($addOnEntity);
+                    $addOn = new AddOn($addOnEntity);
                 }
 
                 $addOnDir = $addOn->getAddOnDirectory();
-                File::writeFile($addOnDir . DIRECTORY_SEPARATOR . 'dev.json', Json::jsonEncodePretty([
+                FileUtil::writeFile($addOnDir . DIRECTORY_SEPARATOR . 'dev.json', JsonUtil::jsonEncodePretty([
                     'gitignore' => $addOn['devTools_gitignore'],
                     'license' => $addOn['devTools_license'],
                     'readme' => $addOn['devTools_readme_md'],
                     'parse_additional_files' => (bool) $addOn['devTools_parse_additional_files']
-                ]), false);
-
-                File::writeFile($addOnDir . DIRECTORY_SEPARATOR . 'git.json', Json::jsonEncodePretty([
-                    'name' => $gitName,
-                    'email' => $gitEmail
                 ]), false);
             }
         }
@@ -75,5 +67,160 @@ class Setup extends AbstractSetup
         {
             $table->dropColumns(['devTools_license', 'devTools_gitignore', 'devTools_readme_md', 'devTools_parse_additional_files']);
         });
+    }
+
+    public function upgrade1010070Step1() : void
+    {
+        $db = $this->db();
+
+        $addOns = $db->fetchAllColumn("
+            SELECT addon_id
+            FROM xf_addon
+            WHERE addon_id NOT IN('XF', 'XFRM', 'XFMG', 'XFI', 'XFES')
+        ");
+
+        foreach ($addOns AS $addOnId)
+        {
+            $addOnEntity = \XF::em()->find('XF:AddOn', $addOnId);
+
+            if (\XF::$versionId >= 2010000)
+            {
+                $addOnManager = $this->app()->addOnManager();
+                $addOn = new AddOn($addOnEntity, $addOnManager);
+            }
+            else
+            {
+                /** @noinspection PhpParamsInspection */
+                $addOn = new AddOn($addOnEntity);
+            }
+
+            $addOnDir = $addOn->getAddOnDirectory();
+
+            $gitJsonPath = FileUtil::canonicalizePath('git.json', $addOnDir);
+            if (\file_exists($gitJsonPath))
+            {
+                \unlink($gitJsonPath);
+            }
+
+            $noUploadsDir = FileUtil::canonicalizePath('_no_upload', $addOnDir);
+            $devJsonPath = FileUtil::canonicalizePath('dev.json', $addOnDir);
+            if (\file_exists($devJsonPath))
+            {
+                $dev = \json_decode(\file_get_contents($devJsonPath), true);
+
+                if (\array_key_exists('parse_additional_files', $dev))
+                {
+                    unset($dev['parse_additional_files']);
+                }
+
+                $markdownFiles = [
+                    'readme' => ['README', 'README.md'],
+                    'license' => ['LICENSE', 'LICENSE.md'],
+                ];
+
+                foreach ($markdownFiles AS $key => $details)
+                {
+                    if (\array_key_exists($key, $dev))
+                    {
+                        $fileNameWithoutExtension = $dev[0];
+                        $preferredFileName = $dev[1];
+                        $fileContents = $dev[$key];
+                        $createFile = true;
+
+                        foreach (['.md', '', '.txt', '.html'] AS $extension)
+                        {
+                            $possibleFilePathInAddOnRoot = FileUtil::canonicalizePath($fileNameWithoutExtension . $extension, $addOnDir);
+                            $fileDateInAddOnRootDir = 0;
+                            if (\file_exists($possibleFilePathInAddOnRoot))
+                            {
+                                $createFile = false;
+                                $fileDateInAddOnRootDir = \filemtime($possibleFilePathInAddOnRoot);
+                            }
+
+                            $possibleFilePathInNoUploads = FileUtil::canonicalizePath($fileNameWithoutExtension . $extension, $noUploadsDir);
+                            $fileDateInNoUploadsDir = 0;
+                            if (\file_exists($possibleFilePathInNoUploads))
+                            {
+                                $createFile = false;
+                                $fileDateInNoUploadsDir = \filemtime($possibleFilePathInNoUploads);
+                            }
+
+                            $copyToAddOnRootWithPreferredFileName = function (string $oldFilePath) use($addOnDir, $preferredFileName)
+                            {
+                                $newDestination = FileUtil::canonicalizePath($preferredFileName, $addOnDir);
+                                FileUtil::copyFile($oldFilePath, $newDestination);
+                            };
+
+                            if ($fileDateInAddOnRootDir >= $fileDateInNoUploadsDir)
+                            {
+                                $copyToAddOnRootWithPreferredFileName($possibleFilePathInAddOnRoot);
+
+                                if ($fileDateInNoUploadsDir !== 0)
+                                {
+                                    \unlink($possibleFilePathInNoUploads);
+                                }
+                            }
+                            else if ($fileDateInAddOnRootDir <= $fileDateInNoUploadsDir)
+                            {
+                                $copyToAddOnRootWithPreferredFileName($possibleFilePathInNoUploads);
+
+                                if ($fileDateInAddOnRootDir !== 0)
+                                {
+                                    \unlink($possibleFilePathInAddOnRoot);
+                                }
+                            }
+                        }
+
+                        if ($createFile)
+                        {
+                            if (\is_string($fileContents) && !empty($fileContents))
+                            {
+                                $markdownPath = FileUtil::canonicalizePath($preferredFileName, $addOnDir);
+                                FileUtil::writeFile($markdownPath, $fileContents, false);
+                            }
+                        }
+
+                        unset($dev[$key]);
+                    }
+                }
+
+                if (\array_key_exists('gitignore', $dev))
+                {
+                    $finalGitIgnore = preg_split('/\r?\n/', $dev['gitignore'], \PREG_SPLIT_NO_EMPTY);
+                    \array_push($finalGitIgnore, ['_releases', '/.idea/', '_build', '_vendor', '.DS_Store', 'hashes.json', '.phpstorm.meta.php', '_metadata.json', '.php_cs.cache']);
+
+                    if (\count($finalGitIgnore))
+                    {
+                        $gitIgnoreFileInAddOnRoot = FileUtil::canonicalizePath('.gitignore', $addOnDir);
+                        if (\file_exists($gitIgnoreFileInAddOnRoot))
+                        {
+                            $gitIgnoreFileContentsFromAddOnRoot = preg_split('/\r?\n/', \file_get_contents($gitIgnoreFileInAddOnRoot), \PREG_SPLIT_NO_EMPTY);
+                            if (\count($gitIgnoreFileContentsFromAddOnRoot))
+                            {
+                                \array_push($finalGitIgnore, ...$gitIgnoreFileContentsFromAddOnRoot);
+                            }
+                        }
+
+                        $finalGitIgnore = \array_unique($finalGitIgnore);
+                        \sort($finalGitIgnore);
+
+                        FileUtil::writeFile($gitIgnoreFileInAddOnRoot, \implode(PHP_EOL, $finalGitIgnore));
+                    }
+
+                    unset($dev['gitignore']);
+                }
+
+                if (empty($dev))
+                {
+                    \unlink($devJsonPath);
+                }
+            }
+
+            $noUploadsFSIterator = new \FilesystemIterator($noUploadsDir);
+            if (\iterator_count($noUploadsFSIterator) === 0)
+            {
+                FileUtil::deleteDirectory($noUploadsDir);
+            }
+        }
     }
 }
