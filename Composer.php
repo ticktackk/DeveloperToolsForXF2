@@ -16,12 +16,13 @@ class Composer
     {
         $namespaces = __DIR__ . DIRECTORY_SEPARATOR . '_vendor' . DIRECTORY_SEPARATOR . 'composer' . DIRECTORY_SEPARATOR . 'autoload_namespaces.php';
 
-        if (!file_exists($namespaces))
+        if (!\file_exists($namespaces))
         {
             $app->error()->logError('Missing vendor autoload files at %s', $namespaces);
         }
         else
         {
+            /** @noinspection PhpIncludeInspection */
             $map = require $namespaces;
 
             foreach ($map as $namespace => $path)
@@ -39,12 +40,13 @@ class Composer
     {
         $psr4 = __DIR__ . DIRECTORY_SEPARATOR . '_vendor' . DIRECTORY_SEPARATOR . 'composer' . DIRECTORY_SEPARATOR . 'autoload_psr4.php';
 
-        if (!file_exists($psr4))
+        if (!\file_exists($psr4))
         {
             $app->error()->logError('Missing vendor autoload files at %s', $psr4);
         }
         else
         {
+            /** @noinspection PhpIncludeInspection */
             $map = require $psr4;
 
             foreach ($map as $namespace => $path)
@@ -61,12 +63,13 @@ class Composer
     {
         $classmap = __DIR__ . DIRECTORY_SEPARATOR . '_vendor' . DIRECTORY_SEPARATOR . 'composer' . DIRECTORY_SEPARATOR . 'autoload_classmap.php';
 
-        if (!file_exists($classmap))
+        if (!\file_exists($classmap))
         {
             $app->error()->logError('Missing vendor autoload files at %s', $classmap);
         }
         else
         {
+            /** @noinspection PhpIncludeInspection */
             $map = require $classmap;
 
             if ($map)
@@ -84,14 +87,16 @@ class Composer
         $files = __DIR__ . DIRECTORY_SEPARATOR . '_vendor' . DIRECTORY_SEPARATOR . 'composer' . DIRECTORY_SEPARATOR . 'autoload_files.php';
 
         // note that autoload_files.php is only generated if there is actually a 'files' directive somewhere in the dependency chain
-        if (file_exists($files))
+        if (\file_exists($files))
         {
+            /** @noinspection PhpIncludeInspection */
             $includeFiles = require $files;
 
             foreach ($includeFiles as $fileIdentifier => $file)
             {
                 if (empty($GLOBALS['__composer_autoload_files'][$fileIdentifier]))
                 {
+                    /** @noinspection PhpIncludeInspection */
                     require $file;
 
                     $GLOBALS['__composer_autoload_files'][$fileIdentifier] = true;

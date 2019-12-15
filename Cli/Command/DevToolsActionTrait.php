@@ -2,6 +2,8 @@
 
 namespace TickTackk\DeveloperTools\Cli\Command;
 
+use XF\Util\File as FileUtil;
+
 /**
  * Trait DevToolsActionTrait
  *
@@ -17,9 +19,7 @@ trait DevToolsActionTrait
 	public function getAddOnRepoDir(\XF\AddOn\AddOn $addOn) : string
 	{
 		$addOnDirectory = $addOn->getAddOnDirectory();
-		$ds = DIRECTORY_SEPARATOR;
-		
-		$repoRoot = $addOnDirectory . $ds . '_repo';
+		$repoRoot = FileUtil::canonicalizePath('_repo', $addOnDirectory);
 		
 		/** @var \TickTackk\DeveloperTools\XF\Entity\AddOn $addOnEntity */
 		$addOnEntity = $addOn->getInstalledAddOn();
@@ -44,7 +44,7 @@ trait DevToolsActionTrait
 			
 			if (utf8_substr($repoRoot, 0, -1) !== '/')
 			{
-				$repoRoot = \XF\Util\File::canonicalizePath($repoRoot);
+				$repoRoot = FileUtil::canonicalizePath($repoRoot);
 			}
 		}
 		

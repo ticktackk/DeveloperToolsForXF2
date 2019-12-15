@@ -2,6 +2,8 @@
 
 namespace TickTackk\DeveloperTools;
 
+use XF\App as BaseApp;
+
 /**
  * Class Listener
  *
@@ -10,9 +12,9 @@ namespace TickTackk\DeveloperTools;
 class Listener
 {
     /**
-     * @param \XF\App $app
+     * @param BaseApp $app
      */
-    public static function appSetup(\XF\App $app) : void
+    public static function appSetup(BaseApp $app) : void
     {
         if (\XF::$versionId < 2010010)
         {
@@ -21,19 +23,5 @@ class Listener
             Composer::autoloadClassmap($app);
             Composer::autoloadFiles($app);
         }
-    }
-
-    public static function requestUrlMatchesAdmin() : bool
-    {
-        $baseRequest = new \XF\Http\Request(new \XF\InputFilterer());
-        $adminFile = 'admin.php';
-        $scriptName = $baseRequest->getServer('SCRIPT_NAME', '');
-
-        if (utf8_strlen($scriptName) <= utf8_strlen($adminFile))
-        {
-            return false;
-        }
-
-        return utf8_substr($scriptName, (utf8_strlen($scriptName) - (utf8_strlen($adminFile) + 1))) === $adminFile;
     }
 }

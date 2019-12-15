@@ -91,7 +91,7 @@ class AddOn extends XFCP_AddOn
         }
         $jsonPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . $fileName;
 
-        if (!file_exists($jsonPath) || !is_readable($jsonPath))
+        if (!\file_exists($jsonPath) || !\is_readable($jsonPath))
         {
             return [];
         }

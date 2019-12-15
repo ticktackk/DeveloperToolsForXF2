@@ -4,7 +4,6 @@ namespace TickTackk\DeveloperTools\XF\Service\AddOn;
 
 use XF\Util\File as FileUtil;
 use TickTackk\DeveloperTools\XF\Entity\AddOn as ExtendedAddOnEntity;
-use function in_array;
 
 /**
  * Class ReleaseBuilder
@@ -51,10 +50,7 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
     {
         parent::prepareFilesToCopy();
 
-        $ds = \XF::$DS;
         $buildRoot = $this->buildRoot;
-        $licenseAdded = false;
-        $readmeAdded = false;
 
         /** @var ExtendedAddOnEntity $addOnEntity */
         $addOnEntity = $this->addOn->getInstalledAddOn();
@@ -64,12 +60,14 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
             $developerOptions = $addOnEntity->DeveloperOptions;
             if (!empty($developerOptions['license']))
             {
-                FileUtil::writeFile($buildRoot . $ds . 'LICENSE.md', $developerOptions['license'], false);
+                $licensePath = FileUtil::canonicalizePath('LICENSE.md', $buildRoot);
+                FileUtil::writeFile($licensePath, $developerOptions['license'], false);
             }
 
             if (!empty($developerOptions['readme']))
             {
-                FileUtil::writeFile($buildRoot . $ds . 'README.md', $developerOptions['readme'], false);
+                $readmePath = FileUtil::canonicalizePath('README.md', $buildRoot);
+                FileUtil::writeFile($readmePath, $developerOptions['readme'], false);
             }
         }
 
@@ -85,21 +83,21 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
      */
     protected function copyFileToBuildRoot($possibleFileName, $possibleExtensions) : void
     {
-        $ds = \XF::$DS;
         $addOnRoot = $this->addOnRoot;
         $buildRoot = $this->buildRoot;
-        
+
         foreach ((array) $possibleFileName AS $fileName)
         {
             foreach ((array) $possibleExtensions AS $possibleExtension)
             {
-                $possibleFileNameFinal= $fileName;
+                $possibleFileNameFinal = $fileName;
                 if (!empty($possibleExtension))
                 {
                     $possibleFileNameFinal .= '.' . $possibleExtension;
                 }
 
-                if (file_exists($buildRoot . $ds . $possibleFileNameFinal))
+                $possibleFilePath = FileUtil::canonicalizePath($possibleFileNameFinal, $buildRoot);
+                if (\file_exists($possibleFilePath))
                 {
                     return;
                 }
@@ -110,16 +108,17 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
         {
             foreach ((array) $possibleExtensions AS $possibleExtension)
             {
-                $possibleFileNameFinal= $fileName;
+                $possibleFileNameFinal = $fileName;
                 if (!empty($possibleExtension))
                 {
                     $possibleFileNameFinal .= '.' . $possibleExtension;
                 }
-                $filePath = $addOnRoot . $ds . $possibleFileNameFinal;
 
-                if (file_exists($filePath) && is_readable($filePath))
+                $filePath = FileUtil::canonicalizePath($possibleFileNameFinal, $addOnRoot);
+                if (\file_exists($filePath) && \is_readable($filePath))
                 {
-                    FileUtil::copyFile($filePath, $buildRoot . $ds . $possibleFileNameFinal);
+                    $destinationPath = FileUtil::canonicalizePath($buildRoot, $possibleFileNameFinal);
+                    FileUtil::copyFile($filePath, $destinationPath);
                     return;
                 }
             }
@@ -128,8 +127,6 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
 
     /**
      * @return array
-     *
-     * @noinspection PhpUnused
      */
     protected function getExcludedDirectories()
     {
@@ -148,12 +145,10 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
      * @param $fileName
      *
      * @return bool
-     *
-     * @noinspection PhpUnused
      */
     protected function isExcludedFileName($fileName)
     {
-        if (in_array($fileName, ['git.json', 'dev.json']))
+        if (\in_array($fileName, ['git.json', 'dev.json'], true))
         {
             return true;
         }

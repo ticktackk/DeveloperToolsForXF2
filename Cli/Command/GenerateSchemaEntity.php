@@ -70,7 +70,7 @@ class GenerateSchemaEntity extends Command
 
         foreach ($columns AS $columnName => $column)
         {
-            $length = (int)($column['maxLength'] ?? null);
+            $length = (int) ($column['maxLength'] ?? null);
             $type = $this->resolveTypeDefaults($entity, $column['type'], $unsigned, $allowedDefault, $length);
 
             if ($length !== null)
@@ -84,26 +84,29 @@ class GenerateSchemaEntity extends Command
                             $length = null;
                         }
                         $type = 'tinyint';
-                    }
-                    else if ($length <= 65536)
+                    } else
                     {
-                        if ($length === 65536)
+                        if ($length <= 65536)
                         {
-                            $length = null;
-                        }
-                        $type = 'shortint';
-                    }
-                    else if ($length > 4294967295)
-                    {
-                        if ($length === 4294967295)
+                            if ($length === 65536)
+                            {
+                                $length = null;
+                            }
+                            $type = 'shortint';
+                        } else
                         {
-                            $length = null;
+                            if ($length > 4294967295)
+                            {
+                                if ($length === 4294967295)
+                                {
+                                    $length = null;
+                                }
+                                $type = 'bigint';
+                            }
                         }
-                        $type = 'bigint';
                     }
                 }
-            }
-            else
+            } else
             {
                 if ($type === 'varchar')
                 {
@@ -116,11 +119,10 @@ class GenerateSchemaEntity extends Command
             if (isset($column['allowedValues']))
             {
                 $type = 'enum';
-                if (count($column['allowedValues']) > 1)
+                if (\count($column['allowedValues']) > 1)
                 {
-                    $values = '[\'' . implode('\', \'', $column['allowedValues']) . '\']';
-                }
-                else
+                    $values = '[\'' . \implode('\', \'', $column['allowedValues']) . '\']';
+                } else
                 {
                     $values = '\'' . $column['allowedValues'] . '\'';
                 }
@@ -153,18 +155,21 @@ class GenerateSchemaEntity extends Command
                 if ($column['default'] === \XF::$time)
                 {
                     $default = 0;
-                }
-                else if (is_string($column['default']))
+                } else
                 {
-                    $default = '\'' . $column['default'] . '\'';
-                }
-                else if (is_bool($column['default']))
-                {
-                    $default = ($column['default'] === true) ? 1 : 0;
-                }
-                else
-                {
-                    $default = $column['default'];
+                    if (is_string($column['default']))
+                    {
+                        $default = '\'' . $column['default'] . '\'';
+                    } else
+                    {
+                        if (is_bool($column['default']))
+                        {
+                            $default = ($column['default'] === true) ? 1 : 0;
+                        } else
+                        {
+                            $default = $column['default'];
+                        }
+                    }
                 }
                 $string .= '->setDefault(' . $default . ')';
             }
@@ -184,17 +189,16 @@ class GenerateSchemaEntity extends Command
         if (!$primaryKeySet && $primaryKey)
         {
             $primaryKeyString = "\n    ";
-            if (is_array($primaryKey) && count($primaryKey) > 1)
+            if (\is_array($primaryKey) && \count($primaryKey) > 1)
             {
-                $primaryKeyString .= '$table->addPrimaryKey([\'' . implode('\', \'', $primaryKey) . '\']);';
-            }
-            else
+                $primaryKeyString .= '$table->addPrimaryKey([\'' . \implode('\', \'', $primaryKey) . '\']);';
+            } else
             {
                 $primaryKeyString .= '$table->addPrimaryKey(\'' . $primaryKey . '\');';
             }
         }
 
-        $columnOutput = implode("\n    ", $columnStrings);
+        $columnOutput = \implode("\n    ", $columnStrings);
 
         $sm = <<< FUNCTION
 \$tables['$table'] = function (\$table) {
@@ -214,6 +218,7 @@ FUNCTION;
      * @param bool|null $unsigned
      * @param bool      $allowedDefault
      * @param int|null  $length
+     *
      * @return string
      */
     protected function resolveTypeDefaults(Entity $entity, $type, &$unsigned = null, &$allowedDefault = true, &$length = null) : string
@@ -239,7 +244,7 @@ FUNCTION;
                 return 'tinyint';
 
             case $entity::STR:
-                if($length)
+                if ($length)
                 {
                     if ($length === 65535)
                     {
@@ -260,7 +265,7 @@ FUNCTION;
                 return 'varchar';
 
             case $entity::BINARY:
-                if($length)
+                if ($length)
                 {
                     if ($length === 65535)
                     {

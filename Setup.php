@@ -23,7 +23,7 @@ class Setup extends AbstractSetup
 
     public function upgrade1000033Step1() : void
     {
-    	$addOns = $this->db()->fetchAll("
+        $addOns = $this->db()->fetchAll("
     		SELECT * FROM xf_addon
     		WHERE (
     			devTools_license <> ''
@@ -34,7 +34,7 @@ class Setup extends AbstractSetup
     		  AND addon_id NOT IN('XF', 'XFRM', 'XFMG')
     	");
 
-        if (count($addOns))
+        if (\count($addOns))
         {
             $options = $this->app->options();
             $gitName = $options->developerTools_git_username;
@@ -42,30 +42,29 @@ class Setup extends AbstractSetup
 
             foreach ($addOns AS $addOn)
             {
-            	$addOnEntity = \XF::em()->find('XF:AddOn', $addOn['addon_id']);
+                $addOnEntity = \XF::em()->find('XF:AddOn', $addOn['addon_id']);
 
                 if (\XF::$versionId >= 2010000)
                 {
                     $addOn = new \XF\AddOn\AddOn($addOnEntity, \XF::app()->addOnManager());
-                }
-                else
+                } else
                 {
                     /** @noinspection PhpParamsInspection */
                     $addOn = new \XF\AddOn\AddOn($addOnEntity);
                 }
 
                 $addOnDir = $addOn->getAddOnDirectory();
-				File::writeFile($addOnDir . DIRECTORY_SEPARATOR . 'dev.json', Json::jsonEncodePretty([
-					'gitignore' => $addOn['devTools_gitignore'],
-					'license' => $addOn['devTools_license'],
-					'readme' => $addOn['devTools_readme_md'],
-					'parse_additional_files' => (bool)$addOn['devTools_parse_additional_files']
-				]), false);
+                File::writeFile($addOnDir . DIRECTORY_SEPARATOR . 'dev.json', Json::jsonEncodePretty([
+                    'gitignore' => $addOn['devTools_gitignore'],
+                    'license' => $addOn['devTools_license'],
+                    'readme' => $addOn['devTools_readme_md'],
+                    'parse_additional_files' => (bool) $addOn['devTools_parse_additional_files']
+                ]), false);
 
-				File::writeFile($addOnDir . DIRECTORY_SEPARATOR . 'git.json', Json::jsonEncodePretty([
-					'name' => $gitName,
-					'email' => $gitEmail
-				]), false);
+                File::writeFile($addOnDir . DIRECTORY_SEPARATOR . 'git.json', Json::jsonEncodePretty([
+                    'name' => $gitName,
+                    'email' => $gitEmail
+                ]), false);
             }
         }
     }

@@ -18,12 +18,6 @@ use Symfony\Component\Process\ProcessBuilder;
 use XF\Cli\Command\AddOnActionTrait;
 use XF\Cli\Command\Development\RequiresDevModeTrait;
 use XF\Util\File;
-use function array_key_exists;
-use function file_exists;
-use function is_scalar;
-use function strlen;
-use function substr;
-use function utf8_strtolower;
 
 /**
  * Class EntityFromTable
@@ -60,8 +54,7 @@ class EntityFromTable extends Command
                 null,
                 InputOption::VALUE_NONE,
                 'Force writing out entity file even if it exists'
-            )
-        ;
+            );
     }
 
     /**
@@ -113,13 +106,12 @@ class EntityFromTable extends Command
         $filename = $manager->getAddOnPath($addOnId) . DIRECTORY_SEPARATOR . 'Entity' . DIRECTORY_SEPARATOR . $name . '.php';
         $force = $input->getOption('force');
 
-        if (file_exists($filename))
+        if (\file_exists($filename))
         {
             if ($force)
             {
                 $output->writeln("<warning>The file {$filename} already exists, overwriting!</warning>");
-            }
-            else
+            } else
             {
                 $output->writeln("<error>The file {$filename} already exists</error>");
                 return 1;
@@ -151,13 +143,12 @@ class EntityFromTable extends Command
         {
             $primaryKey[] = var_export($column['Column_name'], true);
         }
-        if (count($primaryKey) === 1)
+        if (\count($primaryKey) === 1)
         {
             $primaryKey = $primaryKey[0];
-        }
-        else
+        } else
         {
-            $primaryKey = '[' . implode(', ', $primaryKey) . ']';
+            $primaryKey = '[' . \implode(', ', $primaryKey) . ']';
         }
 
         $columns = '';
@@ -172,7 +163,7 @@ class EntityFromTable extends Command
             }
             if (stripos($colDefinition['Extra'], 'auto_increment') !== false)
             {
-                $fieldData['autoIncrement'] = var_export(true, true);
+                $fieldData['autoIncrement'] = \var_export(true, true);
             }
 
             if ($allowedValues)
@@ -181,22 +172,22 @@ class EntityFromTable extends Command
             }
             if (isset($fieldData['Null']) && $fieldData['Null'] !== 'NO')
             {
-                $fieldData['nullable'] = var_export(true, true);
+                $fieldData['nullable'] = \var_export(true, true);
             }
             if (isset($colDefinition['Default']) && ($colDefinition['Default'] !== null || !empty($fieldData['nullable'])))
             {
                 $default = $colDefinition['Default'];
-                switch($type)
+                switch ($type)
                 {
                     case 'self::INT':
                     case 'self::UINT':
-                        if (is_scalar($default))
+                        if (\is_scalar($default))
                         {
                             $default = (int) $default;
                         }
                         break;
                     case 'self::FLOAT':
-                        if (is_scalar($default))
+                        if (\is_scalar($default))
                         {
                             $default = strval(floatval($default)) + 0;
                         }
@@ -206,27 +197,27 @@ class EntityFromTable extends Command
                         break;
                 }
 
-                $fieldData['default'] = var_export($default, true);
+                $fieldData['default'] = \var_export($default, true);
             }
 
-            if (!array_key_exists('default', $fieldData) && empty($fieldData['nullable']))
+            if (!\array_key_exists('default', $fieldData) && empty($fieldData['nullable']))
             {
-                $fieldData['required'] = var_export(true, true);
+                $fieldData['required'] = \var_export(true, true);
             }
 
             $definition = [];
             foreach ($fieldData as $key => $value)
             {
-                if (is_array($value))
+                if (\is_array($value))
                 {
-                    $value = var_export($value, true);
+                    $value = \var_export($value, true);
                 }
 
-                $definition[] = var_export($key, true) . ' => ' . $value;
+                $definition[] = \var_export($key, true) . ' => ' . $value;
             }
-            $definition = implode($definition, ', ');
+            $definition = \implode($definition, ', ');
 
-            $columns .= '            ' . var_export($colDefinition['Field'], true) . ' => [' . $definition . "],\n";
+            $columns .= '            ' . \var_export($colDefinition['Field'], true) . ' => [' . $definition . "],\n";
         }
 
 
@@ -260,7 +251,7 @@ TEMPLATE;
         $entityName = str_replace('/', '\\', $entityName);
 
         $output->writeln("Writing entity for {$entityName}");
-echo $template."\n\n";
+        echo $template . "\n\n";
         File::writeFile($filename, $template, false);
 
         $this->runSubAction($output, [
@@ -278,6 +269,7 @@ echo $template."\n\n";
 
     /**
      * @param string $sqlType
+     *
      * @return array
      */
     protected function parseSqlType($sqlType) : array
@@ -285,7 +277,7 @@ echo $template."\n\n";
         $len = $allowedValues = null;
         if (\preg_match('#^([^\(]+)\s*(?:\(([^\)]+)\)){0,1}\s*(unsigned){0,1}$#i', $sqlType, $matches))
         {
-            $proposedType = utf8_strtolower($matches[1]);
+            $proposedType = \utf8_strtolower($matches[1]);
             $proposedLen = empty($matches[2]) ? null : (int) $matches[2];
             $isUnsigned = !empty($matches[3]);
             switch ($proposedType)
@@ -347,29 +339,30 @@ echo $template."\n\n";
                     if ($proposedLen === 1)
                     {
                         $type = 'self::BOOL';
-                    }
-                    else
+                    } else
                     {
                         $type = $isUnsigned ? 'self::UINT' : 'self::INT';
                         if ($proposedType === 'tinyint')
                         {
                             $len = $isUnsigned ? 255 : 128;
-                        }
-                        else if ($proposedType === 'shortint' || $proposedType === 'smallint')
+                        } else
                         {
-                            $len = $isUnsigned ? 65536 : 32768;
+                            if ($proposedType === 'shortint' || $proposedType === 'smallint')
+                            {
+                                $len = $isUnsigned ? 65536 : 32768;
+                            }
                         }
                     }
                     break;
                 case 'enum':
-                //case 'SET':
+                    //case 'SET':
                     $type = 'self::STR';
                     $allowedValues = explode(',', $matches[2]);
-                    foreach($allowedValues as &$allowedValue)
+                    foreach ($allowedValues as &$allowedValue)
                     {
                         if ($allowedValue && $allowedValue[0] === '\'')
                         {
-                            $allowedValue = substr($allowedValue, 1, strlen($allowedValue) - 2);
+                            $allowedValue = \substr($allowedValue, 1, \strlen($allowedValue) - 2);
                         }
                     }
                     unset($allowedValue);
@@ -377,8 +370,7 @@ echo $template."\n\n";
                 default:
                     throw new \RuntimeException("Unknown SQL type: {$sqlType}");
             }
-        }
-        else
+        } else
         {
             throw new \RuntimeException("Unknown SQL type: {$sqlType}");
         }
@@ -415,7 +407,8 @@ echo $template."\n\n";
 
         try
         {
-            $processHelper->mustRun($output, $process, null, function ($type, $data) use ($output) {
+            $processHelper->mustRun($output, $process, null, function ($type, $data) use ($output)
+            {
                 if ($type === Process::OUT)
                 {
                     $output->write($data);
@@ -438,11 +431,13 @@ echo $template."\n\n";
 
     /**
      * @param $key
+     *
      * @return Closure
      */
     protected function getAddOnQuestionFieldValidator($key) : callable
     {
-        return function ($value) use ($key) {
+        return function ($value) use ($key)
+        {
             $addOn = \XF::em()->create('XF:AddOn');
 
             $valid = $addOn->set($key, $value);

@@ -2,7 +2,6 @@
 
 namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
-use TickTackk\DeveloperTools\App;
 use XF\Diff;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Repository;
@@ -118,9 +117,7 @@ class TemplateModification extends XFCP_TemplateModification
                 return $this->error(\XF::phrase('requested_template_not_found'));
             }
 
-            /** @noinspection PhpUndefinedFieldInspection */
             $content = $templateForStyle->template;
-
             $contentModified = $this->getTemplateModificationRepo()->applyTemplateModifications($content, [$modification]);
 
             $diff = new Diff();
@@ -296,7 +293,7 @@ class TemplateModification extends XFCP_TemplateModification
     {
         $response = parent::templateModificationAddEdit($modification);
 
-        /** @var \XF\Entity\TemplateModification $_modification_ */
+        /** @var TemplateModificationEntity $_modification_ */
         $_modification = $response->getParam('modification');
         if ($_modification && $_modification->type === 'public')
         {

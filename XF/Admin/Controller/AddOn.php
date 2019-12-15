@@ -3,9 +3,9 @@
 namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
 use XF\Mvc\ParameterBag;
-use XF\Mvc\Reply\View as ViewReply;
 use XF\Mvc\Reply\Exception as ExceptionReply;
 use XF\Mvc\Reply\Redirect as RedirectReply;
+use XF\Mvc\Reply\View as ViewReply;
 use XF\Service\AddOn\ReleaseBuilder as ReleaseBuilderSvc;
 
 /**
@@ -78,7 +78,7 @@ class AddOn extends XFCP_AddOn
         }
 
         $viewParams = [
-            'addOn' => $addOn,
+            'addOn' => $addOn
         ];
         return $this->view('TickTackk\DeveloperTools\XF:AddOn\DeveloperOptions', 'developerTools_developer_options', $viewParams);
     }
