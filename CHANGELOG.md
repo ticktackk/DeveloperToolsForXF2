@@ -8,8 +8,11 @@ CHANGELOG
 * **New:** Show template modification type in breadcrumb
 * **New:** Ability to exclude files and directories using `exclude_files` and `exclude_directories` respectively via `build.json` (#25)
 * **New:** Add `CHANGELOG.md` to release archive
+* **New:** Class extensions will now have common classes already imported
 * **Changed:** Entity class extensions created via CLI command will now have `XF\Mvc\Entity\Structure` class aliased to `EntityStructure`
+* **Changed:** Provided scripts now have `.sh` extension
 * **Fixed:** Template modification test failing
+* **Fixed:** "View modifications" failing for templates
 * **Fixed:** Path for `addon.json` is not shown when invalid add-on id is provided for class extension CLI command (#26)
 * **Removed:** Dead class extension
 * **Removed:** Removed PHPUnit integration which was borderline useless
