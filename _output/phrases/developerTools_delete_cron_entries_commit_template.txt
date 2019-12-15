@@ -1,1 +1,0 @@
-Delete {entry_title} cron entry

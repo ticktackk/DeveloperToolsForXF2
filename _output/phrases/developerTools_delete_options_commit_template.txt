@@ -1,1 +1,0 @@
-Delete {option_title} option

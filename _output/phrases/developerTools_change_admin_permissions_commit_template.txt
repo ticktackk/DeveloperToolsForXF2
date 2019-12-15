@@ -1,1 +1,0 @@
-Change {permission_title} admin permission

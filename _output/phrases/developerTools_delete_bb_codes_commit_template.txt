@@ -1,1 +1,0 @@
-Delete {bb_code_title} BB code

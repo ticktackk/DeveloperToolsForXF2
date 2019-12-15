@@ -1,1 +1,0 @@
-Change {navigation_title} under admin navigation
