@@ -46,9 +46,9 @@ class Template extends XFCP_Template
     /**
      * @param ParameterBag $params
      *
-     * @return View
+     * @return ViewReply
      */
-    public function actionViewModifications(ParameterBag $params) : View
+    public function actionViewModifications(ParameterBag $params) : ViewReply
     {
         /** @noinspection PhpUndefinedFieldInspection */
         $masterTemplate = $this->assertTemplateExists($params->template_id);
