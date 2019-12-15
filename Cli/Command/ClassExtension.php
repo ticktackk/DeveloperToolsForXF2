@@ -102,15 +102,17 @@ class ClassExtension extends Command
             $className = basename($fromClassPath);
             $namespace = dirname(str_replace( '\\', DIRECTORY_SEPARATOR, $toClass));
             $isEntity = basename($namespace) === 'Entity';
+            $isController = basename($namespace) === 'Controller';
             $namespace = str_replace(DIRECTORY_SEPARATOR, '\\', $namespace);
 
             $contents = '';
-            $useStatements = '';
+            $useStatements = $this->getCommonUseStatements();
 
             if ($isEntity)
             {
                 $useStatements =  <<<TEMPLATE
-\n\nuse XF\Mvc\Entity\Entity;
+
+use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure as EntityStructure;
 TEMPLATE;
                 $contents = <<<TEMPLATE
@@ -128,6 +130,22 @@ TEMPLATE;
 TEMPLATE;
 
             }
+            else if ($isController)
+            {
+                $useStatements = <<<TEMPLATE
+
+use XF\Mvc\Reply\AbstractReply;
+use XF\Mvc\Reply\View as ViewReply;
+use XF\Mvc\Reply\Redirect as RedirectReply;
+use XF\Mvc\Reply\Reroute as RerouteReply;
+use XF\Mvc\Reply\Message as MessageReply;
+use XF\Mvc\Reply\Exception as ExceptionReply;
+use XF\Mvc\Reply\Error as ErrorReply;
+TEMPLATE;
+
+            }
+
+            \XF::logError($useStatements);
 
             $template = <<<TEMPLATE
 <?php
@@ -176,6 +194,25 @@ TEMPLATE;
         }
 
         return 0;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCommonUseStatements() : string
+    {
+        return <<<TEMPLATE
+
+
+use XF\App as BaseApp;
+use XF\Mvc\Entity\Finder;
+use XF\Mvc\Entity\Entity;
+use XF\Mvc\Entity\Repository;
+use XF\Service\AbstractService;
+use XF\Mvc\Entity\Manager as EntityManager;
+use XF\Job\Manager as JobManager;
+TEMPLATE;
+
     }
 
 	/**
