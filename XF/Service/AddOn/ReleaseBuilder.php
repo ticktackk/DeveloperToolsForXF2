@@ -53,27 +53,6 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
     {
         parent::prepareFilesToCopy();
 
-        $buildRoot = $this->buildRoot;
-
-        /** @var ExtendedAddOnEntity $addOnEntity */
-        $addOnEntity = $this->addOn->getInstalledAddOn();
-
-        if ($addOnEntity)
-        {
-            $developerOptions = $addOnEntity->DeveloperOptions;
-            if (!empty($developerOptions['license']))
-            {
-                $licensePath = FileUtil::canonicalizePath('LICENSE.md', $buildRoot);
-                FileUtil::writeFile($licensePath, $developerOptions['license'], false);
-            }
-
-            if (!empty($developerOptions['readme']))
-            {
-                $readmePath = FileUtil::canonicalizePath('README.md', $buildRoot);
-                FileUtil::writeFile($readmePath, $developerOptions['readme'], false);
-            }
-        }
-
         foreach (['LICENSE', "README", 'CHANGELOG'] AS $fileName)
         {
             $this->copyFileToBuildRoot($fileName, ['md', '', 'txt', 'html']);

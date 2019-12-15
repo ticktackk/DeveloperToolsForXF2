@@ -36,42 +36,10 @@ class BetterExport extends Command
                 'Skip \'xf-dev:export\' command'
             )
             ->addOption(
-                'move',
-                'm',
-                InputOption::VALUE_NONE,
-                'Run \'ticktackk-devtools:git-move\' command'
-            )
-            ->addOption(
                 'release',
                 'r',
                 InputOption::VALUE_NONE,
                 'Run \'xf-addon:build-release\' command'
-            )
-            ->addOption(
-                'commit',
-                'c',
-                InputOption::VALUE_NONE,
-                'Run \'ticktackk-devtools:git-commit\' command'
-            )
-            ->addOption(
-                'push',
-                'p',
-                InputOption::VALUE_NONE,
-                'Run \'ticktackk-devtools:git-push\' command'
-            )
-            ->addOption(
-                'repo',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Repository to push to',
-                'origin'
-            )
-            ->addOption(
-                'branch',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Branch to push to',
-                'master'
             );
     }
 
@@ -130,41 +98,6 @@ class BetterExport extends Command
             $childInput = new ArrayInput([
                 'command' => 'xf-addon:build-release',
                 'id' => $addOn->getAddOnId()
-            ]);
-            $command->run($childInput, $output);
-        }
-
-        $move = $input->getOption('move');
-        if ($move)
-        {
-            $command = $this->getApplication()->find('ticktackk-devtools:git-move');
-            $childInput = new ArrayInput([
-                'command' => 'ticktackk-devtools:git-move',
-                'id' => $addOn->getAddOnId()
-            ]);
-            $command->run($childInput, $output);
-        }
-
-        $commit = $input->getOption('commit');
-        if ($commit)
-        {
-            $command = $this->getApplication()->find('ticktackk-devtools:git-commit');
-            $childInput = new ArrayInput([
-                'command' => 'ticktackk-devtools:git-commit',
-                'id' => $addOn->getAddOnId()
-            ]);
-            $command->run($childInput, $output);
-        }
-
-        $push = $input->getOption('push');
-        if ($push)
-        {
-            $command = $this->getApplication()->find('ticktackk-devtools:git-push');
-            $childInput = new ArrayInput([
-                'command' => 'ticktackk-devtools:git-push',
-                'id' => $addOn->getAddOnId(),
-                '--repo' => $input->getOption('repo'),
-                '--branch' => $input->getOption('branch')
             ]);
             $command->run($childInput, $output);
         }
