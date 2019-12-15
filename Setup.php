@@ -78,6 +78,7 @@ class Setup extends AbstractSetup
             FROM xf_addon
             WHERE addon_id NOT IN('XF', 'XFRM', 'XFMG', 'XFI', 'XFES')
         ");
+        $addOns = ['TickTackk/DevTest'];
 
         foreach ($addOns AS $addOnId)
         {
@@ -216,10 +217,13 @@ class Setup extends AbstractSetup
                 }
             }
 
-            $noUploadsFSIterator = new \FilesystemIterator($noUploadsDir);
-            if (\iterator_count($noUploadsFSIterator) === 0)
+            if (\is_dir($noUploadsDir))
             {
-                FileUtil::deleteDirectory($noUploadsDir);
+                $noUploadsFSIterator = new \FilesystemIterator($noUploadsDir);
+                if (\iterator_count($noUploadsFSIterator) === 0)
+                {
+                    FileUtil::deleteDirectory($noUploadsDir);
+                }
             }
         }
     }
