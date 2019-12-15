@@ -1,1 +1,0 @@
-If yes, the <code>additional_files</code> directive of this addon's <code>build.json</code> file will be processed before committing to Git.
