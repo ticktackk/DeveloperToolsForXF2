@@ -53,7 +53,7 @@ class Init extends Command
 
         $repoRoot = $this->getAddOnRepoDir($addOn);
 
-        if (!is_dir($repoRoot))
+        if (!\is_dir($repoRoot))
         {
             File::createDirectory($repoRoot);
         }

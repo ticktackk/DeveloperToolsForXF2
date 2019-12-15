@@ -15,7 +15,7 @@ class AddOn extends XFCP_AddOn
 {
     /**
      * @param AddOnEntity $addOn
-     * @param array $input
+     * @param array       $input
      */
     public function exportDeveloperOptions(AddOnEntity $addOn, array $input) : void
     {
@@ -24,7 +24,7 @@ class AddOn extends XFCP_AddOn
 
     /**
      * @param AddOnEntity $addOn
-     * @param array $input
+     * @param array       $input
      */
     public function exportGitConfiguration(AddOnEntity $addOn, array $input) : void
     {
@@ -33,16 +33,15 @@ class AddOn extends XFCP_AddOn
 
     /**
      * @param AddOnEntity $addOnEntity
-     * @param string $fileName
-     * @param array $input
+     * @param string      $fileName
+     * @param array       $input
      */
     protected function writeConfigForDeveloperTools(AddOnEntity $addOnEntity, string $fileName, array $input) : void
     {
         if (\XF::$versionId >= 2010000)
         {
             $addOn = new \XF\AddOn\AddOn($addOnEntity, $this->app()->addOnManager());
-        }
-        else
+        } else
         {
             /** @noinspection PhpParamsInspection */
             $addOn = new \XF\AddOn\AddOn($addOnEntity);
@@ -75,7 +74,8 @@ class AddOn extends XFCP_AddOn
 
     /**
      * @param AddOnEntity $addOnEntity
-     * @param string $fileName
+     * @param string      $fileName
+     *
      * @return array
      */
     protected function readConfigForDeveloperTools(AddOnEntity $addOnEntity, string $fileName) : array
@@ -83,8 +83,7 @@ class AddOn extends XFCP_AddOn
         if (\XF::$versionId >= 2010000)
         {
             $addOn = new \XF\AddOn\AddOn($addOnEntity, $this->app()->addOnManager());
-        }
-        else
+        } else
         {
             /** @noinspection PhpParamsInspection */
             $addOn = new \XF\AddOn\AddOn($addOnEntity);

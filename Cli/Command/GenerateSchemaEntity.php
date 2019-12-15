@@ -157,12 +157,12 @@ class GenerateSchemaEntity extends Command
                     $default = 0;
                 } else
                 {
-                    if (is_string($column['default']))
+                    if (\is_string($column['default']))
                     {
                         $default = '\'' . $column['default'] . '\'';
                     } else
                     {
-                        if (is_bool($column['default']))
+                        if (\is_bool($column['default']))
                         {
                             $default = ($column['default'] === true) ? 1 : 0;
                         } else

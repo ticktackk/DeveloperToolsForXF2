@@ -42,8 +42,7 @@ class TemplateModification extends XFCP_TemplateModification
             if ($modification->Template->exists() && !$this->request->exists('style_id'))
             {
                 $styleId = $modification->Template->style_id;
-            }
-            else
+            } else
             {
                 $styleId = $this->filter('style_id', 'uint');
             }
@@ -58,8 +57,7 @@ class TemplateModification extends XFCP_TemplateModification
             if ($params['modification_id'])
             {
                 $modification = $this->assertTemplateModificationExists($params['modification_id']);
-            }
-            else
+            } else
             {
                 $modification = $this->em()->create('XF:TemplateModification');
             }
@@ -232,7 +230,7 @@ class TemplateModification extends XFCP_TemplateModification
 
         if ($formAction instanceof FormAction)
         {
-            $formAction->complete(function () use($modification)
+            $formAction->complete(function () use ($modification)
             {
                 $this->lastInsertedTemplateModificationId = $modification->getEntityId();
             });
@@ -257,8 +255,7 @@ class TemplateModification extends XFCP_TemplateModification
                 if ($params['modification_id'])
                 {
                     $modification = $this->assertTemplateModificationExists($params['modification_id']);
-                }
-                else
+                } else
                 {
                     $modification = $this->assertTemplateModificationExists($this->lastInsertedTemplateModificationId);
                 }
@@ -266,8 +263,7 @@ class TemplateModification extends XFCP_TemplateModification
                 if ($this->request->exists('exit'))
                 {
                     $redirect = $this->buildLink('template-modifications', '', ['type' => $modification->type]);
-                }
-                else
+                } else
                 {
                     $redirect = $this->buildLink('template-modifications/edit', $modification);
                 }
@@ -300,8 +296,7 @@ class TemplateModification extends XFCP_TemplateModification
             if ($_modification->Template && !$this->request->exists('style_id'))
             {
                 $styleId = $_modification->Template->style_id;
-            }
-            else
+            } else
             {
                 $styleId = $this->filter('style_id', 'uint');
             }

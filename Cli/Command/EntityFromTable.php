@@ -391,7 +391,7 @@ TEMPLATE;
             \XF::getRootDirectory() . DIRECTORY_SEPARATOR . 'cmd.php',
             '-n'
         ];
-        $builderOptions = array_merge($builderOptions, $args);
+        $builderOptions = \array_merge($builderOptions, $args);
 
         if ($verbosityOption = $this->getVerbosityOption($output->getVerbosity()))
         {

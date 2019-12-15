@@ -16,44 +16,44 @@ use XF\Entity\Phrase as PhraseEntity;
  */
 class AddPhrase extends Command
 {
-	use AddOnActionTrait;
+    use AddOnActionTrait;
 
-	protected function configure() : void
-	{
-		$this->setName('ticktackk-devtools:add-phrase')
-			->addArgument('id', InputArgument::REQUIRED, 'Add-on ID')
-			->addArgument('title', InputArgument::REQUIRED, 'Title')
-			->addArgument('text', InputArgument::REQUIRED, 'Text')
-			->setAliases(['tdt:phrase']);
-	}
+    protected function configure() : void
+    {
+        $this->setName('ticktackk-devtools:add-phrase')
+            ->addArgument('id', InputArgument::REQUIRED, 'Add-on ID')
+            ->addArgument('title', InputArgument::REQUIRED, 'Title')
+            ->addArgument('text', InputArgument::REQUIRED, 'Text')
+            ->setAliases(['tdt:phrase']);
+    }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return null|int
      * @throws \XF\PrintableException
      */
-	protected function execute(InputInterface $input, OutputInterface $output) : int
-	{
-		$id = $input->getArgument('id');
+    protected function execute(InputInterface $input, OutputInterface $output) : int
+    {
+        $id = $input->getArgument('id');
 
-		$addOn = $this->checkEditableAddOn($id, $error);
-		if (!$addOn)
-		{
-			$output->writeln('<error>' . $error . '</error>');
-			return 1;
-		}
+        $addOn = $this->checkEditableAddOn($id, $error);
+        if (!$addOn)
+        {
+            $output->writeln('<error>' . $error . '</error>');
+            return 1;
+        }
 
-		/** @var PhraseEntity $phrase */
-		$phrase = \XF::app()->em()->create('XF:Phrase');
-		$phrase->title = $input->getArgument('title');
-		$phrase->phrase_text = $input->getArgument('text');
-		$phrase->addon_id = $id;
-		$phrase->language_id = 0;
-		$phrase->save();
+        /** @var PhraseEntity $phrase */
+        $phrase = \XF::app()->em()->create('XF:Phrase');
+        $phrase->title = $input->getArgument('title');
+        $phrase->phrase_text = $input->getArgument('text');
+        $phrase->addon_id = $id;
+        $phrase->language_id = 0;
+        $phrase->save();
 
-		$output->writeln('Done.');
-		return 0;
-	}
+        $output->writeln('Done.');
+        return 0;
+    }
 }

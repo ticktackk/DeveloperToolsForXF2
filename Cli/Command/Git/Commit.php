@@ -50,7 +50,7 @@ class Commit extends Command
      * @return int|null
      * @throws \Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : ? int
+    protected function execute(InputInterface $input, OutputInterface $output) : ?int
     {
         $addOnId = $input->getArgument('id');
         $addOn = $this->checkEditableAddOn($addOnId, $error);
@@ -59,10 +59,10 @@ class Commit extends Command
             $output->writeln('<error>' . $error . '</error>');
             return 1;
         }
-	
+
         $repoRoot = $this->getAddOnRepoDir($addOn);
 
-	
+
         $git = new GitRepository($repoRoot);
         if (!$git->isInitialized())
         {
@@ -73,7 +73,7 @@ class Commit extends Command
             ]);
             $command->run($childInput, $output);
         }
-		
+
         if (empty($git->status()->getIndexStatus()))
         {
             $output->writeln(['', 'Nothing to commit.']);
@@ -85,7 +85,7 @@ class Commit extends Command
         {
             /** @var QuestionHelper $helper */
             $helper = $this->getHelper('question');
-	
+
             $question = new Question('<question>Commit summary:</question> ');
             $commitMessage = $helper->ask($input, $output, $question);
             $output->writeln('');

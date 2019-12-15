@@ -79,8 +79,15 @@ class Move extends Command
 
         $globalGitIgnore = \XF::app()->options()->developerTools_git_ignore;
         $globalGitIgnore = \explode("\n", $globalGitIgnore);
-        $addOnGitIgnore = !empty($developerOptions['gitignore']) ? \explode("\n", $developerOptions['gitignore']) : [];
-        $gitIgnoreLines = array_unique(array_merge($globalGitIgnore, $addOnGitIgnore));
+
+        $addOnGitIgnore = $developerOptions['gitignore'] ?? [];
+        if (\is_string($addOnGitIgnore))
+        {
+            $addOnGitIgnore = \explode("\n", $addOnGitIgnore);
+        }
+
+        $gitIgnoreLines = $globalGitIgnore + $addOnGitIgnore;
+        $gitIgnoreLines = \array_unique($gitIgnoreLines);
 
         $gitIgnorePath = FileUtil::canonicalizePath('.gitignore', $repoRoot);
         FileUtil::writeFile($gitIgnorePath, \implode("\n", $gitIgnoreLines), false);

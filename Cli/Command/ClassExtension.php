@@ -21,12 +21,12 @@ use function str_replace;
  */
 class ClassExtension extends Command
 {
-	protected function configure() : void
-	{
-		$this
-			->setName('ticktackk-devtools:create-class-extension')
-			->setDescription('Creates an XF class-extension for an add-on and writes out a basic template file.')
-			->setAliases(['tdt:create-class-extension', 'tdt:extend'])
+    protected function configure() : void
+    {
+        $this
+            ->setName('ticktackk-devtools:create-class-extension')
+            ->setDescription('Creates an XF class-extension for an add-on and writes out a basic template file.')
+            ->setAliases(['tdt:create-class-extension', 'tdt:extend'])
             ->addArgument(
                 'id',
                 InputArgument::OPTIONAL,
@@ -36,9 +36,8 @@ class ClassExtension extends Command
                 'class',
                 InputArgument::OPTIONAL,
                 'Class to extend'
-            )
-        ;
-	}
+            );
+    }
 
     /**
      * @param InputInterface  $input
@@ -47,7 +46,7 @@ class ClassExtension extends Command
      * @return int|null
      * @throws \XF\PrintableException
      */
-	protected function execute(InputInterface $input, OutputInterface $output) : ? int
+    protected function execute(InputInterface $input, OutputInterface $output) : ?int
     {
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
@@ -64,8 +63,7 @@ class ClassExtension extends Command
         if (\XF::$versionId >= 2010000)
         {
             $addOnObj = new AddOn($addOnId, \XF::app()->addOnManager());
-        }
-        else
+        } else
         {
             /** @noinspection PhpParamsInspection */
             $addOnObj = new AddOn($addOnId);
@@ -90,7 +88,7 @@ class ClassExtension extends Command
         $class = str_replace(['//', '/', '_', '\\\\'], ['/', '\\', '\\', '\\'], $class);
         $class = trim($class);
         $fromClass = trim($class, '\\');
-        $fromClassPath = str_replace( '\\', DIRECTORY_SEPARATOR, $fromClass);
+        $fromClassPath = str_replace('\\', DIRECTORY_SEPARATOR, $fromClass);
         $toClass = $addOnObj->prepareAddOnIdForClass() . '\\' . $fromClass;
         $toClassPath = $addOnObj->getAddOnDirectory() . DIRECTORY_SEPARATOR . $fromClassPath;
         $outputPath = $toClassPath . '.php';
@@ -100,7 +98,7 @@ class ClassExtension extends Command
         if (!\file_exists($outputPath))
         {
             $className = basename($fromClassPath);
-            $namespace = dirname(str_replace( '\\', DIRECTORY_SEPARATOR, $toClass));
+            $namespace = dirname(str_replace('\\', DIRECTORY_SEPARATOR, $toClass));
             $isEntity = basename($namespace) === 'Entity';
             $isController = basename($namespace) === 'Controller';
             $namespace = str_replace(DIRECTORY_SEPARATOR, '\\', $namespace);
@@ -110,7 +108,7 @@ class ClassExtension extends Command
 
             if ($isEntity)
             {
-                $useStatements =  <<<TEMPLATE
+                $useStatements = <<<TEMPLATE
 
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure as EntityStructure;
@@ -129,10 +127,11 @@ TEMPLATE;
     }
 TEMPLATE;
 
-            }
-            else if ($isController)
+            } else
             {
-                $useStatements = <<<TEMPLATE
+                if ($isController)
+                {
+                    $useStatements = <<<TEMPLATE
 
 use XF\Mvc\Reply\AbstractReply;
 use XF\Mvc\Reply\View as ViewReply;
@@ -143,6 +142,7 @@ use XF\Mvc\Reply\Exception as ExceptionReply;
 use XF\Mvc\Reply\Error as ErrorReply;
 TEMPLATE;
 
+                }
             }
 
             \XF::logError($useStatements);
@@ -169,8 +169,7 @@ TEMPLATE;
             if ($written)
             {
                 $output->writeln("Wrote class extension template to {$outputPath}");
-            }
-            else
+            } else
             {
                 $output->writeln("Failed to write class extension template to {$outputPath}");
             }
@@ -178,9 +177,9 @@ TEMPLATE;
 
 
         $extension = \XF::app()->finder('XF:ClassExtension')
-                               ->where('from_class', '=', $fromClass)
-                               ->where('to_class', '=', $toClass)
-                               ->fetchOne();
+            ->where('from_class', '=', $fromClass)
+            ->where('to_class', '=', $toClass)
+            ->fetchOne();
         if (!$extension)
         {
             /** @var \XF\Entity\ClassExtension $extension */
@@ -215,27 +214,27 @@ TEMPLATE;
 
     }
 
-	/**
-	 * @param $key
-	 *
-	 * @return Closure
-	 */
-	protected function getAddOnQuestionFieldValidator($key) : callable
-	{
-		return function($value) use($key)
-		{
-			$addOn = \XF::em()->create('XF:AddOn');
+    /**
+     * @param $key
+     *
+     * @return Closure
+     */
+    protected function getAddOnQuestionFieldValidator($key) : callable
+    {
+        return function ($value) use ($key)
+        {
+            $addOn = \XF::em()->create('XF:AddOn');
 
-			$valid = $addOn->set($key, $value);
-			if (!$valid)
-			{
-				$errors = $addOn->getErrors();
-				if (isset($errors[$key]))
-				{
-					throw new \InvalidArgumentException($errors[$key]);
-				}
-			}
-			return $value;
-		};
-	}
+            $valid = $addOn->set($key, $value);
+            if (!$valid)
+            {
+                $errors = $addOn->getErrors();
+                if (isset($errors[$key]))
+                {
+                    throw new \InvalidArgumentException($errors[$key]);
+                }
+            }
+            return $value;
+        };
+    }
 }

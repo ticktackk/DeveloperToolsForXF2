@@ -55,7 +55,7 @@ class Push extends Command
      * @throws \Exception
      */
     /** @noinspection PhpMissingParentCallCommonInspection */
-    protected function execute(InputInterface $input, OutputInterface $output) : ? int
+    protected function execute(InputInterface $input, OutputInterface $output) : ?int
     {
         $id = $input->getArgument('id');
 
@@ -76,20 +76,19 @@ class Push extends Command
                 'command' => 'ticktackk-devtools:git-init',
                 'id' => $addOn->getAddOnId()
             ]);
-	    $command->run($childInput, $output);
+            $command->run($childInput, $output);
         }
-    
+
         $repo = $input->getOption('repo');
         $branch = $input->getOption('branch');
-        
+
         // Passing null as second argument doesn't work for some reason
         if ($branch)
         {
             $git->push()->execute($repo, $branch);
             $output->writeln(['', "Successfully pushed to {$repo}/{$branch}."]);
-            
-        }
-        else
+
+        } else
         {
             $git->push()->execute($repo);
             $output->writeln(['', "Successfully pushed to {$repo}."]);

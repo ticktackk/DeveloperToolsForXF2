@@ -72,8 +72,7 @@ class BetterExport extends Command
                 InputOption::VALUE_OPTIONAL,
                 'Branch to push to',
                 'master'
-            )
-        ;
+            );
     }
 
     /**
@@ -84,7 +83,7 @@ class BetterExport extends Command
      * @throws \Exception
      */
     /** @noinspection PhpMissingParentCallCommonInspection */
-    protected function execute(InputInterface $input, OutputInterface $output) : ? int
+    protected function execute(InputInterface $input, OutputInterface $output) : ?int
     {
         $id = $input->getArgument('id');
 
@@ -103,7 +102,7 @@ class BetterExport extends Command
         $command->run($childInput, $output);
 
         $entityPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . 'Entity';
-        if (is_dir($entityPath))
+        if (\is_dir($entityPath))
         {
             $command = $this->getApplication()->find('xf-dev:entity-class-properties');
             $childInput = new ArrayInput([
@@ -112,7 +111,7 @@ class BetterExport extends Command
             ]);
             $command->run($childInput, $output);
         }
-        
+
         $skipExport = $input->getOption('skip-export');
         if (!$skipExport)
         {
@@ -123,7 +122,7 @@ class BetterExport extends Command
             ]);
             $command->run($childInput, $output);
         }
-        
+
         $release = $input->getOption('release');
         if ($release)
         {
@@ -156,7 +155,7 @@ class BetterExport extends Command
             ]);
             $command->run($childInput, $output);
         }
-    
+
         $push = $input->getOption('push');
         if ($push)
         {

@@ -7,7 +7,6 @@ use XF\Entity\TemplateModification;
 use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\View as ViewReply;
 use XF\Mvc\Reply\Error as ErrorReply;
-use function array_fill_keys;
 
 /**
  * Extends \XF\Admin\Controller\Template
@@ -28,14 +27,14 @@ class Template extends XFCP_Template
         {
             /** @var \XF\Entity\Template $template */
             $modifications = $this->finder('XF:TemplateModification')
-                                  ->where([
-                                              'type'     => $template->type,
-                                              'template' => $template->title,
-                                              //'enabled'  => 1
-                                          ])
-                                  ->whereAddOnActive()
-                                  ->order('execution_order')
-                                  ->total();
+                ->where([
+                    'type' => $template->type,
+                    'template' => $template->title,
+                    //'enabled'  => 1
+                ])
+                ->whereAddOnActive()
+                ->order('execution_order')
+                ->total();
 
             $reply->setParam('modificationCount', $modifications);
         }
@@ -64,7 +63,7 @@ class Template extends XFCP_Template
         if ($reload)
         {
             $ids = $this->filter('id', 'array-uint', []);
-            $ids = array_fill_keys($ids, true);
+            $ids = \array_fill_keys($ids, true);
         }
 
         $status = null;
@@ -72,15 +71,16 @@ class Template extends XFCP_Template
         /** @var \XF\Repository\TemplateModification $templateModRepo */
         $templateModRepo = $this->repository('XF:TemplateModification');
         $modifications = $this->finder('XF:TemplateModification')
-                              ->where([
-                                          'type'     => $template->type,
-                                          'template' => $template->title,
-                                      ])
-                              ->whereAddOnActive()
-                              ->order('execution_order')
-                              ->fetch();
+            ->where([
+                'type' => $template->type,
+                'template' => $template->title,
+            ])
+            ->whereAddOnActive()
+            ->order('execution_order')
+            ->fetch();
 
-        $filtered = $modifications->filter(function (TemplateModification $mod) use ($ids) {
+        $filtered = $modifications->filter(function (TemplateModification $mod) use ($ids)
+        {
             if ($ids === null)
             {
                 return $mod->enabled;
@@ -95,9 +95,9 @@ class Template extends XFCP_Template
         $diff = new Diff();
         $diffs = $diff->findDifferences($template->template, $templateText);
 
-        $statuses = array_map(function($status)
+        $statuses = \array_map(function ($status)
         {
-            if (is_numeric($status))
+            if (\is_numeric($status))
             {
                 return 'Match count:' . $status;
             }
@@ -106,12 +106,12 @@ class Template extends XFCP_Template
 
 
         $viewParams = [
-            'style'       => $style,
-            'template'    => $template,
-            'diffs'       => $diffs,
-            'mods'        => $modifications->toArray(),
-            'activeMods'  => $filtered,
-            'status'      => $statuses,
+            'style' => $style,
+            'template' => $template,
+            'diffs' => $diffs,
+            'mods' => $modifications->toArray(),
+            'activeMods' => $filtered,
+            'status' => $statuses,
             '_xfWithData' => $this->filter('_xfWithData', 'bool'),
         ];
 

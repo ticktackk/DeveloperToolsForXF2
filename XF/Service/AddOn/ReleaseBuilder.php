@@ -25,7 +25,10 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
         if ($this->buildTasksComplete)
         {
             $excludeFiles = $buildJson['exclude_files'] ?? [];
-            $this->excludeFiles((array) $excludeFiles);
+            $excludeFiles = (array) $excludeFiles;
+            \array_push($excludeFiles, ...['git.json', 'dev.json']);
+
+            $this->excludeFiles($excludeFiles);
         }
     }
 
@@ -132,27 +135,14 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
     {
         $addOn = $this->addOn;
         $buildJson = $addOn->getBuildJson();
+        $excludedDirectories = parent::getExcludedDirectories();
 
-        $excludedDirectories = $buildJson['exclude_directories'] ?? [];
+        $excludedDirectoriesFromBuildFile = $buildJson['exclude_directories'] ?? [];
+        $excludedDirectoriesFromBuildFile = (array) $excludedDirectoriesFromBuildFile;
+        \array_push($excludedDirectoriesFromBuildFile, ...['_repo', '_tests']);
 
-        return \array_merge([
-            '_repo',
-            '_tests'
-        ], parent::getExcludedDirectories(), (array) $excludedDirectories);
-    }
+        $excludedDirectories += $excludedDirectoriesFromBuildFile;
 
-    /**
-     * @param $fileName
-     *
-     * @return bool
-     */
-    protected function isExcludedFileName($fileName)
-    {
-        if (\in_array($fileName, ['git.json', 'dev.json'], true))
-        {
-            return true;
-        }
-
-        return parent::isExcludedFileName($fileName);
+        return \array_unique($excludedDirectories);
     }
 }

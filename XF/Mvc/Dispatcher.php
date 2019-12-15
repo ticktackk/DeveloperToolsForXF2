@@ -20,7 +20,7 @@ class Dispatcher extends XFCP_Dispatcher
     /**
      * @return AbstractReply
      */
-    public function getReply() :? AbstractReply
+    public function getReply() : ?AbstractReply
     {
         return $this->reply;
     }

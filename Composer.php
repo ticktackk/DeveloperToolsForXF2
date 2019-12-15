@@ -2,6 +2,8 @@
 
 namespace TickTackk\DeveloperTools;
 
+use XF\App as BaseApp;
+
 /**
  * Copyright (c) Simon Hampel
  * Based on code used by Composer, which is Copyright (c) Nils Adermann, Jordi Boggiano
@@ -9,10 +11,10 @@ namespace TickTackk\DeveloperTools;
 class Composer
 {
     /**
-     * @param \XF\App $app
+     * @param BaseApp $app
      * @param bool    $prepend
      */
-    public static function autoloadNamespaces(\XF\App $app, $prepend = false): void
+    public static function autoloadNamespaces(BaseApp $app, $prepend = false): void
     {
         $namespaces = __DIR__ . DIRECTORY_SEPARATOR . '_vendor' . DIRECTORY_SEPARATOR . 'composer' . DIRECTORY_SEPARATOR . 'autoload_namespaces.php';
 
@@ -33,10 +35,10 @@ class Composer
     }
 
     /**
-     * @param \XF\App $app
+     * @param BaseApp $app
      * @param bool    $prepend
      */
-    public static function autoloadPsr4(\XF\App $app, $prepend = false): void
+    public static function autoloadPsr4(BaseApp $app, $prepend = false): void
     {
         $psr4 = __DIR__ . DIRECTORY_SEPARATOR . '_vendor' . DIRECTORY_SEPARATOR . 'composer' . DIRECTORY_SEPARATOR . 'autoload_psr4.php';
 
@@ -57,9 +59,9 @@ class Composer
     }
 
     /**
-     * @param \XF\App $app
+     * @param BaseApp $app
      */
-    public static function autoloadClassmap(\XF\App $app): void
+    public static function autoloadClassmap(BaseApp $app): void
     {
         $classmap = __DIR__ . DIRECTORY_SEPARATOR . '_vendor' . DIRECTORY_SEPARATOR . 'composer' . DIRECTORY_SEPARATOR . 'autoload_classmap.php';
 
@@ -80,9 +82,9 @@ class Composer
     }
 
     /**
-     * @param \XF\App $app
+     * @param BaseApp $app
      */
-    public static function autoloadFiles(\XF\App $app): void
+    public static function autoloadFiles(BaseApp $app): void
     {
         $files = __DIR__ . DIRECTORY_SEPARATOR . '_vendor' . DIRECTORY_SEPARATOR . 'composer' . DIRECTORY_SEPARATOR . 'autoload_files.php';
 

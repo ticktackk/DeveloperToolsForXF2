@@ -26,7 +26,7 @@ class JsMinifier extends XFCP_JsMinifier
         if ($closureJarPath === null)
         {
             $possibleClosureJarPath = $xfRoot . DIRECTORY_SEPARATOR . 'closure-compiler-v20180402.jar';
-            if (file_exists($possibleClosureJarPath))
+            if (\file_exists($possibleClosureJarPath))
             {
                 $closureJarPath = $possibleClosureJarPath;
             }
@@ -34,13 +34,13 @@ class JsMinifier extends XFCP_JsMinifier
 
         if ($closureJarPath)
         {
-            if (!file_exists($closureJarPath))
+            if (!\file_exists($closureJarPath))
             {
                 throw new ClosureCompilerNotFoundException();
             }
 
-            passthru("java -jar {$closureJarPath} --js {$jsPath} --js_output_file {$this->minPath}", $returnVar);
-            if ($returnVar !== 0)
+            \passthru("java -jar {$closureJarPath} --js {$jsPath} --js_output_file {$this->minPath}", $exitCode);
+            if ($exitCode !== 0)
             {
                 throw new \ErrorException('Unable to minify ' . $jsPath);
             }
