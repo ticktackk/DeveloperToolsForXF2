@@ -13,23 +13,12 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller
 
 namespace TickTackk\DeveloperTools\XF\Entity
 {
-	class XFCP_AddOn extends \XF\Entity\AddOn {}
 	class XFCP_TemplateModification extends \XF\Entity\TemplateModification {}
 }
 
 namespace TickTackk\DeveloperTools\XF\Job
 {
 	class XFCP_FileCheck extends \XF\Job\FileCheck {}
-}
-
-namespace TickTackk\DeveloperTools\XF\Mvc
-{
-	class XFCP_Dispatcher extends \XF\Mvc\Dispatcher {}
-}
-
-namespace TickTackk\DeveloperTools\XF\Repository
-{
-	class XFCP_AddOn extends \XF\Repository\AddOn {}
 }
 
 namespace TickTackk\DeveloperTools\XF\Service\AddOn
