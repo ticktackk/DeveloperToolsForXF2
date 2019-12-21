@@ -1,4 +1,8 @@
 {
+    "additional_files": [
+        "js/ticktackk/developertools"
+    ],
+    "minify": "*",
     "exec": [
         "composer install --working-dir=_build/upload/src/addons/{addon_id}/ --no-dev --optimize-autoloader"
     ],
