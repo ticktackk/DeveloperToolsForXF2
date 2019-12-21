@@ -22,8 +22,8 @@ class GenerateSchemaEntity extends Command
     {
         $this
             ->setName('ticktackk-devtools:generate-schema-entity')
+            ->setAliases(['tck-dt:generate-schema-entity'])
             ->setDescription('Generates schema code from an entity')
-            ->setAliases(['tdt:generate-schema-entity', 'tdt:schema-entity'])
             ->addArgument(
                 'id',
                 InputArgument::REQUIRED,

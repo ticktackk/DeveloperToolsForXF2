@@ -25,8 +25,8 @@ class ClassExtension extends Command
     {
         $this
             ->setName('ticktackk-devtools:create-class-extension')
+            ->setAliases(['tck-dt:create-class-extension'])
             ->setDescription('Creates an XF class-extension for an add-on and writes out a basic template file.')
-            ->setAliases(['tdt:create-class-extension', 'tdt:extend'])
             ->addArgument(
                 'id',
                 InputArgument::OPTIONAL,
@@ -144,8 +144,6 @@ TEMPLATE;
 
                 }
             }
-
-            \XF::logError($useStatements);
 
             $template = <<<TEMPLATE
 <?php

@@ -32,8 +32,8 @@ class EntityFromTable extends Command
     {
         $this
             ->setName('ticktackk-devtools:create-entity-from-table')
+            ->setAliases(['tck-dt:create-entity-from-table'])
             ->setDescription('Creates an XF entity for an add-on from a table.')
-            ->setAliases(['tdt:create-entity-from-table', 'tdt:create-entity'])
             ->addArgument(
                 'id',
                 InputArgument::REQUIRED,

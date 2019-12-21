@@ -12,6 +12,7 @@ CHANGELOG
 * **Changed:** Entity class extensions created via CLI command will now have `XF\Mvc\Entity\Structure` class aliased to `EntityStructure`
 * **Changed:** Provided scripts now have `.sh` extension
 * **Changed:** Developer options group will now only be shown in debug mode
+* **Changed:** CLI commands have more consistent aliases
 * **Fixed:** Template modification test failing
 * **Fixed:** "View modifications" failing for templates
 * **Fixed:** Path for `addon.json` is not shown when invalid add-on id is provided for class extension CLI command (#26)

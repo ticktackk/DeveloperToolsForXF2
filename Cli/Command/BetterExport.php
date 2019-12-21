@@ -23,6 +23,7 @@ class BetterExport extends Command
     {
         $this
             ->setName('ticktackk-devtools:better-export')
+            ->setAliases(['tck-dt:better-export'])
             ->setDescription('Exports the XML files for an add-on and applies class properties to type hint columns, getters and relations')
             ->addArgument(
                 'id',

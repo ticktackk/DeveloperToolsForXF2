@@ -21,10 +21,10 @@ class AddPhrase extends Command
     protected function configure() : void
     {
         $this->setName('ticktackk-devtools:add-phrase')
+            ->setAliases(['tck-dt:add-phrase'])
             ->addArgument('id', InputArgument::REQUIRED, 'Add-on ID')
             ->addArgument('title', InputArgument::REQUIRED, 'Title')
-            ->addArgument('text', InputArgument::REQUIRED, 'Text')
-            ->setAliases(['tdt:phrase']);
+            ->addArgument('text', InputArgument::REQUIRED, 'Text');
     }
 
     /**
