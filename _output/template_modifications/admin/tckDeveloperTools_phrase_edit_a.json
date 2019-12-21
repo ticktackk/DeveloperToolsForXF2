@@ -1,0 +1,9 @@
+{
+    "template": "phrase_edit",
+    "description": "Add \"Add more phrase\" button",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "#(class=\"block-body.*?)(<xf:formrow label=\"{{ phrase\\('language'\\) }}.*?<\\/xf:formrow>)(.*?)(<xf:if is=\"!\\$language.*?)(<\\/div>)(.*?<xf:html.*?>)#si",
+    "replace": "$1$2<span id=\"language_separator\"></span>$3$4\t<span id=\"new_phrase_block\"></span>\n\t\t$5$6\n\n\t\t\t\t<xf:if is=\"$phrase.isInsert()\">\n\t\t\t\t\t<xf:js src=\"ticktackk/developertools/add-more-phrase.js\" addon=\"TickTackk/DeveloperTools\" min=\"1\" />\n\n\t\t\t\t\t<xf:button icon=\"add\" data-xf-click=\"new-phrase-block-adder\" data-language-id=\"{$language.language_id}\">{{ phrase('tckDeveloperTools_add_more_phrase') }}</xf:button>\n\t\t\t\t</xf:if>"
+}

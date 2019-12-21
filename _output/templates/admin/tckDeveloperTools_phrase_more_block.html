@@ -1,0 +1,72 @@
+<hr class="formRowSep" data-for-more-phrase="true" />
+
+<xf:textboxrow name="phrases[{$nextPhraseCount}][title]" value="{$phrase.title}" maxlength="{{ max_length($phrase, 'title') }}"
+			   label="{{ phrase('title') }}"
+			   hint="{{ phrase('must_be_unique') }}"
+			   dir="ltr" />
+
+<xf:if is="$phrase.isUpdate() AND $language.language_id > 0 AND $phrase.Master.phrase_text">
+	<xf:formrow label="{{ phrase('master_value') }}">
+		<div class="u-ltr">
+			{{ $phrase.language_id == 0 ? $phrase.phrase_text|nl2br : $phrase.Master.phrase_text|nl2br }}
+		</div>
+	</xf:formrow>
+</xf:if>
+
+<xf:if is="$language.text_direction == 'RTL'">
+	<xf:textarearow name="phrases[{$nextPhraseCount}][phrase_text]" value="{$phrase.phrase_text}" dir="rtl" style="text-align: right"
+					label="{{ phrase('phrase_text') }}"
+					explain="{{ phrase('phrase_text_explain') }}" />
+<xf:else />
+	<xf:codeeditorrow name="phrases[{$nextPhraseCount}][phrase_text]" value="{$phrase.phrase_text}"
+					  mode="html" data-line-wrapping="true" data-line-numbers="false"
+					  class="codeEditor--autoSize codeEditor--proportional"
+					  label="{{ phrase('phrase_text') }}"
+					  explain="{{ phrase('phrase_text_explain') }}" />
+</xf:if>
+
+<xf:if is="!$language.language_id">
+	<xf:set var="$addOnRepo" value="{{ $xf.app.em.getRepository('XF:AddOn') }}" />
+
+	<xf:if is="$addOnRepo.canChangeAddOn()">
+		<xf:macro name="addon_select"
+				  arg-addOnId="{$phrase.addon_id}"
+				  arg-includeAny="{$includeAny}" arg-inputName="phrases[{$nextPhraseCount}][addon_id]" />
+	<xf:else />
+		<xf:hiddenval name="addon_id">{$addOnId}</xf:hiddenval>
+	</xf:if>
+<xf:else />
+	<xf:hiddenval name="phrases[{$nextPhraseCount}][addon_id]">{$phrase.addon_id}</xf:hiddenval>
+</xf:if>
+
+<xf:if is="!$language.language_id">
+	<xf:checkboxrow>
+		<xf:option name="phrases[{$nextPhraseCount}][global_cache]" selected="{$phrase.global_cache}">{{ phrase('cache_this_phrase_globally') }}</xf:option>
+	</xf:checkboxrow>
+</xf:if>
+
+<xf:macro name="addon_select" arg-addOnId="!" arg-row="{{ true }}" arg-class="" arg-includeAny="{{ false }}" arg-inputName="!">
+	<xf:set var="$addOnRepo" value="{{ $xf.app.em.getRepository('XF:AddOn') }}" />
+	<xf:set var="$select">
+		<xf:select name="{$inputName}" value="{{ $addOnId === false ? $addOnRepo.getDefaultAddOnId() : $addOnId }}" class="{$class}">
+			<xf:option value=""></xf:option>
+			
+			<xf:if is="$includeAny">
+				<xf:option value="_any">{{ phrase('(any)') }}</xf:option>
+			</xf:if>
+			
+			<xf:foreach loop="{{ $addOnRepo.findAddOnsForList().fetch() }}" value="$addOn">
+				<xf:option value="{$addOn.addon_id}">{$addOn.title}</xf:option>
+			</xf:foreach>
+		</xf:select>
+	</xf:set>
+
+	<xf:if is="$row">
+		<xf:formrow rowtype="input"
+					label="{{ phrase('add_on') }}">
+			{$select|raw}
+		</xf:formrow>
+		<xf:else />
+		{$select|raw}
+	</xf:if>
+</xf:macro>

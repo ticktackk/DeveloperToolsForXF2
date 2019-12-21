@@ -9,6 +9,7 @@ CHANGELOG
 * **New:** Ability to exclude files and directories using `exclude_files` and `exclude_directories` respectively via `build.json` (#25)
 * **New:** Add `CHANGELOG.md` to release archive
 * **New:** Class extensions will now have common classes already imported
+* **New:** Allow creating multiple phrases via the add phrase page (#27)
 * **Changed:** Entity class extensions created via CLI command will now have `XF\Mvc\Entity\Structure` class aliased to `EntityStructure`
 * **Changed:** Provided scripts now have `.sh` extension
 * **Changed:** Developer options group will now only be shown in debug mode
