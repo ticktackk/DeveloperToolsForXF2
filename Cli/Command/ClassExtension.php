@@ -110,6 +110,7 @@ class ClassExtension extends Command
             {
                 $useStatements = <<<TEMPLATE
 
+
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure as EntityStructure;
 TEMPLATE;
@@ -117,7 +118,7 @@ TEMPLATE;
     /**
      * @param EntityStructure \$structure
      *
-     * @return Structure
+     * @return EntityStructure
      */
     public static function getStructure(EntityStructure \$structure)
     {
@@ -132,6 +133,7 @@ TEMPLATE;
                 if ($isController)
                 {
                     $useStatements = <<<TEMPLATE
+
 
 use XF\Mvc\Reply\AbstractReply;
 use XF\Mvc\Reply\View as ViewReply;
