@@ -31,7 +31,7 @@ class EntityFromTable extends Command
     protected function configure() : void
     {
         $this
-            ->setName('ticktackk-devtools:create-entity-from-table')
+            ->setName('tck-devtools:create-entity-from-table')
             ->setAliases(['tck-dt:create-entity-from-table'])
             ->setDescription('Creates an XF entity for an add-on from a table.')
             ->addArgument(

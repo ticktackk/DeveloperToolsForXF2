@@ -21,7 +21,7 @@ class GenerateSchemaEntity extends Command
     protected function configure() : void
     {
         $this
-            ->setName('ticktackk-devtools:generate-schema-entity')
+            ->setName('tck-devtools:generate-schema-entity')
             ->setAliases(['tck-dt:generate-schema-entity'])
             ->setDescription('Generates schema code from an entity')
             ->addArgument(

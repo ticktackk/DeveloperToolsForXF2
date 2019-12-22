@@ -24,7 +24,7 @@ class ClassExtension extends Command
     protected function configure() : void
     {
         $this
-            ->setName('ticktackk-devtools:create-class-extension')
+            ->setName('tck-devtools:create-class-extension')
             ->setAliases(['tck-dt:create-class-extension'])
             ->setDescription('Creates an XF class-extension for an add-on and writes out a basic template file.')
             ->addArgument(
