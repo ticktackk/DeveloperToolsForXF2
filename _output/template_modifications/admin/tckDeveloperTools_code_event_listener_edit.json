@@ -1,0 +1,9 @@
+{
+    "template": "code_event_listener_edit",
+    "description": "Allow automatically setting callback class and method based on the inputs",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "#(<xf:selectrow name=\"event_id\".*?desc-loader)(\")#si",
+    "replace": "<xf:if is=\"$listener.isInsert()\">\n\t\t\t\t<xf:js src=\"ticktackk/developertools/code-event-field-loader.js\" addon=\"TickTackk/DeveloperTools\" min=\"1\" />\n\t\t\t</xf:if>\n\n\t\t\t$1 {{ $listener.isInsert() ? 'code-event-field-loader' : '' }}$2"
+}

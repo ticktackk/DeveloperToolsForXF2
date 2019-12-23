@@ -14,12 +14,18 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller
 
 namespace TickTackk\DeveloperTools\XF\Entity
 {
+	class XFCP_CodeEventListener extends \XF\Entity\CodeEventListener {}
 	class XFCP_TemplateModification extends \XF\Entity\TemplateModification {}
 }
 
 namespace TickTackk\DeveloperTools\XF\Job
 {
 	class XFCP_FileCheck extends \XF\Job\FileCheck {}
+}
+
+namespace TickTackk\DeveloperTools\XF\Repository
+{
+	class XFCP_CodeEvent extends \XF\Repository\CodeEvent {}
 }
 
 namespace TickTackk\DeveloperTools\XF\Service\AddOn

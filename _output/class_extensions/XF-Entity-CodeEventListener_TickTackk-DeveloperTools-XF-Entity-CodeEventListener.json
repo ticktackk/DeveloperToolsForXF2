@@ -1,0 +1,6 @@
+{
+    "from_class": "XF\\Entity\\CodeEventListener",
+    "to_class": "TickTackk\\DeveloperTools\\XF\\Entity\\CodeEventListener",
+    "execute_order": 10,
+    "active": true
+}
