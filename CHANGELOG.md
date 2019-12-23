@@ -10,10 +10,12 @@ CHANGELOG
 * **New:** Add `CHANGELOG.md` to release archive
 * **New:** Class extensions will now have common classes already imported
 * **New:** Allow creating multiple phrases via the add phrase page (#27)
+* **New:** Automatically fill code event listener callback class and method based on selected event and add-on and create listener file / method as required (#28)
 * **Changed:** Entity class extensions created via CLI command will now have `XF\Mvc\Entity\Structure` class aliased to `EntityStructure`
 * **Changed:** Provided scripts now have `.sh` extension
 * **Changed:** Developer options group will now only be shown in debug mode
 * **Changed:** CLI commands have more consistent aliases
+* **Changed:** Changed execution order for all listeners
 * **Fixed:** Template modification test failing
 * **Fixed:** "View modifications" failing for templates
 * **Fixed:** Path for `addon.json` is not shown when invalid add-on id is provided for class extension CLI command (#26)
