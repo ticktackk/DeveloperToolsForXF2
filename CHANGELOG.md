@@ -16,6 +16,7 @@ CHANGELOG
 * **Changed:** Developer options group will now only be shown in debug mode
 * **Changed:** CLI commands have more consistent aliases
 * **Changed:** Changed execution order for all listeners
+* **Changed:** Increased minimum XenForo version requirement to 2.1.6 PL 1 (#30)
 * **Fixed:** Template modification test failing
 * **Fixed:** "View modifications" failing for templates
 * **Fixed:** Path for `addon.json` is not shown when invalid add-on id is provided for class extension CLI command (#26)
