@@ -1,7 +1,7 @@
 {
     "legacy_addon_id": "",
     "title": "Developer Tools",
-    "description": "Developer tools for XenForo 2",
+    "description": "This add-on provides enhancements for add-on developers.",
     "version_id": 1010070,
     "version_string": "1.1.0",
     "dev": "TickTackk",
