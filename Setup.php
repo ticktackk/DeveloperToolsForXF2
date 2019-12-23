@@ -40,15 +40,7 @@ class Setup extends AbstractSetup
             foreach ($addOns AS $addOn)
             {
                 $addOnEntity = \XF::em()->find('XF:AddOn', $addOn['addon_id']);
-
-                if (\XF::$versionId >= 2010000)
-                {
-                    $addOn = new AddOn($addOnEntity, \XF::app()->addOnManager());
-                } else
-                {
-                    /** @noinspection PhpParamsInspection */
-                    $addOn = new AddOn($addOnEntity);
-                }
+                $addOn = new AddOn($addOnEntity, \XF::app()->addOnManager());
 
                 $addOnDir = $addOn->getAddOnDirectory();
                 FileUtil::writeFile($addOnDir . DIRECTORY_SEPARATOR . 'dev.json', JsonUtil::jsonEncodePretty([
@@ -84,16 +76,8 @@ class Setup extends AbstractSetup
         {
             $addOnEntity = \XF::em()->find('XF:AddOn', $addOnId);
 
-            if (\XF::$versionId >= 2010000)
-            {
-                $addOnManager = $this->app()->addOnManager();
-                $addOn = new AddOn($addOnEntity, $addOnManager);
-            }
-            else
-            {
-                /** @noinspection PhpParamsInspection */
-                $addOn = new AddOn($addOnEntity);
-            }
+            $addOnManager = $this->app()->addOnManager();
+            $addOn = new AddOn($addOnEntity, $addOnManager);
 
             $addOnDir = $addOn->getAddOnDirectory();
 

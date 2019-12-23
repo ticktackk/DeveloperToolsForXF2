@@ -5,5 +5,5 @@
     "enabled": true,
     "action": "str_replace",
     "find": "<xf:if is=\"$addOn.isFileVersionValid()",
-    "replace": "<xf:if is=\"$xf.versionId >= 2010010 ? $xf.development : $xf.debug\">\n\t<a href=\"{{ link('add-ons/build', $addOn) }}\" class=\"menu-linkRow\">{{ phrase('developerTools_build') }}</a>\n</xf:if>\n\n$0"
+    "replace": "<xf:if is=\"$xf.development\">\n\t<a href=\"{{ link('add-ons/build', $addOn) }}\" class=\"menu-linkRow\">{{ phrase('developerTools_build') }}</a>\n</xf:if>\n\n$0"
 }

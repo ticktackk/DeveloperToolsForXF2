@@ -60,14 +60,7 @@ class ClassExtension extends Command
             $output->writeln('');
         }
 
-        if (\XF::$versionId >= 2010000)
-        {
-            $addOnObj = new AddOn($addOnId, \XF::app()->addOnManager());
-        } else
-        {
-            /** @noinspection PhpParamsInspection */
-            $addOnObj = new AddOn($addOnId);
-        }
+        $addOnObj = new AddOn($addOnId, \XF::app()->addOnManager());
 
         $jsonPath = $addOnObj->getJsonPath();
 
