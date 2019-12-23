@@ -1,7 +1,7 @@
 {
     "template": "style_property_edit",
     "description": "Show style property group in breadcrumb",
-    "execution_order": 10,
+    "execution_order": 6119,
     "enabled": true,
     "action": "str_replace",
     "find": "<xf:pageaction",

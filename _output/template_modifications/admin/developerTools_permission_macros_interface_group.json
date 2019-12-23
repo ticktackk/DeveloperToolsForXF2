@@ -1,7 +1,7 @@
 {
     "template": "permission_macros",
     "description": "Add the display order next to permission interface group",
-    "execution_order": 10,
+    "execution_order": 6119,
     "enabled": true,
     "action": "str_replace",
     "find": "<span class=\"block-formSectionHeader-aligner\">{$interfaceGroup.title}</span>",

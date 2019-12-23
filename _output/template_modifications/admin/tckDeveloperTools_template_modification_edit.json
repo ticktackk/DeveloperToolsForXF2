@@ -1,7 +1,7 @@
 {
     "template": "template_modification_edit",
     "description": "Show template modification type in breadcrumb",
-    "execution_order": 10,
+    "execution_order": 6119,
     "enabled": true,
     "action": "str_replace",
     "find": "<xf:pageaction",

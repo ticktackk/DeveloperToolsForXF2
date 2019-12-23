@@ -1,7 +1,7 @@
 {
     "template": "template_modification_edit",
     "description": "Add \"style_id\" to auto complete url and a",
-    "execution_order": 10,
+    "execution_order": 6119,
     "enabled": true,
     "action": "str_replace",
     "find": "<xf:textboxrow name=\"template\" value=\"{$modification.template}\" id=\"js-templateModificationTemplate\"\n\t\t\t\tmaxlength=\"{{ max_length($modification, 'template') }}\"\n\t\t\t\treadonly=\"{{ !$modification.canEdit() }}\"\n\t\t\t\tac=\"single\"\n\t\t\t\tdata-acurl=\"{{ link('template-modifications/auto-complete', null, {'type': $modification.type}) }}\"\n\t\t\t\tlabel=\"{{ phrase('template') }}\"\n\t\t\t\tdir=\"ltr\" />",

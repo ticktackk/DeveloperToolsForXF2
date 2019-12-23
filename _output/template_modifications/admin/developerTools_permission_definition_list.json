@@ -1,7 +1,7 @@
 {
     "template": "permission_definition_list",
     "description": "Add the display order next to permission definition interface group",
-    "execution_order": 10,
+    "execution_order": 6119,
     "enabled": true,
     "action": "str_replace",
     "find": "hint=\"{$permission.permission_group_id} / {$permission.permission_id}\"",

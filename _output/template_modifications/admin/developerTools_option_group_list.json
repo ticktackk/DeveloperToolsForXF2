@@ -1,7 +1,7 @@
 {
     "template": "option_group_list",
     "description": "Add the display order next to option group.",
-    "execution_order": 10,
+    "execution_order": 6119,
     "enabled": true,
     "action": "str_replace",
     "find": "label=\"{$group.title}\"",

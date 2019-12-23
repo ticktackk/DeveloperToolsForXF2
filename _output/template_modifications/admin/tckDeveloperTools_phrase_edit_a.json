@@ -1,7 +1,7 @@
 {
     "template": "phrase_edit",
     "description": "Add \"Add more phrase\" button",
-    "execution_order": 10,
+    "execution_order": 6119,
     "enabled": true,
     "action": "preg_replace",
     "find": "#(class=\"block-body.*?)(<xf:formrow label=\"{{ phrase\\('language'\\) }}.*?<\\/xf:formrow>)(.*?)(<xf:if is=\"!\\$language.*?)(<\\/div>)(.*?<xf:html.*?>)#si",

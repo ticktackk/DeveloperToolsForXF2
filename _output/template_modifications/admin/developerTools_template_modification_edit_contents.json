@@ -1,7 +1,7 @@
 {
     "template": "template_modification_edit",
     "description": "Add \"style_id\" to template contents container url data",
-    "execution_order": 10,
+    "execution_order": 6119,
     "enabled": true,
     "action": "str_replace",
     "find": "{ template: templateName },",

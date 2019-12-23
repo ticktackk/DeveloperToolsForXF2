@@ -1,7 +1,7 @@
 {
     "template": "option_template_emailTransport",
     "description": "Enable hidden file-based email transport option",
-    "execution_order": 10,
+    "execution_order": 6119,
     "enabled": true,
     "action": "str_replace",
     "find": "<xf:option value=\"sendmail\"",
