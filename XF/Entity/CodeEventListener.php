@@ -87,7 +87,7 @@ PHP;
             }
             else
             {
-                if (!\preg_match('#\sstatic function ' . \preg_quote($callbackMethodWithBrackets) . '#si', $listenerContents))
+                if (!\preg_match('#\sstatic function ' . $callbackMethod . '\(.*?\)#si', $listenerContents))
                 {
                     $listenerContents = \utf8_rtrim($listenerContents, "}");
                     $listenerContents .= \PHP_EOL . $methodBlock . \PHP_EOL . '}';
