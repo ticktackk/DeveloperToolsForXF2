@@ -3,7 +3,7 @@ CHANGELOG
 
 ## 1.1.1 (`1010170`)
 
-*Pending changes*
+* **Removed:** Even more XF 2.0 specific composer code (#32)
 
 ## 1.1.0 (`1010070`)
 
