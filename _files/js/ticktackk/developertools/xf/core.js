@@ -11,7 +11,7 @@ TickTackk.DeveloperTools = TickTackk.DeveloperTools || {};
 
         settings.success = function (data, status, xhr)
         {
-            if (data.html.permissionErrors)
+            if (data.html && data.html.permissionErrors)
             {
                 var permissionErrorStr = 'Permission errors were triggered when rendering this template:';
                 if (data.html.permissionErrorDetails)
