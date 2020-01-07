@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.2.0 Alpha 1 (`1020011`)
+
+*Pending changes*
+
 ## 1.1.1 (`1010170`)
 
 * **Fixed:** Fatal error thrown when code even listeners callback method use namespace alias for type hinting (#31)
