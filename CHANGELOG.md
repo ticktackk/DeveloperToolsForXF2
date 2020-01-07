@@ -3,7 +3,7 @@ CHANGELOG
 
 ## 1.2.0 Alpha 1 (`1020011`)
 
-*Pending changes*
+* **New:** Show warnings when attempted to check for permissions or permission groups that do not exist (#34)
 
 ## 1.1.1 (`1010170`)
 

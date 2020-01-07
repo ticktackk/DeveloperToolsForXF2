@@ -1,0 +1,9 @@
+{
+    "event_id": "dispatcher_post_render",
+    "execute_order": 10,
+    "callback_class": "TickTackk\\DeveloperTools\\Listener",
+    "callback_method": "dispatcherPostRender",
+    "active": true,
+    "hint": "",
+    "description": "Add permission errors to the page"
+}

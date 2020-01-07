@@ -1,0 +1,9 @@
+{
+    "template": "helper_js_global",
+    "description": "Update AJAX success callback to show permission errors in console",
+    "execution_order": 6119,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<!--XF:JS-->",
+    "replace": "$0\n\n<xf:js src=\"ticktackk/developertools/xf/core.js\" addon=\"TickTackk/DeveloperTools\" min=\"1\" />"
+}

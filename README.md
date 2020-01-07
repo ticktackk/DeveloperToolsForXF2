@@ -11,6 +11,7 @@ This add-on provides enhancements for add-on developers.
 - Show breadcrumb for style property group
 - Show template modification type in breadcrumb
 - Show option group when adding option
+- Show warnings when attempted to check for permissions or permission groups that do not exist (Since 1.2)
 - Automatically fill out code event listener callback class and method as well creating listener file or adding just the function
 - Exclude files or directories via `exclude_files` and `exclude_directories` respectively via `build.json` from add-on archive
 - Create multiple phrases at once

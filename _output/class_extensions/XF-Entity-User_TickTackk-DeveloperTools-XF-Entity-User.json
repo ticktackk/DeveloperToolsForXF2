@@ -1,0 +1,6 @@
+{
+    "from_class": "XF\\Entity\\User",
+    "to_class": "TickTackk\\DeveloperTools\\XF\\Entity\\User",
+    "execute_order": 6119,
+    "active": true
+}

@@ -16,11 +16,17 @@ namespace TickTackk\DeveloperTools\XF\Entity
 {
 	class XFCP_CodeEventListener extends \XF\Entity\CodeEventListener {}
 	class XFCP_TemplateModification extends \XF\Entity\TemplateModification {}
+	class XFCP_User extends \XF\Entity\User {}
 }
 
 namespace TickTackk\DeveloperTools\XF\Job
 {
 	class XFCP_FileCheck extends \XF\Job\FileCheck {}
+}
+
+namespace TickTackk\DeveloperTools\XF\Mvc\Renderer
+{
+	class XFCP_Json extends \XF\Mvc\Renderer\Json {}
 }
 
 namespace TickTackk\DeveloperTools\XF\Repository
