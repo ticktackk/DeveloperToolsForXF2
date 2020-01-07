@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.1.1 (`1010170`)
+
+*Pending changes*
+
 ## 1.1.0 (`1010070`)
 
 * **New:** Show style property group in breadcrumb
