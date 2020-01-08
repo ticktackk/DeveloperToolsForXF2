@@ -2,7 +2,10 @@
 
 namespace TickTackk\DeveloperTools;
 
+use TickTackk\DeveloperTools\XF\PermissionCache as ExtendedPermissionCache;
 use TickTackk\DeveloperTools\XF\Template\Templater as ExtendedTemplater;
+use XF\App as BaseApp;
+use XF\Container;
 use XF\Http\Response;
 use XF\Mvc\Dispatcher;
 use XF\Mvc\Reply\AbstractReply;
@@ -53,5 +56,21 @@ class Listener
                 $content = preg_replace('#<body[^>]*>#i', "\\0$warningHtml", $content);
             }
         }
+    }
+
+    /**
+     * Called after the global \XF\App object has been setup. This will fire regardless of
+     * the application type.
+     *
+     * @param BaseApp $app Global App object.
+     */
+    public static function appSetup(BaseApp $app) : void
+    {
+        $container = $app->container();
+
+        $container['permission.cache'] = function (Container $container)
+        {
+            return new ExtendedPermissionCache($container['db']);
+        };
     }
 }

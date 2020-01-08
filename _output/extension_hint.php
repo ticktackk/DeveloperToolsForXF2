@@ -16,7 +16,6 @@ namespace TickTackk\DeveloperTools\XF\Entity
 {
 	class XFCP_CodeEventListener extends \XF\Entity\CodeEventListener {}
 	class XFCP_TemplateModification extends \XF\Entity\TemplateModification {}
-	class XFCP_User extends \XF\Entity\User {}
 }
 
 namespace TickTackk\DeveloperTools\XF\Job
