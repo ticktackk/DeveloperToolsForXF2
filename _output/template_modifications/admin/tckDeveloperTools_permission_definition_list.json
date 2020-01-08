@@ -1,0 +1,9 @@
+{
+    "template": "permission_definition_list",
+    "description": "Allow adding permission directly through permission interface",
+    "execution_order": 6119,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "#<xf:foreach loop=\"\\$interfaceGroups\" key=\"\\$interfaceGroupId\" value=\"\\$interfaceGroup\">.*?class=\"block-body.*?<\\/xf:if>.*?<\\/div>#si",
+    "replace": "$0\n\n\t\t\t<div class=\"block-footer\">\n\t\t\t\t<a href=\"{{ link('permission-definitions/permissions/add', null, {\n\t\t\t\t\t'interface_group_id': $interfaceGroupId\n\t\t\t\t}) }}\">{{ phrase('add_permission') }}</a>\n\t\t\t</div>"
+}
