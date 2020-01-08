@@ -4,6 +4,7 @@ CHANGELOG
 ## 1.2.0 Alpha 1 (`1020011`)
 
 * **New:** Show warnings when attempted to check for permissions or permission groups that do not exist (#34)
+* **New:** Allow creating permission via permission interface even if permissions already exist (#35)
 
 ## 1.1.1 (`1010170`)
 
