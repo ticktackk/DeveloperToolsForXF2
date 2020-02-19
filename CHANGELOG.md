@@ -6,6 +6,10 @@ CHANGELOG
 * **New:** Show warnings when attempted to check for permissions or permission groups that do not exist (#34)
 * **New:** Allow creating permission via permission interface even if permissions already exist (#35)
 
+## 1.1.2 (`1010270`)
+
+* **Fixed:** Code event listener creates invalid documentation (#36)
+
 ## 1.1.1 (`1010170`)
 
 * **Fixed:** Fatal error thrown when code even listeners callback method use namespace alias for type hinting (#31)
