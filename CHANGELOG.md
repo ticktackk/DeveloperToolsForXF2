@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.1.2 (`1010270`)
+
+* **Fixed:** Code event listener creates invalid documentation (#36)
+
 ## 1.1.1 (`1010170`)
 
 * **Fixed:** Fatal error thrown when code even listeners callback method use namespace alias for type hinting (#31)
