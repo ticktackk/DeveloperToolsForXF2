@@ -2,10 +2,11 @@
 
 namespace TickTackk\DeveloperTools\XF\Entity;
 
+use TickTackk\DeveloperTools\Service\Listener\Creator as ListenerCreatorSvc;
 use TickTackk\DeveloperTools\XF\Repository\CodeEvent as ExtendedCodeEventRepo;
+use XF\Entity\CodeEvent as CodeEventEntity;
 use XF\Mvc\Entity\Repository;
 use XF\Repository\CodeEvent as CodeEventRepo;
-use XF\Util\File as FileUtil;
 
 /**
  * Class CodeEventListener
@@ -18,89 +19,34 @@ class CodeEventListener extends XFCP_CodeEventListener
 {
     protected function _preSave()
     {
-        $eventId = $this->event_id;
-        $callbackClass = $this->callback_class;
-        $callbackMethod = $this->callback_method;
-        $addOnId = $this->addon_id;
+        parent::_preSave();
 
-        if (!$this->exists() && $eventId && $callbackClass && $callbackMethod && $addOnId)
+        if (\array_key_exists('callback_method', $this->getErrors()))
         {
-            $addOn = $this->app()->addOnManager()->getById($addOnId);
+            unset($this->_errors['callback_method']);
 
-            $addOnClass = $addOn->prepareAddOnIdForClass();
-            $addOnDir = $addOn->getAddOnDirectory();
+            $eventId = $this->event_id;
+            $callbackClass = $this->callback_class;
+            $callbackMethod = $this->callback_method;
+            $addOnId = $this->addon_id;
 
-            $listenerPath = FileUtil::canonicalizePath('Listener.php', $addOnDir);
-            if (!\file_exists($listenerPath))
+            if ($eventId && $callbackClass && $callbackMethod && $addOnId)
             {
-                \touch($listenerPath);
-                $listenerContents = '';
-            }
-            else
-            {
-                $listenerContents = \trim(\file_get_contents($listenerPath));
-            }
-
-            $codeEventRepo = $this->getCodeEventRepo();
-            $docBlock = $codeEventRepo->getDocBlockForCodeEvent($eventId, $callbackSignature);
-
-            $callbackMethodWithBrackets = "{$callbackMethod}({$callbackSignature})";
-
-            $returnType = '';
-            $addOnJson = $addOn->getJson();
-            $addOnRequirements = $addOnJson['require'] ?? [];
-            if (\array_key_exists('php', $addOnRequirements))
-            {
-                $phpRequirements = $addOnRequirements['php'];
-                if (\substr(\reset($phpRequirements), 0, 1) === '7')
-                {
-                    $returnType = ' : void';
+                /** @var CodeEventEntity $codeEvent */
+                $codeEvent = $this->em()->find('XF:CodeEvent', $eventId);
+                if (!$codeEvent) {
+                    parent::_preSave();
+                    return;
                 }
-            }
 
-            $methodBlock = <<<PHP
-{$docBlock}
-\tpublic static function {$callbackMethodWithBrackets}{$returnType}
-\t{
-\t}
-PHP;
-
-            if (\utf8_strlen($listenerContents) === 0)
-            {
-                $listenerContents = <<<PHP
-<?php
-
-namespace {$addOnClass};
-
-/**
- * Class Listener
- * 
- * This class declares code event listeners for the add-on.
- * 
- * @package {$addOnClass}
- */
-class Listener
-{
-{$methodBlock}
-}
-PHP;
-            }
-            else
-            {
-                if (!\preg_match('#\sstatic function ' . $callbackMethod . '\(.*?\)#si', $listenerContents))
-                {
-                    $listenerContents = \utf8_rtrim($listenerContents, "}");
-                    $listenerContents .= \PHP_EOL . $methodBlock . \PHP_EOL . '}';
-                }
-            }
-
-            if (utf8_strlen($listenerContents))
-            {
-                \file_put_contents($listenerPath, $listenerContents);
+                /** @var ListenerCreatorSvc $listenerCreatorSvc */
+                $listenerCreatorSvc = $this->app()->service(
+                    'TickTackk\DeveloperTools:Listener\Creator',
+                    $codeEvent, $this->addon_id
+                );
+                $listenerCreatorSvc->create();
             }
         }
-
-        parent::_preSave();
     }
 
     /**

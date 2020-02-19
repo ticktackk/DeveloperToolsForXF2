@@ -23,11 +23,6 @@ namespace TickTackk\DeveloperTools\XF\Job
 	class XFCP_FileCheck extends \XF\Job\FileCheck {}
 }
 
-namespace TickTackk\DeveloperTools\XF\Repository
-{
-	class XFCP_CodeEvent extends \XF\Repository\CodeEvent {}
-}
-
 namespace TickTackk\DeveloperTools\XF\Service\AddOn
 {
 	class XFCP_JsMinifier extends \XF\Service\AddOn\JsMinifier {}
