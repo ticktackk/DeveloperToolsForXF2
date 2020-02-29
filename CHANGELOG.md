@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.1.3 (`1010270`)
+
+- **Fix:** Custom listener callback class and and method are not respected (#40)
+
 ## 1.1.2 (`1010270`)
 
 * **Fixed:** Code event listener creates invalid documentation (#36)
