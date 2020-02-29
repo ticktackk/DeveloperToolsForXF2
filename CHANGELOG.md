@@ -1,7 +1,7 @@
 CHANGELOG
 ==========================
 
-## 1.1.3 (`1010270`)
+## 1.1.3 (`1010370`)
 
 - **Fix:** Custom listener callback class and and method are not respected (#40)
 
