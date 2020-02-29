@@ -6,6 +6,10 @@ CHANGELOG
 * **New:** Show warnings when attempted to check for permissions or permission groups that do not exist (#34)
 * **New:** Allow creating permission via permission interface even if permissions already exist (#35)
 
+## 1.1.3 (`1010370`)
+
+- **Fix:** Custom listener callback class and and method are not respected (#40)
+
 ## 1.1.2 (`1010270`)
 
 * **Fixed:** Code event listener creates invalid documentation (#36)

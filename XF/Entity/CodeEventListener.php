@@ -34,7 +34,8 @@ class CodeEventListener extends XFCP_CodeEventListener
             {
                 /** @var CodeEventEntity $codeEvent */
                 $codeEvent = $this->em()->find('XF:CodeEvent', $eventId);
-                if (!$codeEvent) {
+                if (!$codeEvent)
+                {
                     parent::_preSave();
                     return;
                 }
@@ -44,6 +45,8 @@ class CodeEventListener extends XFCP_CodeEventListener
                     'TickTackk\DeveloperTools:Listener\Creator',
                     $codeEvent, $this->addon_id
                 );
+                $listenerCreatorSvc->setListenerClass($callbackClass);
+                $listenerCreatorSvc->setListenerMethod($callbackMethod);
                 $listenerCreatorSvc->create();
             }
         }
