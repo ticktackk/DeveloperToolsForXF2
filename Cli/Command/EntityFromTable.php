@@ -1,6 +1,6 @@
 <?php
 
-namespace TickTackk\DeveloperTools\Cli\Command\AddOn;
+namespace TickTackk\DeveloperTools\Cli\Command;
 
 use Closure;
 use Symfony\Component\Console\Command\Command;
