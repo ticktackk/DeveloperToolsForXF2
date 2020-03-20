@@ -1,0 +1,9 @@
+{
+    "template": "template_modification_list",
+    "description": "Show execution order for template modifications",
+    "execution_order": 6119,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:toggle name=\"enabled[{$modification.modification_id}]\"",
+    "replace": "<xf:cell class=\"dataList-cell--number dataList-cell--hint\" dir=\"auto\">\n\t<span data-xf-init=\"tooltip\" title=\"{{ phrase('execution_order') }}\">{$modification.execution_order|number}</span>\n</xf:cell>\n\n$0"
+}
