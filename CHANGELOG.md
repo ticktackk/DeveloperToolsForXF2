@@ -6,6 +6,7 @@ CHANGELOG
 * **New:** Show warnings when attempted to check for permissions or permission groups that do not exist (#34)
 * **New:** Allow creating permission via permission interface even if permissions already exist (#35)
 * **New:** Show class extension execution order in the list (#43)
+* **New:** Show template modification execution order (#44)
 
 ## 1.1.3 (`1010370`)
 
