@@ -151,13 +151,13 @@ class Creator extends AbstractService
         return <<<PHP
 <?php
 
+namespace {$listenerNamespace};
+
 /**
 * Class {$listenerClass}
  * 
  * @package {$listenerNamespace}
  */
-namespace {$listenerNamespace};
-
 class {$listenerClass}
 {
 }

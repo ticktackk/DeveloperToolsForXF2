@@ -9,6 +9,7 @@ CHANGELOG
 - **New:** Show template modification execution order (#44)
 - **Fix:** Upgrading to 1.1.0 does not migrate markdown files correctly (#45)
 - **Fix:** Certain CLI commands have wrong namespace (#46)
+- **Fix:** Doc block is before namespace instead of before class (#47)
 
 ## 1.1.3 (`1010370`)
 
