@@ -70,7 +70,6 @@ class Setup extends AbstractSetup
             FROM xf_addon
             WHERE addon_id NOT IN('XF', 'XFRM', 'XFMG', 'XFI', 'XFES')
         ");
-        $addOns = ['TickTackk/DevTest'];
 
         foreach ($addOns AS $addOnId)
         {
