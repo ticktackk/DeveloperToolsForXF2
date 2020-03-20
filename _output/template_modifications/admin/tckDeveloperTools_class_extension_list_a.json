@@ -1,0 +1,9 @@
+{
+    "template": "class_extension_list",
+    "description": "Add execution order header",
+    "execution_order": 6119,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:cell>{{ phrase('extension_class_name') }}</xf:cell>",
+    "replace": "$0\n<xf:cell class=\"dataList-cell--min\">{{ phrase('execution_order') }}</xf:cell>"
+}
