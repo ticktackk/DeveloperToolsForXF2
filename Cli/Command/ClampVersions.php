@@ -3,18 +3,18 @@
 namespace TickTackk\DeveloperTools\Cli\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
-use TickTackk\DeveloperTools\Cli\Command\Exception\InvalidAddOnQuestionFieldAnswerException;
-use XF\AddOn\AddOn;
 use XF\AddOn\Manager as AddOnManager;
 use XF\App as BaseApp;
+use XF\Behavior\DevOutputWritable as DevOutputWritableBehavior;
+use XF\Cli\Command\AddOnActionTrait;
 use XF\Db\AbstractAdapter as DbAdapter;
+use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Manager as EntityManager;
-use XF\Entity\AddOn as AddOnEntity;
+use XF\DevelopmentOutput as DevelopmentOutput;
 
 /**
  * Class ClampVersions
@@ -23,34 +23,37 @@ use XF\Entity\AddOn as AddOnEntity;
  */
 class ClampVersions extends Command
 {
+    use AddOnActionTrait;
+
     protected function configure() : void
     {
         $this
             ->setName('tck-devtools:clamp-versions')
             ->setAliases(['tck-dt:clamp-versions'])
             ->setDescription('Ensures an add-on does not have phrases or templates with version id\'s above the addon.json file.')
-            ->addArgument('id', InputArgument::OPTIONAL, 'Add-On ID')
+            ->addArgument('id', InputArgument::REQUIRED, 'Add-On ID')
         ;
     }
 
     /**
-     * @inheritDoc
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     *
+     * @throws \XF\PrintableException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var QuestionHelper $helper */
-        $helper = $this->getHelper('question');
-
         $addOnId = $input->getArgument('id');
-        if (!$addOnId)
+        $addOnObj = $this->checkEditableAddOn($addOnId, $error);
+        if (!$addOnObj)
         {
-            $question = new Question("<question>Enter the ID for the add-on:</question> ");
-            $question->setValidator($this->getAddOnQuestionFieldValidator('addon_id'));
-            $addOnId = $helper->ask($input, $output, $question);
-            $output->writeln("");
+            $output->writeln('<error>' . $error . '</error>');
+            return 1;
         }
 
-        $addOnObj = new AddOn($addOnId, $this->addOnManager());
+        $addOnId = $addOnObj->getAddOnId();
         $jsonPath = $addOnObj->getJsonPath();
 
         if (!\file_exists($jsonPath))
@@ -60,54 +63,81 @@ class ClampVersions extends Command
             return 1;
         }
 
-        $versionData = $addOnObj->getJsonVersion();
-        $db = $this->db();
+        $entityMaps = [
+            'XF:Phrase' => 'phrases',
+            'XF:Template' => 'templates'
+        ];
+        ['version_id' => $versionId, 'version_string' => $versionString] = $addOnObj->getJsonVersion();
 
-        $phrasesUpdated = $db->update('xf_phrase', [
-            'version_id' => $versionData['version_id'],
-            'version_string' => $versionData['version_string']
-        ], 'version_id >= ? AND addon_id = ?', [$versionData['version_id'], $addOnObj->getAddOnId()]);
-        if ($phrasesUpdated)
+        $totalUpdated = 0;
+        foreach ($entityMaps AS $identifier => $friendlyName)
         {
-            $output->writeln("Updated {$phrasesUpdated} phrases with too new versions to {$versionData['version_string']}");
+            $this->clampVersionFor($output, $identifier, $friendlyName, $addOnId, $versionId, $versionString, $totalUpdated);
         }
 
-        $templatesUpdated = $db->update('xf_template', [
-            'version_id' => $versionData['version_id'],
-            'version_string' => $versionData['version_string']
-        ], 'version_id >= ? AND addon_id = ?', [$versionData['version_id'], $addOnObj->getAddOnId()]);
-        if ($templatesUpdated)
+        if (!$totalUpdated)
         {
-            $output->writeln("Updated {$templatesUpdated} templates with too new versions to {$versionData['version_string']}");
+            $output->writeln('No phrases or templates were updated.');
         }
 
         return 0;
     }
 
     /**
-     * @param string $key
-     * 
-     * @return \Closure
+     * @param OutputInterface $output
+     * @param string $identifier
+     * @param string $friendlyName
+     * @param string $addOnId
+     * @param int $versionId
+     * @param string $versionString
+     * @param int $totalUpdated
+     *
+     * @throws \XF\PrintableException
      */
-    protected function getAddOnQuestionFieldValidator(string $key)
+    protected function clampVersionFor(OutputInterface $output, string $identifier, string $friendlyName, string $addOnId, int $versionId, string $versionString, int &$totalUpdated) : void
     {
-        return function ($value) use ($key)
+        $start = microtime(true);
+
+        $finder = $this->entityManager()->getFinder($identifier)
+            ->where('addon_id', $addOnId)
+            ->where('version_id', '>=', $versionId);
+
+        $total = $finder->total();
+        if (!$total)
         {
-            /** @var AddOnEntity $addOn */
-            $addOn = $this->entityManager()->create('XF:AddOn');
-            $valid = $addOn->set($key, $value);
+            return;
+        }
 
-            if (!$valid)
-            {
-                $errors = $addOn->getErrors();
-                if (\array_key_exists($key, $errors))
-                {
-                    throw new InvalidAddOnQuestionFieldAnswerException($key, $errors[$key]);
-                }
-            }
+        $output->writeln("Exporting $friendlyName...");
+        $progress = new ProgressBar($output, $total);
 
-            return $value;
-        };
+        $devOutput = $this->developmentOutput();
+        $devOutput->enableBatchMode();
+
+        /** @var Entity $entity */
+        foreach ($finder->fetch() AS $entity)
+        {
+            $entity->bulkSet([
+                'version_id' => $versionId,
+                'version_string' => $versionString
+            ]);
+
+            /** @var DevOutputWritableBehavior $devOutputWritable */
+            $devOutputWritable = $entity->getBehavior('XF:DevOutputWritable');
+            $devOutputWritable->setOption('write_dev_output', false);
+
+            $entity->save();
+            $devOutput->export($entity);
+            $progress->advance();
+        }
+
+        $progress->finish();
+        $output->writeln("");
+        $devOutput->clearBatchMode();
+
+        $output->writeln(\sprintf(ucfirst($friendlyName) . " exported. (%.02fs)",
+            \microtime(true) - $start
+        ));
     }
 
     /**
@@ -119,26 +149,18 @@ class ClampVersions extends Command
     }
 
     /**
-     * @return AddOnManager
-     */
-    protected function addOnManager() : AddOnManager
-    {
-        return $this->app()->addOnManager();
-    }
-
-    /**
-     * @return DbAdapter
-     */
-    protected function db() : DbAdapter
-    {
-        return $this->app()->db();
-    }
-
-    /**
      * @return EntityManager
      */
     protected function entityManager() : EntityManager
     {
         return $this->app()->em();
+    }
+
+    /**
+     * @return DevelopmentOutput
+     */
+    protected function developmentOutput() : DevelopmentOutput
+    {
+        return $this->app()->developmentOutput();
     }
 }
