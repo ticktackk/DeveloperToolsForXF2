@@ -63,6 +63,13 @@ class BetterExport extends Command
             return 1;
         }
 
+        $command = $this->getApplication()->find('tck-devtools:clamp-versions');
+        $childInput = new ArrayInput([
+            'command' => 'tck-devtools:clamp-versions',
+            'id' => $addOn->getAddOnId()
+        ]);
+        $command->run($childInput, $output);
+
         $command = $this->getApplication()->find('xf-addon:export');
         $childInput = new ArrayInput([
             'command' => 'xf-addon:export',
