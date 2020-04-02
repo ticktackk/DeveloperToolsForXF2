@@ -4,7 +4,7 @@ CHANGELOG
 ## 1.2.0 Alpha 2 (`1020012`)
 
 - **New:** Show callback execution order in code event listener list (#51)
-- **New:** Allow clamping versions via CLI (#52)
+- **New:** Allow clamping versions via CLI (#52) (Thanks @Xon)
 - **Change:** Make execution order selectable in class extensions select (#50)
 
 ## 1.2.0 Alpha 1 (`1020011`)
