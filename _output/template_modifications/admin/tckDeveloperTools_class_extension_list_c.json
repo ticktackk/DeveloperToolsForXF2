@@ -5,5 +5,5 @@
     "enabled": true,
     "action": "preg_replace",
     "find": "#{\\$extension\\.to_class\\|split_long\\(25\\)}.*?<\\/xf:cell>#si",
-    "replace": "$0\n\n<xf:cell class=\"dataList-cell--number\" href=\"{{ link('class-extensions/edit', $extension) }}\" dir=\"auto\">\n\t{$extension.execute_order|number}\n</xf:cell>"
+    "replace": "$0\n\n<xf:cell class=\"dataList-cell--number dataList-cell--hint\" dir=\"auto\">{$extension.execute_order|number}</xf:cell>"
 }
