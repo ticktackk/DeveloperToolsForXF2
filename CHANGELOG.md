@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.2.0 Alpha 2 (`1020012`)
+
+- **New:** Show callback execution order in code event listener list (#51)
+
 ## 1.2.0 Alpha 1 (`1020011`)
 
 - **New:** Show warnings when attempted to check for permissions or permission groups that do not exist (#34)

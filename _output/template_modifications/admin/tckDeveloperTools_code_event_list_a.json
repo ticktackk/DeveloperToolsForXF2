@@ -1,0 +1,9 @@
+{
+    "template": "code_event_listener_list",
+    "description": "Increase colspan from 3 to 4",
+    "execution_order": 6119,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:cell colspan=\"3\">",
+    "replace": "<xf:cell colspan=\"4\">"
+}
