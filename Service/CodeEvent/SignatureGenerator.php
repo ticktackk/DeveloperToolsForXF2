@@ -48,11 +48,16 @@ class SignatureGenerator extends AbstractService
 
         foreach ($parsedDescription['arguments'] AS $argumentData)
         {
-            ['hint' => $hint, 'name' => $argument] = $argumentData;
+            ['hint' => $hint, 'name' => $argument, 'passedByRef' => $passedByRef] = $argumentData;
 
             if ($hint && $hint !== 'mixed')
             {
                 $signature .= "{$hint} ";
+            }
+
+            if ($passedByRef)
+            {
+                $signature .= '&';
             }
 
             $signature .= "{$argument}, ";
