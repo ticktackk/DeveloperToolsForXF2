@@ -3,6 +3,57 @@ CHANGELOG
 
 ## 1.2.0 Alpha 3 (`1020013`)
 
+- **New:** CLI Command to create README file (#57)
+  - The following information will be available in README with description whenever possible:
+    - Add-on title
+    - Add-on description
+    - Add-on requirements
+    - Options
+    - Permissions
+    - Admin permissions
+    - BB codes
+    - BB code media sites
+    - Style properties
+    - Advertising positions
+    - Widget positions
+    - Widget definitions
+    - Cron entries
+    - REST API scopes
+    - CLI Commands
+  - Further more, you can add your own blocks by creating HTML files named after the hook positions:
+    - `BEFORE_TITLE`
+    - `AFTER_TITLE`
+    - `BEFORE_DESCRIPTION`
+    - `AFTER_DESCRIPTION`
+    - `BEFORE_REQUIREMENTS`
+    - `AFTER_REQUIREMENTS`
+    - `BEFORE_OPTIONS`
+    - `AFTER_OPTIONS`
+    - `BEFORE_PERMISSIONS`
+    - `AFTER_PERMISSIONS`
+    - `BEFORE_ADMIN_PERMISSIONS`
+    - `AFTER_ADMIN_PERMISSIONS`
+    - `BEFORE_BB_CODES`
+    - `AFTER_BB_CODES`
+    - `BEFORE_BB_CODE_MEDIA_SITES`
+    - `AFTER_BB_CODE_MEDIA_SITES`
+    - `BEFORE_STYLE_PROPERTIES`
+    - `AFTER_STYLE_PROPERTIES`
+    - `BEFORE_ADVERTISING_POSITIONS`
+    - `AFTER_ADVERTISING_POSITIONS`
+    - `BEFORE_WIDGET_POSITIONS`
+    - `AFTER_WIDGET_POSITIONS`
+    - `BEFORE_WIDGET_DEFINITIONS`
+    - `AFTER_WIDGET_DEFINITIONS`
+    - `BEFORE_CRON_ENTRIES`
+    - `AFTER_CRON_ENTRIES`
+    - `BEFORE_REST_API_SCOPES`
+    - `AFTER_REST_API_SCOPES`
+    - `BEFORE_CLI_COMMANDS`
+    - `AFTER_CLI_COMMANDS`
+  - When an add-on is built, following `README` variants will be created:
+    - BB code version at `_dev/resource_description.txt` for resource descriptions
+    - Markdown version at `README.md` for any VCS repository
 - **Change:** Increase minimum XenForo version requirement to 2.1.7 (#59)
 - **Change:** Increase minimum PHP version requirement to 7.3 (#60)
 - **Fix:** When creating code event listener method, passed by reference state is not respected (#58)

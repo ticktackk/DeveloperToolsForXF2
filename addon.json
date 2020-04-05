@@ -21,5 +21,6 @@
             "PHP 7.3.0+"
         ]
     },
-    "icon": "fa-laptop-code"
+    "icon": "fa-laptop-code",
+    "composer_autoload": "_vendor/composer"
 }

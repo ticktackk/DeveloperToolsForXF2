@@ -1,0 +1,16 @@
+{
+    "config": {
+        "vendor-dir": "_vendor"
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/ticktackk/php-markdown-table-converter"
+        }
+    ],
+    "require": {
+        "xprt64/php-markdown-table-converter": "dev-master",
+        "ext-intl": "*",
+        "jawira/case-converter": "^3.4"
+    }
+}
