@@ -1,0 +1,152 @@
+[SIZE=6][B]Developer Tools for XenForo 2.1.7+[/B][/SIZE]
+
+[SIZE=5][B]Description[/B][/SIZE]
+This add-on provides enhancements for add-on developers.
+
+[SIZE=5][B]Features[/B][/SIZE]
+[LIST]
+[*]Show display order...
+[LIST]
+[*]Option group
+[*]Options
+[*]Permission groups
+[*]Permission
+[/LIST]
+[*]Test template modification against specific style
+[*]Show breadcrumb for style property group
+[*]Show template modification type in breadcrumb
+[*]Show option group when adding option
+[*]Show execution order for template modifications, class extensions and code event listeners (Since 1.2)
+[*]Show warnings when attempted to check for permissions or permission groups that do not exist (Since 1.2)
+[*]Allow creating permission via permission interface even if permissions already exist (Since 1.2)
+[*]Automatically fill out code event listener callback class and method as well creating listener file or adding just the function
+[*]Exclude files or directories via `exclude_files` and `exclude_directories` respectively via `build.json` from add-on archive
+[*]Create multiple phrases at once
+[*]Build add-on archive from ACP
+[*]View template modifications applied on a specific template
+[*]Minify JavaScript files locally
+[*]Automatically generate README.md...
+[LIST]
+[*]The following information will be available in README with description whenever possible:
+[LIST]
+[*]Add-on title
+[*]Add-on description
+[*]Add-on requirements
+[*]Options
+[*]Permissions
+[*]Admin permissions
+[*]BB codes
+[*]BB code media sites
+[*]Style properties
+[*]Advertising positions
+[*]Widget positions
+[*]Widget definitions
+[*]Cron entries
+[*]REST API scopes
+[*]CLI Commands
+[/LIST]
+[*]Further more, you can add your own blocks by creating HTML files named after the hook positions:
+[LIST]
+[*]BEFORE_TITLE
+[*]AFTER_TITLE
+[*]BEFORE_DESCRIPTION
+[*]AFTER_DESCRIPTION
+[*]BEFORE_REQUIREMENTS
+[*]AFTER_REQUIREMENTS
+[*]BEFORE_OPTIONS
+[*]AFTER_OPTIONS
+[*]BEFORE_PERMISSIONS
+[*]AFTER_PERMISSIONS
+[*]BEFORE_ADMIN_PERMISSIONS
+[*]AFTER_ADMIN_PERMISSIONS
+[*]BEFORE_BB_CODES
+[*]AFTER_BB_CODES
+[*]BEFORE_BB_CODE_MEDIA_SITES
+[*]AFTER_BB_CODE_MEDIA_SITES
+[*]BEFORE_STYLE_PROPERTIES
+[*]AFTER_STYLE_PROPERTIES
+[*]BEFORE_ADVERTISING_POSITIONS
+[*]AFTER_ADVERTISING_POSITIONS
+[*]BEFORE_WIDGET_POSITIONS
+[*]AFTER_WIDGET_POSITIONS
+[*]BEFORE_WIDGET_DEFINITIONS
+[*]AFTER_WIDGET_DEFINITIONS
+[*]BEFORE_CRON_ENTRIES
+[*]AFTER_CRON_ENTRIES
+[*]BEFORE_REST_API_SCOPES
+[*]AFTER_REST_API_SCOPES
+[*]BEFORE_CLI_COMMANDS
+[*]AFTER_CLI_COMMANDS
+[/LIST]
+[*]When an add-on is built, following README variants will be created:
+[LIST]
+[*]BB code version at _dev/resource_description.txt for resource descriptions
+[*]Markdown version at README.md for any VCS repository
+[/LIST]
+[/LIST]
+[/LIST]
+
+[SIZE=5][B]Requirements[/B][/SIZE]
+[LIST]
+[*]PHP 7.3.0+
+[/LIST]
+
+[SIZE=5][B]Options[/B][/SIZE]
+[TABLE]
+[TR]
+[TH]Group[/TH]
+[TH]Name[/TH]
+[TH]Description[/TH]
+[/TR]
+[TR]
+[TD]Developer Tools (Debug only)[/TD]
+[TD]Disable hash checking[/TD]
+[TD]For development purposes disabling XF's hash check is required to hotpatch code[/TD]
+[/TR]
+[TR]
+[TD]Developer Tools (Debug only)[/TD]
+[TD]Disable XF Template watching[/TD]
+[TD]XF's template watching causes a large amount of IO per page, and doesn't touch phrases to template modification. Disable for a boost in performance if it isn't required.[/TD]
+[/TR]
+[/TABLE]
+
+[SIZE=5][B]CLI Commands[/B][/SIZE]
+[TABLE]
+[TR]
+[TH]Command[/TH]
+[TH]Description[/TH]
+[/TR]
+[TR]
+[TD]tck-devtools:create-entity-from-table[/TD]
+[TD]Creates an XF entity for an add-on from a table.[/TD]
+[/TR]
+[TR]
+[TD]tck-devtools:generate-schema-entity[/TD]
+[TD]Generates schema code from an entity[/TD]
+[/TR]
+[TR]
+[TD]tck-devtools:better-export[/TD]
+[TD]Exports the XML files for an add-on and applies class properties to type hint columns, getters and relations[/TD]
+[/TR]
+[TR]
+[TD]tck-devtools:add-phrase[/TD]
+[/TR]
+[TR]
+[TD]tck-devtools:clamp-versions[/TD]
+[TD]Ensures an add-on does not have phrases or templates with version id's above the addon.json file.[/TD]
+[/TR]
+[TR]
+[TD]tck-devtools:create-class-extension[/TD]
+[TD]Creates an XF class-extension for an add-on and writes out a basic template file.[/TD]
+[/TR]
+[TR]
+[TD]tck-devtools:build-readme[/TD]
+[TD]build readme[/TD]
+[/TR]
+[/TABLE]
+
+[SIZE=5][B]Scripts[/B][/SIZE]
+There are some wrapper scripts under `scripts` directory provided by [URL='https://xenforo.com/community/members/xon.71874/']Xon[/URL] which can be helpful.
+
+[SIZE=5][B]License[/B][/SIZE]
+This project is licensed under the MIT License - see the [URL='https://github.com/ticktackk/DeveloperToolsForXF2/blob/master/LICENSE.md']LICENSE.md[/URL] file for details.

@@ -2,8 +2,8 @@
     "legacy_addon_id": "",
     "title": "Developer Tools",
     "description": "This add-on provides enhancements for add-on developers.",
-    "version_id": 1020012,
-    "version_string": "1.2.0 Alpha 2",
+    "version_id": 1020013,
+    "version_string": "1.2.0 Alpha 3",
     "dev": "TickTackk",
     "dev_url": "https://xenforo.com/community/members/ticktackk.90375/",
     "faq_url": "",
@@ -13,13 +13,14 @@
     },
     "require": {
         "XF": [
-            2010671,
-            "XenForo 2.1.6 Patch 1+"
+            2010770,
+            "XenForo 2.1.7+"
         ],
         "php": [
-            "7.1.0",
-            "PHP 7.1.0+"
+            "7.3.0",
+            "PHP 7.3.0+"
         ]
     },
-    "icon": "fa-laptop-code"
+    "icon": "fa-laptop-code",
+    "composer_autoload": "_vendor/composer"
 }

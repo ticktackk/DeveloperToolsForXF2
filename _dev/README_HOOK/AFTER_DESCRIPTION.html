@@ -1,0 +1,87 @@
+<h2>Features</h2>
+<ul>
+    <li>Show display order...
+        <ul>
+            <li>Option group</li>
+            <li>Options</li>
+            <li>Permission groups</li>
+            <Li>Permission</Li>
+        </ul>
+    </li>
+    <li>Test template modification against specific style</li>
+    <li>Show breadcrumb for style property group</li>
+    <li>Show template modification type in breadcrumb</li>
+    <li>Show option group when adding option</li>
+    <li>Show execution order for template modifications, class extensions and code event listeners (Since 1.2)</li>
+    <li>Show warnings when attempted to check for permissions or permission groups that do not exist (Since 1.2)</li>
+    <li>Allow creating permission via permission interface even if permissions already exist (Since 1.2)</li>
+    <li>Automatically fill out code event listener callback class and method as well creating listener file or adding just the function</li>
+    <li>Exclude files or directories via `exclude_files` and `exclude_directories` respectively via `build.json` from add-on archive</li>
+    <li>Create multiple phrases at once</li>
+    <li>Build add-on archive from ACP</li>
+    <li>View template modifications applied on a specific template</li>
+    <li>Minify JavaScript files locally</li>
+    <li>Automatically generate <code>README.md</code>...
+        <ul>
+            <li>The following information will be available in README with description whenever possible:
+                <ul>
+                    <li>Add-on title</li>
+                    <li>Add-on description</li>
+                    <li>Add-on requirements</li>
+                    <li>Options</li>
+                    <li>Permissions</li>
+                    <li>Admin permissions</li>
+                    <li>BB codes</li>
+                    <li>BB code media sites</li>
+                    <li>Style properties</li>
+                    <li>Advertising positions</li>
+                    <li>Widget positions</li>
+                    <li>Widget definitions</li>
+                    <li>Cron entries</li>
+                    <li>REST API scopes</li>
+                    <li>CLI Commands</li>
+                </ul>
+            </li>
+            <li>Further more, you can add your own blocks by creating HTML files named after the hook positions:
+                <ul>
+                    <li><code>BEFORE_TITLE</code></li>
+                    <li><code>AFTER_TITLE</code></li>
+                    <li><code>BEFORE_DESCRIPTION</code></li>
+                    <li><code>AFTER_DESCRIPTION</code></li>
+                    <li><code>BEFORE_REQUIREMENTS</code></li>
+                    <li><code>AFTER_REQUIREMENTS</code></li>
+                    <li><code>BEFORE_OPTIONS</code></li>
+                    <li><code>AFTER_OPTIONS</code></li>
+                    <li><code>BEFORE_PERMISSIONS</code></li>
+                    <li><code>AFTER_PERMISSIONS</code></li>
+                    <li><code>BEFORE_ADMIN_PERMISSIONS</code></li>
+                    <li><code>AFTER_ADMIN_PERMISSIONS</code></li>
+                    <li><code>BEFORE_BB_CODES</code></li>
+                    <li><code>AFTER_BB_CODES</code></li>
+                    <li><code>BEFORE_BB_CODE_MEDIA_SITES</code></li>
+                    <li><code>AFTER_BB_CODE_MEDIA_SITES</code></li>
+                    <li><code>BEFORE_STYLE_PROPERTIES</code></li>
+                    <li><code>AFTER_STYLE_PROPERTIES</code></li>
+                    <li><code>BEFORE_ADVERTISING_POSITIONS</code></li>
+                    <li><code>AFTER_ADVERTISING_POSITIONS</code></li>
+                    <li><code>BEFORE_WIDGET_POSITIONS</code></li>
+                    <li><code>AFTER_WIDGET_POSITIONS</code></li>
+                    <li><code>BEFORE_WIDGET_DEFINITIONS</code></li>
+                    <li><code>AFTER_WIDGET_DEFINITIONS</code></li>
+                    <li><code>BEFORE_CRON_ENTRIES</code></li>
+                    <li><code>AFTER_CRON_ENTRIES</code></li>
+                    <li><code>BEFORE_REST_API_SCOPES</code></li>
+                    <li><code>AFTER_REST_API_SCOPES</code></li>
+                    <li><code>BEFORE_CLI_COMMANDS</code></li>
+                    <li><code>AFTER_CLI_COMMANDS</code></li>
+                </ul>
+            </li>
+            <li>When an add-on is built, following <code>README</code> variants will be created:
+                <ul>
+                    <li>BB code version at <code>_dev/resource_description.txt</code> for resource descriptions</li>
+                    <li>Markdown version at <code>README.md</code> for any VCS repository</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>

@@ -2,8 +2,10 @@
 
 namespace TickTackk\DeveloperTools\XF\Service\AddOn;
 
+use TickTackk\DeveloperTools\Service\AddOn\ReadmeBuilder as AddOnReadmeBuilder;
+use XF\PrintableException;
+use XF\Service\AbstractService;
 use XF\Util\File as FileUtil;
-use TickTackk\DeveloperTools\XF\Entity\AddOn as ExtendedAddOnEntity;
 
 /**
  * Class ReleaseBuilder
@@ -12,6 +14,21 @@ use TickTackk\DeveloperTools\XF\Entity\AddOn as ExtendedAddOnEntity;
  */
 class ReleaseBuilder extends XFCP_ReleaseBuilder
 {
+    /**
+     * @throws PrintableException
+     */
+    protected function prepareDirectories()
+    {
+        $readmeBuilderSvc = $this->getReadmeBuilderSvc();
+        if (!$readmeBuilderSvc->validate($errors))
+        {
+            throw new PrintableException($errors);
+        }
+        $readmeBuilderSvc->save();
+
+        parent::prepareDirectories();
+    }
+
     /**
      * @throws \XF\PrintableException
      */
@@ -118,10 +135,19 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
 
         $excludedDirectoriesFromBuildFile = $buildJson['exclude_directories'] ?? [];
         $excludedDirectoriesFromBuildFile = (array) $excludedDirectoriesFromBuildFile;
-        \array_push($excludedDirectoriesFromBuildFile, ...['_repo', '_tests']);
+        \array_push($excludedDirectoriesFromBuildFile, ...['_repo', '_tests', '_dev']);
 
         $excludedDirectories += $excludedDirectoriesFromBuildFile;
 
         return \array_unique($excludedDirectories);
+    }
+
+    /**
+     * @return AbstractService|AddOnReadmeBuilder
+     */
+    protected function getReadmeBuilderSvc() : AddOnReadmeBuilder
+    {
+        $addOn = $this->addOn;
+        return $this->service('TickTackk\DeveloperTools:AddOn\ReadmeBuilder', $addOn);
     }
 }
