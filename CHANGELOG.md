@@ -3,6 +3,7 @@ CHANGELOG
 
 ## 1.2.0 Alpha 3 (`1020013`)
 
+- **Change:** Increase minimum XenForo version requirement to 2.1.7 (#59)
 - **Fix:** When creating code event listener method, passed by reference state is not respected (#58)
 
 ## 1.2.0 Alpha 2 (`1020012`)
