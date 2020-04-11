@@ -17,7 +17,6 @@ class JsMinifier extends XFCP_JsMinifier
      */
     public function minify()
     {
-        $xfRoot = \XF::getSourceDirectory();
         $development = $this->app->config('development');
         $jsPath = $this->jsPath;
 
