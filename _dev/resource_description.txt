@@ -25,7 +25,7 @@ This add-on provides enhancements for add-on developers.
 [*]Build add-on archive from ACP
 [*]View template modifications applied on a specific template
 [*]Minify JavaScript files locally
-[*]Automatically generate README.md...
+[*]Automatically generate [ICODE]README.md[/ICODE]...
 [LIST]
 [*]The following information will be available in README with description whenever possible:
 [LIST]
@@ -47,41 +47,41 @@ This add-on provides enhancements for add-on developers.
 [/LIST]
 [*]Further more, you can add your own blocks by creating HTML files named after the hook positions:
 [LIST]
-[*]BEFORE_TITLE
-[*]AFTER_TITLE
-[*]BEFORE_DESCRIPTION
-[*]AFTER_DESCRIPTION
-[*]BEFORE_REQUIREMENTS
-[*]AFTER_REQUIREMENTS
-[*]BEFORE_OPTIONS
-[*]AFTER_OPTIONS
-[*]BEFORE_PERMISSIONS
-[*]AFTER_PERMISSIONS
-[*]BEFORE_ADMIN_PERMISSIONS
-[*]AFTER_ADMIN_PERMISSIONS
-[*]BEFORE_BB_CODES
-[*]AFTER_BB_CODES
-[*]BEFORE_BB_CODE_MEDIA_SITES
-[*]AFTER_BB_CODE_MEDIA_SITES
-[*]BEFORE_STYLE_PROPERTIES
-[*]AFTER_STYLE_PROPERTIES
-[*]BEFORE_ADVERTISING_POSITIONS
-[*]AFTER_ADVERTISING_POSITIONS
-[*]BEFORE_WIDGET_POSITIONS
-[*]AFTER_WIDGET_POSITIONS
-[*]BEFORE_WIDGET_DEFINITIONS
-[*]AFTER_WIDGET_DEFINITIONS
-[*]BEFORE_CRON_ENTRIES
-[*]AFTER_CRON_ENTRIES
-[*]BEFORE_REST_API_SCOPES
-[*]AFTER_REST_API_SCOPES
-[*]BEFORE_CLI_COMMANDS
-[*]AFTER_CLI_COMMANDS
+[*][ICODE]BEFORE_TITLE[/ICODE]
+[*][ICODE]AFTER_TITLE[/ICODE]
+[*][ICODE]BEFORE_DESCRIPTION[/ICODE]
+[*][ICODE]AFTER_DESCRIPTION[/ICODE]
+[*][ICODE]BEFORE_REQUIREMENTS[/ICODE]
+[*][ICODE]AFTER_REQUIREMENTS[/ICODE]
+[*][ICODE]BEFORE_OPTIONS[/ICODE]
+[*][ICODE]AFTER_OPTIONS[/ICODE]
+[*][ICODE]BEFORE_PERMISSIONS[/ICODE]
+[*][ICODE]AFTER_PERMISSIONS[/ICODE]
+[*][ICODE]BEFORE_ADMIN_PERMISSIONS[/ICODE]
+[*][ICODE]AFTER_ADMIN_PERMISSIONS[/ICODE]
+[*][ICODE]BEFORE_BB_CODES[/ICODE]
+[*][ICODE]AFTER_BB_CODES[/ICODE]
+[*][ICODE]BEFORE_BB_CODE_MEDIA_SITES[/ICODE]
+[*][ICODE]AFTER_BB_CODE_MEDIA_SITES[/ICODE]
+[*][ICODE]BEFORE_STYLE_PROPERTIES[/ICODE]
+[*][ICODE]AFTER_STYLE_PROPERTIES[/ICODE]
+[*][ICODE]BEFORE_ADVERTISING_POSITIONS[/ICODE]
+[*][ICODE]AFTER_ADVERTISING_POSITIONS[/ICODE]
+[*][ICODE]BEFORE_WIDGET_POSITIONS[/ICODE]
+[*][ICODE]AFTER_WIDGET_POSITIONS[/ICODE]
+[*][ICODE]BEFORE_WIDGET_DEFINITIONS[/ICODE]
+[*][ICODE]AFTER_WIDGET_DEFINITIONS[/ICODE]
+[*][ICODE]BEFORE_CRON_ENTRIES[/ICODE]
+[*][ICODE]AFTER_CRON_ENTRIES[/ICODE]
+[*][ICODE]BEFORE_REST_API_SCOPES[/ICODE]
+[*][ICODE]AFTER_REST_API_SCOPES[/ICODE]
+[*][ICODE]BEFORE_CLI_COMMANDS[/ICODE]
+[*][ICODE]AFTER_CLI_COMMANDS[/ICODE]
 [/LIST]
-[*]When an add-on is built, following README variants will be created:
+[*]When an add-on is built, following [ICODE]README[/ICODE] variants will be created:
 [LIST]
-[*]BB code version at _dev/resource_description.txt for resource descriptions
-[*]Markdown version at README.md for any VCS repository
+[*]BB code version at [ICODE]_dev/resource_description.txt[/ICODE] for resource descriptions
+[*]Markdown version at [ICODE]README.md[/ICODE] for any VCS repository
 [/LIST]
 [/LIST]
 [/LIST]
@@ -117,30 +117,30 @@ This add-on provides enhancements for add-on developers.
 [TH]Description[/TH]
 [/TR]
 [TR]
-[TD]tck-devtools:create-entity-from-table[/TD]
+[TD][ICODE]tck-devtools:create-entity-from-table[/ICODE][/TD]
 [TD]Creates an XF entity for an add-on from a table.[/TD]
 [/TR]
 [TR]
-[TD]tck-devtools:generate-schema-entity[/TD]
+[TD][ICODE]tck-devtools:generate-schema-entity[/ICODE][/TD]
 [TD]Generates schema code from an entity[/TD]
 [/TR]
 [TR]
-[TD]tck-devtools:better-export[/TD]
+[TD][ICODE]tck-devtools:better-export[/ICODE][/TD]
 [TD]Exports the XML files for an add-on and applies class properties to type hint columns, getters and relations[/TD]
 [/TR]
 [TR]
-[TD]tck-devtools:add-phrase[/TD]
+[TD][ICODE]tck-devtools:add-phrase[/ICODE][/TD]
 [/TR]
 [TR]
-[TD]tck-devtools:clamp-versions[/TD]
+[TD][ICODE]tck-devtools:clamp-versions[/ICODE][/TD]
 [TD]Ensures an add-on does not have phrases or templates with version id's above the addon.json file.[/TD]
 [/TR]
 [TR]
-[TD]tck-devtools:create-class-extension[/TD]
+[TD][ICODE]tck-devtools:create-class-extension[/ICODE][/TD]
 [TD]Creates an XF class-extension for an add-on and writes out a basic template file.[/TD]
 [/TR]
 [TR]
-[TD]tck-devtools:build-readme[/TD]
+[TD][ICODE]tck-devtools:build-readme[/ICODE][/TD]
 [TD]build readme[/TD]
 [/TR]
 [/TABLE]

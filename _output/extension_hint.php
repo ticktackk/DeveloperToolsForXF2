@@ -18,6 +18,11 @@ namespace TickTackk\DeveloperTools\XF\Entity
 	class XFCP_TemplateModification extends \XF\Entity\TemplateModification {}
 }
 
+namespace TickTackk\DeveloperTools\XF\Html\Renderer
+{
+	class XFCP_BbCode extends \XF\Html\Renderer\BbCode {}
+}
+
 namespace TickTackk\DeveloperTools\XF\Job
 {
 	class XFCP_FileCheck extends \XF\Job\FileCheck {}

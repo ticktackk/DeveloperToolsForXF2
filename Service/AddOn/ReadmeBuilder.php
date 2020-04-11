@@ -704,7 +704,9 @@ class ReadmeBuilder extends AbstractService
             }
             else if ($format === static::OUTPUT_FORMAT_BB_CODE)
             {
-                $contents = BbCode::renderFromHtml($readmeHtml);
+                $contents = BbCode::renderFromHtml($readmeHtml, [
+                    'handleCodeTagForTckDeveloperTools' => true
+                ]);
                 $contents = \XF::cleanString($contents);
                 $contents = \preg_replace_callback('#(^\[SIZE=\d].*?\[/SIZE]\n)#sm', function ($header)
                 {

@@ -133,11 +133,9 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
         $buildJson = $addOn->getBuildJson();
         $excludedDirectories = parent::getExcludedDirectories();
 
-        $excludedDirectoriesFromBuildFile = $buildJson['exclude_directories'] ?? [];
-        $excludedDirectoriesFromBuildFile = (array) $excludedDirectoriesFromBuildFile;
-        \array_push($excludedDirectoriesFromBuildFile, ...['_repo', '_tests', '_dev']);
-
-        $excludedDirectories += $excludedDirectoriesFromBuildFile;
+        $excludedDirectoriesFromBuildFile = (array) ($buildJson['exclude_directories'] ?? []);
+        \array_push($excludedDirectoriesFromBuildFile, ...['_repo', '_tests', '_dev', '.idea']);
+        \array_push($excludedDirectories, ...$excludedDirectoriesFromBuildFile);
 
         return \array_unique($excludedDirectories);
     }
