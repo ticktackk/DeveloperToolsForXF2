@@ -3,6 +3,7 @@ CHANGELOG
 
 ## 1.2.0 (`1020070`)
 
+- **Change:** The `.idea` directory will now be excluded by default when building add-on release archive (#63)
 - **Fix:** Excluded directories are not respected when building add-on release archive (#62)
 
 ## 1.2.0 Alpha 3 (`1020013`)
