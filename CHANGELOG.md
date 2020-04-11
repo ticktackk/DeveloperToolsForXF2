@@ -5,6 +5,7 @@ CHANGELOG
 
 - **New:** Handle in-line code tags when building README files (#64)
 - **Change:** The `.idea` directory will now be excluded by default when building add-on release archive (#63)
+- **Change:** Do not try to autodetect google closure compiler (#66)
 - **Fix:** Excluded directories are not respected when building add-on release archive (#62)
 
 ## 1.2.0 Alpha 3 (`1020013`)
