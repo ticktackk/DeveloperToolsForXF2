@@ -1,0 +1,6 @@
+{
+    "from_class": "XF\\Html\\Renderer\\BbCode",
+    "to_class": "TickTackk\\DeveloperTools\\XF\\Html\\Renderer\\BbCode",
+    "execute_order": 6119,
+    "active": true
+}
