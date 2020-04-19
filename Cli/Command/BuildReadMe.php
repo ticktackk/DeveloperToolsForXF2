@@ -27,7 +27,7 @@ class BuildReadme extends Command
         $this
             ->setName('tck-devtools:build-readme')
             ->setAliases(['tck-dt:build-readme'])
-            ->setDescription('build readme')
+            ->setDescription('Builds README files for provided add-on.')
             ->addArgument('id', InputArgument::REQUIRED, 'Add-On ID');
     }
 
