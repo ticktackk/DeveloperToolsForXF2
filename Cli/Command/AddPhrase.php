@@ -22,6 +22,7 @@ class AddPhrase extends Command
     {
         $this->setName('tck-devtools:add-phrase')
             ->setAliases(['tck-dt:add-phrase'])
+            ->setDescription('Creates a phrase for an add-on.')
             ->addArgument('id', InputArgument::REQUIRED, 'Add-on ID')
             ->addArgument('title', InputArgument::REQUIRED, 'Title')
             ->addArgument('text', InputArgument::REQUIRED, 'Text');

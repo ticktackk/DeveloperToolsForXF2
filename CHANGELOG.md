@@ -4,7 +4,8 @@ CHANGELOG
 ## 1.2.1 (`1020170`)
 
 - **Fix:** Style property description is same as title in README file (#67)
-- **Change:** CLI command tck-devtools:build-readme does not have descriptive description (#69)
+- **Fix:** CLI command `tck-devtools:build-readme` does not have descriptive description (#69)
+- **Fix:** CLI command `tck-devtools:add-phrase` does not have description (#70)
 
 ## 1.2.0 (`1020070`)
 
