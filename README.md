@@ -97,13 +97,13 @@ CLI Commands
 
 | Command                                 | Description                                                                                                  |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `tck-devtools:build-readme`             | Builds README files for provided add-on.                                                                     |
+| `tck-devtools:add-phrase`               | Creates a phrase for an add-on.                                                                              |
+| `tck-devtools:create-class-extension`   | Creates an XF class-extension for an add-on and writes out a basic template file.                            |
+| `tck-devtools:better-export`            | Exports the XML files for an add-on and applies class properties to type hint columns, getters and relations |
 | `tck-devtools:create-entity-from-table` | Creates an XF entity for an add-on from a table.                                                             |
 | `tck-devtools:generate-schema-entity`   | Generates schema code from an entity                                                                         |
-| `tck-devtools:better-export`            | Exports the XML files for an add-on and applies class properties to type hint columns, getters and relations |
-| `tck-devtools:add-phrase`               |                                                                                                              |
 | `tck-devtools:clamp-versions`           | Ensures an add-on does not have phrases or templates with version id's above the addon.json file.            |
-| `tck-devtools:create-class-extension`   | Creates an XF class-extension for an add-on and writes out a basic template file.                            |
-| `tck-devtools:build-readme`             | build readme                                                                                                 |
 
 Scripts
 -------

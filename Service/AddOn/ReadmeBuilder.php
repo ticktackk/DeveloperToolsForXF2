@@ -487,15 +487,15 @@ class ReadmeBuilder extends AbstractService
                     return 'Unknown';
                 }
 
-                return $stylePropertyGroup->getMasterPhrase('title')->phrase_text;
+                return $stylePropertyGroup->getMasterPhrase(true)->phrase_text;
             },
             'Property' => function(StylePropertyEntity $styleProperty)
             {
-                return $styleProperty->getMasterPhrase('title')->phrase_text;
+                return $styleProperty->getMasterPhrase(true)->phrase_text;
             },
             'Description' => function(StylePropertyEntity $styleProperty)
             {
-                return $styleProperty->getMasterPhrase('description')->phrase_text;
+                return $styleProperty->getMasterPhrase(false)->phrase_text;
             }
         ]);
 
