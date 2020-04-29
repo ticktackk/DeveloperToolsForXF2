@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.2.2 (`1020270`)
+
+- **Change:** Apply default sort order for entities that are fetched when building README files (#71)
+
 ## 1.2.1 (`1020170`)
 
 - **Fix:** Style property description is same as title in README file (#67)

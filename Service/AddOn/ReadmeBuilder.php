@@ -98,6 +98,7 @@ class ReadmeBuilder extends AbstractService
         {
             $finder = $this->finder($identifier);
             $this->applyAddOnIdCondition($finder);
+            $this->applyDefaultOrder($finder);
             $data[$dataKey] = $finder->fetch();
         }
 
@@ -265,6 +266,27 @@ class ReadmeBuilder extends AbstractService
         if (\array_key_exists('display_order', $finder->getStructure()->columns))
         {
             $finder->setDefaultOrder('display_order', 'ASC');
+        }
+
+        return $finder;
+    }
+
+    /**
+     * @param Finder $finder
+     *
+     * @return Finder
+     */
+    protected function applyDefaultOrder(Finder $finder) : Finder
+    {
+        $structure = $finder->getStructure();
+        $columns = $structure->columns;
+
+        if (\array_key_exists('display_order', $columns))
+        {
+            $finder->setDefaultOrder(
+                (\array_key_exists('lft', $columns) && \array_key_exists('rgt', $columns)) ?
+                'lft' : 'display_order'
+            );
         }
 
         return $finder;
