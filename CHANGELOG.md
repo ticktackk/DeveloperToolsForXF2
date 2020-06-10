@@ -3,7 +3,7 @@ CHANGELOG
 
 ## 1.2.3 (`1020370`)
 
-- **Change:** Disable polyfill for JsMinifier closure (#74)
+- **Change:** Disable polyfill for JsMinifier closure (#74) (Thanks @[DragonByte Tech](https://xenforo.com/community/members/dragonbyte-tech.2478/))
 - **Fix:** Argument 2 passed to `TickTackk\DeveloperTools\Listener::dispatcherPostRender()` must be of the type string, null given (#73)
 
 ## 1.2.2 (`1020270`)
