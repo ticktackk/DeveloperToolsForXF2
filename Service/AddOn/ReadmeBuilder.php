@@ -54,16 +54,24 @@ class ReadmeBuilder extends AbstractService
     protected $addOn;
 
     /**
+     * @var array
+     */
+    protected $types;
+
+
+    /**
      * ReadMeGenerator constructor.
      *
      * @param BaseApp $app
      * @param AddOn $addOn
+     * @param array $types
      */
-    public function __construct(BaseApp $app, AddOn $addOn)
+    public function __construct(BaseApp $app, AddOn $addOn, array $types = [])
     {
         parent::__construct($app);
 
         $this->addOn = $addOn;
+        $this->types = $types;
     }
 
     /**
@@ -705,12 +713,26 @@ class ReadmeBuilder extends AbstractService
         $addOn = $this->getAddOn();
         $addOnRoot = $addOn->getAddOnDirectory();
 
-        $fileAndOutputFormatMap = [
-            static::OUTPUT_FORMAT_MARKDOWN => FileUtil::canonicalizePath('README.md', $addOnRoot),
-            static::OUTPUT_FORMAT_BB_CODE => FileUtil::canonicalizePath("resource_description.txt",
-                FileUtil::canonicalizePath('_dev', $addOnRoot)
-            )
-        ];
+        $fileAndOutputFormatMap = [];
+        foreach ($this->types as $type)
+        {
+            if ($type === static::OUTPUT_FORMAT_MARKDOWN)
+            {
+                $fileAndOutputFormatMap[static::OUTPUT_FORMAT_MARKDOWN] = FileUtil::canonicalizePath('README.md', $addOnRoot);
+            }
+            else if ($type === static::OUTPUT_FORMAT_BB_CODE)
+            {
+                $fileAndOutputFormatMap[static::OUTPUT_FORMAT_BB_CODE] = FileUtil::canonicalizePath("resource_description.txt",
+                    FileUtil::canonicalizePath('_dev', $addOnRoot)
+                );
+            }
+            else if ($type === static::OUTPUT_FORMAT_HTML)
+            {
+                $fileAndOutputFormatMap[static::OUTPUT_FORMAT_HTML] = FileUtil::canonicalizePath("resource_description.html",
+                    FileUtil::canonicalizePath('_dev', $addOnRoot)
+                );
+            }
+        }
 
         $readmeHtml = $this->generateHtml();
         foreach ($fileAndOutputFormatMap AS $format => $filePath)
