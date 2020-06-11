@@ -98,8 +98,13 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
                     $possibleFileNameFinal .= '.' . $possibleExtension;
                 }
 
+                if (empty($possibleFileNameFinal))
+                {
+                    continue;
+                }
+
                 $filePath = FileUtil::canonicalizePath($possibleFileNameFinal, $addOnRoot);
-                if (\file_exists($filePath) && \is_readable($filePath))
+                if (\file_exists($filePath) && \is_readable($filePath) && \is_file($filePath))
                 {
                     $destinationPath = FileUtil::canonicalizePath($possibleFileNameFinal, $buildRoot);
                     FileUtil::copyFile($filePath, $destinationPath);
