@@ -46,7 +46,7 @@ class BetterExport extends Command
                 'readme',
                 'd',
                 InputOption::VALUE_NONE,
-                'Run \'tck-devtools:build-readme\' command'
+                'Run \'tck-devtools:build-readme\' command (Markdown only)'
             );
     }
 
