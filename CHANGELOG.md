@@ -3,6 +3,7 @@ CHANGELOG
 
 ## 1.3.1 (`1030170`)
 
+- **New:** Optional argument `-d` to `tck-devtools:better-export` to also build the README
 - **Change:** Stop building readme when building add-on (#83)
 - **Fix:** Suppress DOM errors when attempting to convert markdown to HTML (#81)
 - **Fix:** Fix potential server error when attempting to copy files

@@ -37,6 +37,12 @@ class BetterExport extends Command
                 'Skip \'xf-dev:export\' command'
             )
             ->addOption(
+                'readme',
+                'd',
+                InputOption::VALUE_NONE,
+                'Run \'tck-devtools:build-readme\' command'
+            )
+            ->addOption(
                 'release',
                 'r',
                 InputOption::VALUE_NONE,
@@ -105,6 +111,17 @@ class BetterExport extends Command
             $command = $this->getApplication()->find('xf-addon:build-release');
             $childInput = new ArrayInput([
                 'command' => 'xf-addon:build-release',
+                'id' => $addOn->getAddOnId()
+            ]);
+            $command->run($childInput, $output);
+        }
+
+        $release = $input->getOption('readme');
+        if ($release)
+        {
+            $command = $this->getApplication()->find('tck-devtools:build-readme');
+            $childInput = new ArrayInput([
+                'command' => 'tck-devtools:build-readme',
                 'id' => $addOn->getAddOnId()
             ]);
             $command->run($childInput, $output);
