@@ -4,6 +4,7 @@ CHANGELOG
 ## 1.3.1 (`1030170`)
 
 - **Change:** Stop building readme when building add-on (#83)
+- **Fix:** Suppress DOM errors when attempting to convert markdown to HTML (#81)
 
 ## 1.3.0 (`1030070`)
 

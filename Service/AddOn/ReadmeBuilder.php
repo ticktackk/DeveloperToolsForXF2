@@ -722,6 +722,7 @@ class ReadmeBuilder extends AbstractService
                 $environment->addConverter(new TableConverter());
 
                 $htmlConverter = new HtmlConverter($environment);
+                $htmlConverter->getConfig()->setOption('suppress_errors', true);
                 $contents = $htmlConverter->convert($readmeHtml);
             }
             else if ($format === static::OUTPUT_FORMAT_BB_CODE)
