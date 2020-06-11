@@ -91,6 +91,12 @@ class BuildReadme extends Command
             $types[] = 'bb_code';
         }
 
+        if (empty($types))
+        {
+            $output->writeln('<error>You must specify at least one readme type!</error>');
+            return 1;
+        }
+
         $readMeGeneratorSvc = $this->getReadMeGeneratorSvc($addOnObj, $types, (bool)$input->getOption('copy'));
         if (!$readMeGeneratorSvc->validate($errors))
         {
