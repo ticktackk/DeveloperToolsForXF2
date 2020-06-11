@@ -5,6 +5,7 @@ CHANGELOG
 
 - **Change:** Stop building readme when building add-on (#83)
 - **Fix:** Suppress DOM errors when attempting to convert markdown to HTML (#81)
+- **Fix:** Fix potential server error when attempting to copy files
 
 ## 1.3.0 (`1030070`)
 
