@@ -365,9 +365,9 @@ class ReadmeBuilder extends AbstractService
         if (\count($requirements))
         {
             $requirementsBlock .= '<h2>Requirements</h2><ul>';
-            foreach ($requirements AS $requirement)
+            foreach ($requirements AS $requirement => $version)
             {
-                $readableRequirement = \end($requirement);
+                $readableRequirement = ($version === '*') ? $requirement : \end($version);
                 $requirementsBlock .= "<li>{$readableRequirement}</li>";
             }
             $requirementsBlock .= '</ul>';
