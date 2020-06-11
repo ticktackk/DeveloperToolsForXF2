@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.3.0 (`1030070`)
+
+- **New:** Allow viewing HTML and text sent via emails (#78)
+
 ## 1.2.3 (`1020370`)
 
 - **Change:** Disable polyfill for JsMinifier closure (#74) (Thanks @[DragonByte Tech](https://xenforo.com/community/members/dragonbyte-tech.2478/))

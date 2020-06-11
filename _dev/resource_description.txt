@@ -25,6 +25,7 @@ This add-on provides enhancements for add-on developers.
 [*]Build add-on archive from ACP
 [*]View template modifications applied on a specific template
 [*]Minify JavaScript files locally
+[*]Lookup what email HTML and plain text was sent (Since 1.3)
 [*]Automatically generate [ICODE]README.md[/ICODE]...
 [LIST]
 [*]The following information will be available in README with description whenever possible:
@@ -117,10 +118,6 @@ This add-on provides enhancements for add-on developers.
 [TH]Description[/TH]
 [/TR]
 [TR]
-[TD][ICODE]tck-devtools:build-readme[/ICODE][/TD]
-[TD]Builds README files for provided add-on.[/TD]
-[/TR]
-[TR]
 [TD][ICODE]tck-devtools:add-phrase[/ICODE][/TD]
 [TD]Creates a phrase for an add-on.[/TD]
 [/TR]
@@ -139,6 +136,10 @@ This add-on provides enhancements for add-on developers.
 [TR]
 [TD][ICODE]tck-devtools:generate-schema-entity[/ICODE][/TD]
 [TD]Generates schema code from an entity[/TD]
+[/TR]
+[TR]
+[TD][ICODE]tck-devtools:build-readme[/ICODE][/TD]
+[TD]Builds README files for provided add-on.[/TD]
 [/TR]
 [TR]
 [TD][ICODE]tck-devtools:clamp-versions[/ICODE][/TD]
