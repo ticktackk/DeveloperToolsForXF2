@@ -22,6 +22,29 @@ class Setup extends AbstractSetup
     use StepRunnerUpgradeTrait;
     use StepRunnerUninstallTrait;
 
+    public function installStep1() : void
+    {
+        $sm = $this->schemaManager();
+
+        $sm->createTable('xf_tck_developer_tools_email_log', function(\XF\Db\Schema\Create $table)
+        {
+            $table->addColumn('email_id', 'int')->nullable()->autoIncrement();
+            $table->addColumn('subject', 'text');
+            $table->addColumn('log_date', 'int');
+            $table->addColumn('return_path', 'text');
+            $table->addColumn('sender', 'blob')->nullable();
+            $table->addColumn('from', 'blob');
+            $table->addColumn('reply_to', 'blob')->nullable();
+            $table->addColumn('to', 'blob');
+            $table->addColumn('cc', 'blob')->nullable();
+            $table->addColumn('bcc', 'blob')->nullable();
+            $table->addColumn('html_message', 'text')->nullable();
+            $table->addColumn('text_message', 'text')->nullable();
+
+            $table->addKey('log_date');
+        });
+    }
+
     public function upgrade1000033Step1() : void
     {
         $addOns = $this->db()->fetchAll("
@@ -209,5 +232,10 @@ class Setup extends AbstractSetup
                 }
             }
         }
+    }
+
+    public function upgrade1030070Step1() : void
+    {
+        $this->installStep1();
     }
 }

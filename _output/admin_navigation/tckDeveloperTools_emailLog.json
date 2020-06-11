@@ -1,0 +1,10 @@
+{
+    "parent_navigation_id": "logsMisc",
+    "display_order": 900,
+    "link": "logs/email",
+    "icon": "",
+    "admin_permission_id": "viewLogs",
+    "debug_only": true,
+    "development_only": true,
+    "hide_no_children": false
+}

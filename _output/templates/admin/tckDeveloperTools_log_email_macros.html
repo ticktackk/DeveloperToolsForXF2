@@ -1,0 +1,9 @@
+<xf:macro name="email_list" arg-emails="!">
+	<xf:if is="is_array($emails)">
+		<ul class="listInline listInline--comma listInline--selfInline">
+			<xf:foreach loop="$emails" key="$email" value="$name"><xf:trim>
+				<li>{$name} ({$email})</li>
+			</xf:trim></xf:foreach>
+		</ul>
+	</xf:if>
+</xf:macro>

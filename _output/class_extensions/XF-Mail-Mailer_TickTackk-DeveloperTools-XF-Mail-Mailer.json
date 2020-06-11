@@ -1,0 +1,6 @@
+{
+    "from_class": "XF\\Mail\\Mailer",
+    "to_class": "TickTackk\\DeveloperTools\\XF\\Mail\\Mailer",
+    "execute_order": 10,
+    "active": true
+}

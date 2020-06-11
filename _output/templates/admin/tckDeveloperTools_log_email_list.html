@@ -1,0 +1,35 @@
+<xf:title>{{ phrase('tckDeveloperTools_email_log') }}</xf:title>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist>
+				<xf:foreach loop="$emailLogs" value="$emailLog">
+					<xf:datarow overlay="true"
+								label="{$emailLog.subject}"
+								href="{{ link('logs/emails', $emailLog) }}"
+								delete="{{ link('logs/emails/delete', $emailLog) }}"
+								dir="auto">
+						<xf:explain>
+							<ul class="listInline listInline--bullet">
+								<li><xf:date time="{$emailLog.log_date}" /></li>
+								<li><xf:macro template="tckDeveloperTools_log_email_macros" name="email_list"
+											  arg-emails="{$emailLog.to}" /></li>
+							</ul>
+						</xf:explain>
+					</xf:datarow>
+				<xf:else />
+					<xf:datarow>
+						<xf:cell>{{ phrase('tckDeveloperTools_no_entries_have_been_logged') }}</xf:cell>
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+		<div class="block-footer">
+			<span class="block-footer-counter">{{ display_totals($emailLogs, $total) }}</span>
+		</div>
+	</div>
+	<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+				link="logs/emails" params="{$linkFilters}"
+				wrapperclass="block-outer block-outer--after" />
+</div>
