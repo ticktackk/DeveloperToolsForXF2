@@ -52,6 +52,12 @@ class BuildReadme extends Command
                 InputOption::VALUE_NONE,
                 'Builds BBCode version of the README file.'
             )
+            ->addOption(
+                'copy',
+                'c',
+                InputOption::VALUE_NONE,
+                'Also copies the resulting file(s) to the \'_no_upload\' directory.'
+            )
         ;
     }
 
@@ -85,7 +91,7 @@ class BuildReadme extends Command
             $types[] = 'bb_code';
         }
 
-        $readMeGeneratorSvc = $this->getReadMeGeneratorSvc($addOnObj, $types);
+        $readMeGeneratorSvc = $this->getReadMeGeneratorSvc($addOnObj, $types, (bool)$input->getOption('copy'));
         if (!$readMeGeneratorSvc->validate($errors))
         {
             foreach ($errors AS $error)
@@ -124,11 +130,12 @@ class BuildReadme extends Command
     /**
      * @param AddOn $addOn
      * @param array $types
+     * @param bool $copy
      *
      * @return AbstractService|AddOnReadmeBuilderSvc
      */
-    protected function getReadMeGeneratorSvc(AddOn $addOn, array $types = []) : AddOnReadmeBuilderSvc
+    protected function getReadMeGeneratorSvc(AddOn $addOn, array $types = [], bool $copy = false) : AddOnReadmeBuilderSvc
     {
-        return $this->service('TickTackk\DeveloperTools:AddOn\ReadmeBuilder', $addOn, $types);
+        return $this->service('TickTackk\DeveloperTools:AddOn\ReadmeBuilder', $addOn, $types, $copy);
     }
 }

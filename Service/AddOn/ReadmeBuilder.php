@@ -58,6 +58,11 @@ class ReadmeBuilder extends AbstractService
      */
     protected $types;
 
+    /**
+     * @var bool
+     */
+    protected $copy;
+
 
     /**
      * ReadMeGenerator constructor.
@@ -65,13 +70,15 @@ class ReadmeBuilder extends AbstractService
      * @param BaseApp $app
      * @param AddOn $addOn
      * @param array $types
+     * @param bool $copy
      */
-    public function __construct(BaseApp $app, AddOn $addOn, array $types = [])
+    public function __construct(BaseApp $app, AddOn $addOn, array $types = [], bool $copy = false)
     {
         parent::__construct($app);
 
         $this->addOn = $addOn;
         $this->types = $types;
+        $this->copy = $copy;
     }
 
     /**
@@ -718,18 +725,23 @@ class ReadmeBuilder extends AbstractService
         {
             if ($type === static::OUTPUT_FORMAT_MARKDOWN)
             {
-                $fileAndOutputFormatMap[static::OUTPUT_FORMAT_MARKDOWN] = FileUtil::canonicalizePath('README.md', $addOnRoot);
+                $fileAndOutputFormatMap[static::OUTPUT_FORMAT_MARKDOWN] = FileUtil::canonicalizePath(
+                    'README.md',
+                    $addOnRoot
+                );
             }
             else if ($type === static::OUTPUT_FORMAT_BB_CODE)
             {
-                $fileAndOutputFormatMap[static::OUTPUT_FORMAT_BB_CODE] = FileUtil::canonicalizePath("resource_description.txt",
-                    FileUtil::canonicalizePath('_dev', $addOnRoot)
+                $fileAndOutputFormatMap[static::OUTPUT_FORMAT_BB_CODE] = FileUtil::canonicalizePath(
+                    '_dev/resource_description.txt',
+                    $addOnRoot
                 );
             }
             else if ($type === static::OUTPUT_FORMAT_HTML)
             {
-                $fileAndOutputFormatMap[static::OUTPUT_FORMAT_HTML] = FileUtil::canonicalizePath("resource_description.html",
-                    FileUtil::canonicalizePath('_dev', $addOnRoot)
+                $fileAndOutputFormatMap[static::OUTPUT_FORMAT_HTML] = FileUtil::canonicalizePath(
+                    '_dev/resource_description.html',
+                    $addOnRoot
                 );
             }
         }
@@ -761,6 +773,17 @@ class ReadmeBuilder extends AbstractService
             }
 
             FileUtil::writeFile($filePath, utf8_trim($contents), false);
+
+            if ($this->copy)
+            {
+                FileUtil::copyFile(
+                    $filePath,
+                    FileUtil::canonicalizePath(
+                        '_no_upload/' . pathinfo($filePath, PATHINFO_BASENAME),
+                        $addOnRoot
+                    )
+                );
+            }
         }
     }
 }
