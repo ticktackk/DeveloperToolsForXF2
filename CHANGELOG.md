@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.3.1 (`1030170`)
+
+- **Change:** Stop building readme when building add-on (#83)
+
 ## 1.3.0 (`1030070`)
 
 - **New:** Allow viewing HTML and text sent via emails (#78)

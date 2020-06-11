@@ -15,21 +15,6 @@ use XF\Util\File as FileUtil;
 class ReleaseBuilder extends XFCP_ReleaseBuilder
 {
     /**
-     * @throws PrintableException
-     */
-    protected function prepareDirectories()
-    {
-        $readmeBuilderSvc = $this->getReadmeBuilderSvc();
-        if (!$readmeBuilderSvc->validate($errors))
-        {
-            throw new PrintableException($errors);
-        }
-        $readmeBuilderSvc->save();
-
-        parent::prepareDirectories();
-    }
-
-    /**
      * @throws \XF\PrintableException
      */
     public function performBuildTasks()
@@ -138,14 +123,5 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
         \array_push($excludedDirectories, ...$excludedDirectoriesFromBuildFile);
 
         return \array_unique($excludedDirectories);
-    }
-
-    /**
-     * @return AbstractService|AddOnReadmeBuilder
-     */
-    protected function getReadmeBuilderSvc() : AddOnReadmeBuilder
-    {
-        $addOn = $this->addOn;
-        return $this->service('TickTackk\DeveloperTools:AddOn\ReadmeBuilder', $addOn);
     }
 }
