@@ -1,0 +1,11 @@
+{
+    "route_type": "admin",
+    "route_prefix": "logs",
+    "sub_name": "emails",
+    "format": "emails/:int<email_id>/",
+    "build_class": "",
+    "build_method": "",
+    "controller": "XF:Log",
+    "context": "tckDeveloperTools_emailLog",
+    "action_prefix": "email"
+}

@@ -6,6 +6,7 @@
 namespace TickTackk\DeveloperTools\XF\Admin\Controller
 {
 	class XFCP_AddOn extends \XF\Admin\Controller\AddOn {}
+	class XFCP_Log extends \XF\Admin\Controller\Log {}
 	class XFCP_Option extends \XF\Admin\Controller\Option {}
 	class XFCP_Phrase extends \XF\Admin\Controller\Phrase {}
 	class XFCP_Template extends \XF\Admin\Controller\Template {}
@@ -26,6 +27,11 @@ namespace TickTackk\DeveloperTools\XF\Html\Renderer
 namespace TickTackk\DeveloperTools\XF\Job
 {
 	class XFCP_FileCheck extends \XF\Job\FileCheck {}
+}
+
+namespace TickTackk\DeveloperTools\XF\Mail
+{
+	class XFCP_Mailer extends \XF\Mail\Mailer {}
 }
 
 namespace TickTackk\DeveloperTools\XF\Mvc\Renderer
