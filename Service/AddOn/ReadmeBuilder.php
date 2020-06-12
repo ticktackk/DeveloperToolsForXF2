@@ -472,23 +472,49 @@ class ReadmeBuilder extends AbstractService
                 $block .= '</tbody></table>';
             };
 
+            $generateListFromEntity = function($entities, array $headerMap) use (&$block, &$readme)
+            {
+                $block .= '<ul>';
+
+                // entity row
+                foreach ($entities as $entity)
+                {
+                    $getter = \end($headerMap);
+
+                    if ($getter instanceof \Closure)
+                    {
+                        $value = $getter($entity);
+                    }
+                    else
+                    {
+                        $value = $entity[$getter];
+                    }
+
+                    $block .= "<li>{$value}</li>";
+                }
+
+                $block .= '</ul>';
+            };
+
             $block = '';
 
             if (\count($entities))
             {
                 $block .= "<h2>{$tableTitle}</h2>";
 
+                $func = (count($headerMap) == 1) ? $generateListFromEntity : $geneerateTableBodyFromEntity;
+
                 if ($groupedEntities)
                 {
                     foreach ($entities as $group => $entity)
                     {
                         $block .= "<h4>{$group}</h4>";
-                        $geneerateTableBodyFromEntity($entity, $headerMap);
+                        $func($entity, $headerMap);
                     }
                 }
                 else
                 {
-                    $geneerateTableBodyFromEntity($entities, $headerMap);
+                    $func($entities, $headerMap);
                 }
             }
 
