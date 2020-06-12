@@ -11,6 +11,8 @@ CHANGELOG
 - **Fix:** Potential server error when attempting to copy files
 - **Fix:** Error with building the list of requirements if the version was `*` instead of an array
 
+Some of the contributions were made by @[DragonByte Tech](https://xenforo.com/community/members/dragonbyte-tech.2478/)
+
 ## 1.3.0 (`1030070`)
 
 - **New:** Allow viewing HTML and text sent via emails (#78)
