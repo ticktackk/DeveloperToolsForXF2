@@ -105,7 +105,8 @@ class ReadmeBuilder extends AbstractService
         $data = [
             'title' => $installedAddOn->title,
             'description' => $addOnJson['description'] ?? '',
-            'requirements' => $addOnJson['require'] ?? []
+            'requirements' => $addOnJson['require'] ?? [],
+            'softRequirements' => $addOnJson['require-soft'] ?? [],
         ];
 
         $finderAndDataMap = $this->getFinderAndDataMap();
@@ -373,6 +374,20 @@ class ReadmeBuilder extends AbstractService
             $requirementsBlock .= '</ul>';
         }
         $this->handleHookContents('Requirements', $requirementsBlock, $readme);
+
+        $softRequirements = $data['softRequirements'];
+        $softRequirementsBlock = '';
+        if (\count($softRequirements))
+        {
+            $softRequirementsBlock .= '<h2>Recommendations</h2><ul>';
+            foreach ($softRequirements AS $softRequirement => $version)
+            {
+                $readableRequirement = ($version === '*') ? $softRequirement : $version[1];
+                $softRequirementsBlock .= "<li>{$readableRequirement}</li>";
+            }
+            $softRequirementsBlock .= '</ul>';
+        }
+        $this->handleHookContents('Recommendations', $softRequirementsBlock, $readme);
 
         /**
          * @param string $tableTitle
