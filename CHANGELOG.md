@@ -8,8 +8,8 @@ CHANGELOG
 - **New:** Support for @Xon's `require-soft` recommendations parameter in `addon.json`
 - **Change:** Stop building readme when building add-on (#83)
 - **Fix:** Suppress DOM errors when attempting to convert markdown to HTML (#81)
-- **Fix:** Fix potential server error when attempting to copy files
-- **Fix:** Fixed an error with building the list of requirements if the version was `*` instead of an array
+- **Fix:** Potential server error when attempting to copy files
+- **Fix:** Error with building the list of requirements if the version was `*` instead of an array
 
 ## 1.3.0 (`1030070`)
 
