@@ -87,6 +87,11 @@ class Phrase extends XFCP_Phrase
 
                 foreach ($phrases AS $input)
                 {
+                    if (empty($input['title']))
+                    {
+                        continue;
+                    }
+
                     /** @var PhraseEntity $phrase */
                     $phrase = $this->em()->create('XF:Phrase');
 
