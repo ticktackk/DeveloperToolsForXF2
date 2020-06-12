@@ -54,16 +54,31 @@ class ReadmeBuilder extends AbstractService
     protected $addOn;
 
     /**
+     * @var array
+     */
+    protected $types;
+
+    /**
+     * @var bool
+     */
+    protected $copy;
+
+
+    /**
      * ReadMeGenerator constructor.
      *
      * @param BaseApp $app
      * @param AddOn $addOn
+     * @param array $types
+     * @param bool $copy
      */
-    public function __construct(BaseApp $app, AddOn $addOn)
+    public function __construct(BaseApp $app, AddOn $addOn, array $types = [], bool $copy = false)
     {
         parent::__construct($app);
 
         $this->addOn = $addOn;
+        $this->types = $types;
+        $this->copy = $copy;
     }
 
     /**
@@ -90,7 +105,8 @@ class ReadmeBuilder extends AbstractService
         $data = [
             'title' => $installedAddOn->title,
             'description' => $addOnJson['description'] ?? '',
-            'requirements' => $addOnJson['require'] ?? []
+            'requirements' => $addOnJson['require'] ?? [],
+            'softRequirements' => $addOnJson['require-soft'] ?? [],
         ];
 
         $finderAndDataMap = $this->getFinderAndDataMap();
@@ -350,14 +366,28 @@ class ReadmeBuilder extends AbstractService
         if (\count($requirements))
         {
             $requirementsBlock .= '<h2>Requirements</h2><ul>';
-            foreach ($requirements AS $requirement)
+            foreach ($requirements AS $requirement => $version)
             {
-                $readableRequirement = \end($requirement);
+                $readableRequirement = ($version === '*') ? $requirement : \end($version);
                 $requirementsBlock .= "<li>{$readableRequirement}</li>";
             }
             $requirementsBlock .= '</ul>';
         }
         $this->handleHookContents('Requirements', $requirementsBlock, $readme);
+
+        $softRequirements = $data['softRequirements'];
+        $softRequirementsBlock = '';
+        if (\count($softRequirements))
+        {
+            $softRequirementsBlock .= '<h2>Recommendations</h2><ul>';
+            foreach ($softRequirements AS $softRequirement => $version)
+            {
+                $readableRequirement = ($version === '*') ? $softRequirement : $version[1];
+                $softRequirementsBlock .= "<li>{$readableRequirement}</li>";
+            }
+            $softRequirementsBlock .= '</ul>';
+        }
+        $this->handleHookContents('Recommendations', $softRequirementsBlock, $readme);
 
         /**
          * @param string $tableTitle
@@ -705,12 +735,31 @@ class ReadmeBuilder extends AbstractService
         $addOn = $this->getAddOn();
         $addOnRoot = $addOn->getAddOnDirectory();
 
-        $fileAndOutputFormatMap = [
-            static::OUTPUT_FORMAT_MARKDOWN => FileUtil::canonicalizePath('README.md', $addOnRoot),
-            static::OUTPUT_FORMAT_BB_CODE => FileUtil::canonicalizePath("resource_description.txt",
-                FileUtil::canonicalizePath('_dev', $addOnRoot)
-            )
-        ];
+        $fileAndOutputFormatMap = [];
+        foreach ($this->types as $type)
+        {
+            if ($type === static::OUTPUT_FORMAT_MARKDOWN)
+            {
+                $fileAndOutputFormatMap[static::OUTPUT_FORMAT_MARKDOWN] = FileUtil::canonicalizePath(
+                    'README.md',
+                    $addOnRoot
+                );
+            }
+            else if ($type === static::OUTPUT_FORMAT_BB_CODE)
+            {
+                $fileAndOutputFormatMap[static::OUTPUT_FORMAT_BB_CODE] = FileUtil::canonicalizePath(
+                    '_dev/resource_description.txt',
+                    $addOnRoot
+                );
+            }
+            else if ($type === static::OUTPUT_FORMAT_HTML)
+            {
+                $fileAndOutputFormatMap[static::OUTPUT_FORMAT_HTML] = FileUtil::canonicalizePath(
+                    '_dev/resource_description.html',
+                    $addOnRoot
+                );
+            }
+        }
 
         $readmeHtml = $this->generateHtml();
         foreach ($fileAndOutputFormatMap AS $format => $filePath)
@@ -722,6 +771,7 @@ class ReadmeBuilder extends AbstractService
                 $environment->addConverter(new TableConverter());
 
                 $htmlConverter = new HtmlConverter($environment);
+                $htmlConverter->getConfig()->setOption('suppress_errors', true);
                 $contents = $htmlConverter->convert($readmeHtml);
             }
             else if ($format === static::OUTPUT_FORMAT_BB_CODE)
@@ -738,6 +788,17 @@ class ReadmeBuilder extends AbstractService
             }
 
             FileUtil::writeFile($filePath, utf8_trim($contents), false);
+
+            if ($this->copy)
+            {
+                FileUtil::copyFile(
+                    $filePath,
+                    FileUtil::canonicalizePath(
+                        '_no_upload/' . pathinfo($filePath, PATHINFO_BASENAME),
+                        $addOnRoot
+                    )
+                );
+            }
         }
     }
 }

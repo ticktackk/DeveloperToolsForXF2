@@ -1,6 +1,18 @@
 CHANGELOG
 ==========================
 
+## 1.3.1 (`1030170`)
+
+- **New:** Arguments must now be passed to `tck-devtools:build-readme` in order to build any of the 3 different output formats
+- **New:** A new argument can be passed to `tck-devtools:build-readme` in order to copy the resulting file to the `_no_upload` directory
+- **New:** Support for @Xon's `require-soft` recommendations parameter in `addon.json`
+- **Change:** Stop building readme when building add-on (#83)
+- **Fix:** Suppress DOM errors when attempting to convert markdown to HTML (#81)
+- **Fix:** Potential server error when attempting to copy files
+- **Fix:** Error with building the list of requirements if the version was `*` instead of an array
+
+Some of the contributions were made by @[DragonByte Tech](https://xenforo.com/community/members/dragonbyte-tech.2478/)
+
 ## 1.3.0 (`1030070`)
 
 - **New:** Allow viewing HTML and text sent via emails (#78)

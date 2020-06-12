@@ -5,6 +5,7 @@ namespace TickTackk\DeveloperTools\Cli\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TickTackk\DeveloperTools\Service\AddOn\ReadmeBuilder as AddOnReadmeBuilderSvc;
 use XF\AddOn\AddOn;
@@ -28,7 +29,36 @@ class BuildReadme extends Command
             ->setName('tck-devtools:build-readme')
             ->setAliases(['tck-dt:build-readme'])
             ->setDescription('Builds README files for provided add-on.')
-            ->addArgument('id', InputArgument::REQUIRED, 'Add-On ID');
+            ->addArgument(
+                'id',
+                InputArgument::REQUIRED,
+                'Add-On ID'
+            )
+            ->addOption(
+                'markdown',
+                'm',
+                InputOption::VALUE_NONE,
+                'Builds Markdown version of the README file.'
+            )
+            ->addOption(
+                'html',
+                't',
+                InputOption::VALUE_NONE,
+                'Builds HTML version of the README file.'
+            )
+            ->addOption(
+                'bbcode',
+                'b',
+                InputOption::VALUE_NONE,
+                'Builds BBCode version of the README file.'
+            )
+            ->addOption(
+                'copy',
+                'c',
+                InputOption::VALUE_NONE,
+                'Also copies the resulting file(s) to the \'_no_upload\' directory.'
+            )
+        ;
     }
 
     /**
@@ -47,7 +77,27 @@ class BuildReadme extends Command
             return 1;
         }
 
-        $readMeGeneratorSvc = $this->getReadMeGeneratorSvc($addOnObj);
+        $types = [];
+        if ($input->getOption('markdown'))
+        {
+            $types[] = 'md';
+        }
+        if ($input->getOption('html'))
+        {
+            $types[] = 'html';
+        }
+        if ($input->getOption('bbcode'))
+        {
+            $types[] = 'bb_code';
+        }
+
+        if (empty($types))
+        {
+            $output->writeln('<error>You must specify at least one readme type!</error>');
+            return 1;
+        }
+
+        $readMeGeneratorSvc = $this->getReadMeGeneratorSvc($addOnObj, $types, (bool)$input->getOption('copy'));
         if (!$readMeGeneratorSvc->validate($errors))
         {
             foreach ($errors AS $error)
@@ -85,11 +135,13 @@ class BuildReadme extends Command
 
     /**
      * @param AddOn $addOn
+     * @param array $types
+     * @param bool $copy
      *
      * @return AbstractService|AddOnReadmeBuilderSvc
      */
-    protected function getReadMeGeneratorSvc(AddOn $addOn) : AddOnReadmeBuilderSvc
+    protected function getReadMeGeneratorSvc(AddOn $addOn, array $types = [], bool $copy = false) : AddOnReadmeBuilderSvc
     {
-        return $this->service('TickTackk\DeveloperTools:AddOn\ReadmeBuilder', $addOn);
+        return $this->service('TickTackk\DeveloperTools:AddOn\ReadmeBuilder', $addOn, $types, $copy);
     }
 }
