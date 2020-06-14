@@ -443,17 +443,17 @@ class ReadmeBuilder extends AbstractService
                 $block .= '<table style="width:100%">';
                 // header row
                 $block .= '<thead><tr>';
-                foreach (\array_keys($headerMap) as $header)
+                foreach (\array_keys($headerMap) AS $header)
                 {
                     $block .= "<th>{$header}</th>";
                 }
                 $block .= '</tr></thead><tbody>';
 
                 // entity row
-                foreach ($entities as $entity)
+                foreach ($entities AS $entity)
                 {
                     $block .= '<tr>';
-                    foreach ($headerMap as $header => $getter)
+                    foreach ($headerMap AS $header => $getter)
                     {
                         if ($getter instanceof \Closure)
                         {
@@ -477,7 +477,7 @@ class ReadmeBuilder extends AbstractService
                 $block .= '<ul>';
 
                 // entity row
-                foreach ($entities as $entity)
+                foreach ($entities AS $entity)
                 {
                     $getter = \end($headerMap);
 
@@ -506,7 +506,7 @@ class ReadmeBuilder extends AbstractService
 
                 if ($groupedEntities)
                 {
-                    foreach ($entities as $group => $entity)
+                    foreach ($entities AS $group => $entity)
                     {
                         $block .= "<h4>{$group}</h4>";
                         $func($entity, $headerMap);
@@ -783,7 +783,7 @@ class ReadmeBuilder extends AbstractService
         $addOnRoot = $addOn->getAddOnDirectory();
 
         $fileAndOutputFormatMap = [];
-        foreach ($this->types as $type)
+        foreach ($this->types AS $type)
         {
             if ($type === static::OUTPUT_FORMAT_MARKDOWN)
             {
