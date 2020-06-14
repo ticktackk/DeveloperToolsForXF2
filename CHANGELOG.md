@@ -3,8 +3,8 @@ CHANGELOG
 
 ## 1.3.2 (`1030270`)
 
-- **Change:** Options, Permissions and Style Properties are now grouped in the output rather than displaying group inline
-- **Fix:** Fix newline printing literally in the resulting Markdown code
+- **Change:** Options, Permissions and Style Properties are now grouped in the output rather than displaying group inline (#88)
+- **Fix:** Fix newline printing literally in the resulting Markdown code (#88)
 
 ## 1.3.1 (`1030170`)
 
