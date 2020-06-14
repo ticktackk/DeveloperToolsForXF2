@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.3.2 (`1030270`)
+
+- **Fix:** Cron entries that use "Day of the week" run schedule will now correctly generate readme entries (#87)
+
 ## 1.3.1 (`1030170`)
 
 - **New:** Arguments must now be passed to `tck-devtools:build-readme` in order to build any of the 3 different output formats

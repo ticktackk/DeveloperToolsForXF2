@@ -634,7 +634,7 @@ class ReadmeBuilder extends AbstractService
                         $days[] = $dayMap[$dayOfMonth];
                     }
 
-                    return 'On ' . \implode(', ', $days);
+                    return 'The ' . \implode(', ', $days) . ' of the month';
                 }
 
                 if (\in_array(-1, $runRules['dow']))
@@ -653,12 +653,12 @@ class ReadmeBuilder extends AbstractService
                 ];
 
                 $days = [];
-                foreach ($runRules['dom'] AS $dayOfWeek)
+                foreach ($runRules['dow'] AS $dayOfWeek)
                 {
                     $days[] = $daysMap[$dayOfWeek];
                 }
 
-                return 'On ' . \implode(', ', $days);
+                return 'Every ' . \implode(', ', $days);
             },
             'Run at hours' => function(CronEntryEntity $cronEntry)
             {
