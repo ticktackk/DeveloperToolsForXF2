@@ -120,6 +120,47 @@ class ReadmeBuilder extends AbstractService
 
         $data['cli_commands'] = $this->getCliCommands();
 
+        // Grouped exports
+        $data['options'] = $data['options']->groupBy(function(OptionEntity $option)
+        {
+            /** @var OptionGroupRelationEntity $optionGroupRelation */
+            $optionGroupRelation = $option->Relations->first();
+            if (!$optionGroupRelation)
+            {
+                return 'Unknown';
+            }
+
+            $optionGroup = $optionGroupRelation->OptionGroup;
+            if (!$optionGroup)
+            {
+                return 'Unknown';
+            }
+
+            $group = $optionGroup->getMasterPhrase('title')->phrase_text;
+            if ($optionGroup->debug_only)
+            {
+                $group .= ' (Debug only)';
+            }
+
+            return $group;
+        });
+
+        $data['permissions'] = $data['permissions']->groupBy(function(PermissionEntity $permission)
+        {
+            return $permission->Interface->getMasterPhrase()->phrase_text;
+        });
+
+        $data['style_properties'] = $data['style_properties']->groupBy(function(StylePropertyEntity $styleProperty)
+        {
+            $stylePropertyGroup = $styleProperty->Group;
+            if (!$stylePropertyGroup)
+            {
+                return 'Unknown';
+            }
+
+            return $stylePropertyGroup->getMasterPhrase(true)->phrase_text;
+        });
+
         return $data;
     }
 
@@ -393,29 +434,26 @@ class ReadmeBuilder extends AbstractService
          * @param string $tableTitle
          * @param ArrayCollection|array|Entity[] $entities
          * @param array $headerMap
+         * @param bool $groupedEntities
          */
-        $generateTableFromEntity = function (string $tableTitle, $entities, array $headerMap) use(&$readme) : void
+        $generateTableFromEntity = function (string $tableTitle, $entities, array $headerMap, bool $groupedEntities = false) use(&$readme) : void
         {
-            $block = '';
-
-            if (\count($entities))
+            $geneerateTableBodyFromEntity = function($entities, array $headerMap) use (&$block, &$readme)
             {
-                $block .= "<h2>{$tableTitle}</h2>";
                 $block .= '<table style="width:100%">';
-
                 // header row
                 $block .= '<thead><tr>';
-                foreach (\array_keys($headerMap) AS $header)
+                foreach (\array_keys($headerMap) as $header)
                 {
                     $block .= "<th>{$header}</th>";
                 }
                 $block .= '</tr></thead><tbody>';
 
                 // entity row
-                foreach ($entities AS $entity)
+                foreach ($entities as $entity)
                 {
                     $block .= '<tr>';
-                    foreach ($headerMap AS $header => $getter)
+                    foreach ($headerMap as $header => $getter)
                     {
                         if ($getter instanceof \Closure)
                         {
@@ -432,35 +470,58 @@ class ReadmeBuilder extends AbstractService
                 }
 
                 $block .= '</tbody></table>';
+            };
+
+            $generateListFromEntity = function($entities, array $headerMap) use (&$block, &$readme)
+            {
+                $block .= '<ul>';
+
+                // entity row
+                foreach ($entities as $entity)
+                {
+                    $getter = \end($headerMap);
+
+                    if ($getter instanceof \Closure)
+                    {
+                        $value = $getter($entity);
+                    }
+                    else
+                    {
+                        $value = $entity[$getter];
+                    }
+
+                    $block .= "<li>{$value}</li>";
+                }
+
+                $block .= '</ul>';
+            };
+
+            $block = '';
+
+            if (\count($entities))
+            {
+                $block .= "<h2>{$tableTitle}</h2>";
+
+                $func = (count($headerMap) == 1) ? $generateListFromEntity : $geneerateTableBodyFromEntity;
+
+                if ($groupedEntities)
+                {
+                    foreach ($entities as $group => $entity)
+                    {
+                        $block .= "<h4>{$group}</h4>";
+                        $func($entity, $headerMap);
+                    }
+                }
+                else
+                {
+                    $func($entities, $headerMap);
+                }
             }
 
             $this->handleHookContents($tableTitle, $block, $readme);
         };
 
         $generateTableFromEntity('Options', $data['options'], [
-            'Group' => function(OptionEntity $option)
-            {
-                /** @var OptionGroupRelationEntity $optionGroupRelation */
-                $optionGroupRelation = $option->Relations->first();
-                if (!$optionGroupRelation)
-                {
-                    return 'Unknown';
-                }
-
-                $optionGroup = $optionGroupRelation->OptionGroup;
-                if (!$optionGroup)
-                {
-                    return 'Unknown';
-                }
-
-                $group = $optionGroup->getMasterPhrase('title')->phrase_text;
-                if ($optionGroup->debug_only)
-                {
-                    $group .= ' (Debug only)';
-                }
-
-                return $group;
-            },
             'Name' => function(OptionEntity $option)
             {
                 return $option->getMasterPhrase(true)->phrase_text;
@@ -469,18 +530,14 @@ class ReadmeBuilder extends AbstractService
             {
                 return $option->getMasterPhrase(false)->phrase_text;
             }
-        ]);
+        ], true);
 
         $generateTableFromEntity('Permissions', $data['permissions'], [
-            'Group' => function(PermissionEntity $permission)
-            {
-                return $permission->Interface->getMasterPhrase()->phrase_text;
-            },
             'Permission' => function(PermissionEntity $permission)
             {
                 return $permission->getMasterPhrase()->phrase_text;
             }
-        ]);
+        ], true);
 
         $generateTableFromEntity('Admin Permissions', $data['admin_permissions'], [
             'Permission' => function(AdminPermissionEntity $adminPermission)
@@ -531,16 +588,6 @@ class ReadmeBuilder extends AbstractService
         ]);
 
         $generateTableFromEntity('Style Properties', $data['style_properties'], [
-            'Group' => function(StylePropertyEntity $styleProperty)
-            {
-                $stylePropertyGroup = $styleProperty->Group;
-                if (!$stylePropertyGroup)
-                {
-                    return 'Unknown';
-                }
-
-                return $stylePropertyGroup->getMasterPhrase(true)->phrase_text;
-            },
             'Property' => function(StylePropertyEntity $styleProperty)
             {
                 return $styleProperty->getMasterPhrase(true)->phrase_text;
@@ -549,7 +596,7 @@ class ReadmeBuilder extends AbstractService
             {
                 return $styleProperty->getMasterPhrase(false)->phrase_text;
             }
-        ]);
+        ], true);
 
         $generateTableFromEntity('Advertising Positions', $data['advertising_positions'], [
             'Position' => function(AdvertisingPositionEntity $advertisingPosition)
@@ -772,7 +819,7 @@ class ReadmeBuilder extends AbstractService
 
                 $htmlConverter = new HtmlConverter($environment);
                 $htmlConverter->getConfig()->setOption('suppress_errors', true);
-                $contents = $htmlConverter->convert($readmeHtml);
+                $contents = str_replace('  \n', '<br />', $htmlConverter->convert($readmeHtml));
             }
             else if ($format === static::OUTPUT_FORMAT_BB_CODE)
             {
