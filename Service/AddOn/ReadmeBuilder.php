@@ -436,7 +436,7 @@ class ReadmeBuilder extends AbstractService
          * @param array $headerMap
          * @param bool $groupedEntities
          */
-        $generateTableFromEntity = function (string $tableTitle, $entities, array $headerMap, $groupedEntities = false) use(&$readme) : void
+        $generateTableFromEntity = function (string $tableTitle, $entities, array $headerMap, bool $groupedEntities = false) use(&$readme) : void
         {
             $geneerateTableBodyFromEntity = function($entities, array $headerMap) use (&$block, &$readme)
             {
