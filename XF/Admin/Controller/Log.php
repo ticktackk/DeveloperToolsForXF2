@@ -49,7 +49,7 @@ class Log extends XFCP_Log
         }
 
         $page = $this->filterPage();
-        $perPage = 5;
+        $perPage = 100;
 
         $emailLogRepo = $this->getEmailLogRepo();
         $emailLogFinder = $emailLogRepo->findEmailLogForList()->limitByPage($page, $perPage);

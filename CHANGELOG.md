@@ -4,6 +4,7 @@ CHANGELOG
 ## 1.3.2 (`1030270`)
 
 - **Change:** Options, Permissions and Style Properties are now grouped in the output rather than displaying group inline (#88)
+- **Change:** Increase mails per-page to 100 (#89)
 - **Fix:** Fix newline printing literally in the resulting Markdown code (#88)
 - **Fix:** Cron entries that use "Day of the week" run schedule will now correctly generate readme entries (#87)
 
