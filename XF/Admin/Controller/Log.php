@@ -70,6 +70,21 @@ class Log extends XFCP_Log
         );
     }
 
+    public function actionEmailClear() : AbstractReply
+    {
+        if ($this->isPost())
+        {
+            $this->getEmailLogRepo()->clearEmailLog();
+
+            return $this->redirect($this->buildLink('logs/emails'));
+        }
+
+        return $this->view(
+            'TickTackk\DeveloperTools\XF:Log\Email\Clear',
+            'tckDeveloperTools_log_email_clear'
+        );
+    }
+
     /**
      * @param ParameterBag $parameterBag
      *
