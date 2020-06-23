@@ -69,6 +69,11 @@ class EmailLog extends Repository
         $emailLog->save();
     }
 
+    public function clearEmailLog() : void
+    {
+        $this->db()->emptyTable('xf_tck_developer_tools_email_log');
+    }
+
     /**
      * @return Finder|EmailLogFinder
      */
