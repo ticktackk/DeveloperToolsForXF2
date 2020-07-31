@@ -5,7 +5,7 @@ namespace TickTackk\DeveloperTools\Repository;
 use XF\Mvc\Entity\Finder;
 use XF\Mvc\Entity\Repository;
 use TickTackk\DeveloperTools\Finder\EmailLog as EmailLogFinder;
-use \Swift_Mime_Message as SwiftMessage;
+use \Swift_Mime_SimpleMessage as SwiftMessage;
 use XF\Mvc\Entity\Manager as EntityManager;
 use TickTackk\DeveloperTools\Entity\EmailLog as EmailLogEntity;
 
