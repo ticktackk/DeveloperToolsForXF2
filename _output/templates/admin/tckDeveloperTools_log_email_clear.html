@@ -1,0 +1,13 @@
+<xf:title>{{ phrase('confirm_action') }}</xf:title>
+
+<xf:form action="{{ link('logs/emails/clear') }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('tckDeveloperTools_sure_you_want_to_clear_email_log') }}
+			</xf:inforow>
+		</div>
+
+		<xf:submitrow submit="{{ phrase('clear') }}" rowtype="simple" icon="delete" />
+	</div>
+</xf:form>

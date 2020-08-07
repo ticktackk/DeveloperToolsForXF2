@@ -139,7 +139,7 @@ class EntityFromTable extends Command
         }
 
         $primaryKey = [];
-        foreach ($tableIndexDefinition['PRIMARY'] as $column)
+        foreach ($tableIndexDefinition['PRIMARY'] AS $column)
         {
             $primaryKey[] = var_export($column['Column_name'], true);
         }
@@ -152,7 +152,7 @@ class EntityFromTable extends Command
         }
 
         $columns = '';
-        foreach ($tableColDefinition as $colDefinition)
+        foreach ($tableColDefinition AS $colDefinition)
         {
             $fieldData = [];
             [$type, $len, $allowedValues] = $this->parseSqlType($colDefinition['Type']);
@@ -206,7 +206,7 @@ class EntityFromTable extends Command
             }
 
             $definition = [];
-            foreach ($fieldData as $key => $value)
+            foreach ($fieldData AS $key => $value)
             {
                 if (\is_array($value))
                 {

@@ -10,7 +10,7 @@ use XF\Mvc\Entity\Repository;
 use XF\Service\AbstractService;
 use XF\Mvc\Entity\Manager as EntityManager;
 use XF\Job\Manager as JobManager;
-use \Swift_Mime_Message as SwiftMessage;
+use \Swift_Mime_SimpleMessage as SwiftMessage;
 use \Swift_Transport as SwiftTransport;
 
 /**

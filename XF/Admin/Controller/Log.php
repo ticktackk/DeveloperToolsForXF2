@@ -49,7 +49,7 @@ class Log extends XFCP_Log
         }
 
         $page = $this->filterPage();
-        $perPage = 5;
+        $perPage = 100;
 
         $emailLogRepo = $this->getEmailLogRepo();
         $emailLogFinder = $emailLogRepo->findEmailLogForList()->limitByPage($page, $perPage);
@@ -67,6 +67,21 @@ class Log extends XFCP_Log
             'TickTackk\DeveloperTools\XF:Log\Email\Listing',
             'tckDeveloperTools_log_email_list',
             $viewParams
+        );
+    }
+
+    public function actionEmailClear() : AbstractReply
+    {
+        if ($this->isPost())
+        {
+            $this->getEmailLogRepo()->clearEmailLog();
+
+            return $this->redirect($this->buildLink('logs/emails'));
+        }
+
+        return $this->view(
+            'TickTackk\DeveloperTools\XF:Log\Email\Clear',
+            'tckDeveloperTools_log_email_clear'
         );
     }
 

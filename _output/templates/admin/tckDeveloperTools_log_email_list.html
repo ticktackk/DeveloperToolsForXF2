@@ -1,5 +1,11 @@
 <xf:title>{{ phrase('tckDeveloperTools_email_log') }}</xf:title>
 
+<xf:pageaction if="$emailLogs is not empty">
+	<xf:button href="{{ link('logs/emails/clear') }}" icon="delete" overlay="true">
+		{{ phrase('clear') }}
+	</xf:button>
+</xf:pageaction>
+
 <div class="block">
 	<div class="block-container">
 		<div class="block-body">
@@ -25,9 +31,11 @@
 				</xf:foreach>
 			</xf:datalist>
 		</div>
-		<div class="block-footer">
-			<span class="block-footer-counter">{{ display_totals($emailLogs, $total) }}</span>
-		</div>
+		<xf:if is="$emailLogs is not empty">
+			<div class="block-footer">
+				<span class="block-footer-counter">{{ display_totals($emailLogs, $total) }}</span>
+			</div>
+		</xf:if>
 	</div>
 	<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
 				link="logs/emails" params="{$linkFilters}"

@@ -1,16 +1,32 @@
 CHANGELOG
 ==========================
 
+## 1.3.3 (`1030370`)
+
+- **Fix:** Fixed being unable to save phrases if you accidentally clicked the "Add more phrase" button (#82)
+
+## 1.3.2 (`1030270`)
+
+- **New:** Button to clear email logs (#90)
+- **Change:** Options, Permissions and Style Properties are now grouped in the output rather than displaying group inline (#88)
+- **Change:** Increase mails per-page to 100 (#89)
+- **Fix:** Fix newline printing literally in the resulting Markdown code (#88)
+- **Fix:** Cron entries that use "Day of the week" run schedule will now correctly generate readme entries (#87)
+
 ## 1.3.1 (`1030170`)
 
 - **New:** Arguments must now be passed to `tck-devtools:build-readme` in order to build any of the 3 different output formats
 - **New:** A new argument can be passed to `tck-devtools:build-readme` in order to copy the resulting file to the `_no_upload` directory
+- **New:** Support for @Xon's `require-soft` recommendations parameter in `addon.json`
 - **Change:** Stop building readme when building add-on (#83)
 - **Change:** Changed the wording on the "Add more phrase" button to "Add another phrase" (#82)
 - **Fix:** Suppress DOM errors when attempting to convert markdown to HTML (#81)
 - **Fix:** Fix potential server error when attempting to copy files
 - **Fix:** Fixed an error with building the list of requirements if the version was `*` instead of an array
-- **Fix:** Fixed being unable to save phrases if you accidentally clicked the "Add more phrase" button (#82)
+- **Fix:** Potential server error when attempting to copy files
+- **Fix:** Error with building the list of requirements if the version was `*` instead of an array
+
+Some of the contributions were made by @[DragonByte Tech](https://xenforo.com/community/members/dragonbyte-tech.2478/)
 
 ## 1.3.0 (`1030070`)
 

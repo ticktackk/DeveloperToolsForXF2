@@ -1,4 +1,4 @@
-<h2>Features</h2>
+<h1>Developer Tools for XenForo 2.1.7+</h1><h2>Description</h2><p>This add-on provides enhancements for add-on developers.</p><h2>Features</h2>
 <ul>
     <li>Show display order...
         <ul>
@@ -87,4 +87,8 @@
             </li>
         </ul>
     </li>
-</ul>
+</ul><h2>Requirements</h2><ul><li>PHP 7.3.0+</li></ul><h2>Options</h2><table style="width:100%"><thead><tr><th>Group</th><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>Developer Tools (Debug only)</td><td>Disable hash checking</td><td>For development purposes disabling XF's hash check is required to hotpatch code</td></tr><tr><td>Developer Tools (Debug only)</td><td>Disable XF Template watching</td><td>XF's template watching causes a large amount of IO per page, and doesn't touch phrases to template modification. Disable for a boost in performance if it isn't required.</td></tr></tbody></table><h2>CLI Commands</h2><table style="width:100%"><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody><tr><td><code>tck-devtools:add-phrase</code></td><td>Creates a phrase for an add-on.</td></tr><tr><td><code>tck-devtools:create-class-extension</code></td><td>Creates an XF class-extension for an add-on and writes out a basic template file.</td></tr><tr><td><code>tck-devtools:better-export</code></td><td>Exports the XML files for an add-on and applies class properties to type hint columns, getters and relations</td></tr><tr><td><code>tck-devtools:create-entity-from-table</code></td><td>Creates an XF entity for an add-on from a table.</td></tr><tr><td><code>tck-devtools:generate-schema-entity</code></td><td>Generates schema code from an entity</td></tr><tr><td><code>tck-devtools:build-readme</code></td><td>Builds README files for provided add-on.</td></tr><tr><td><code>tck-devtools:clamp-versions</code></td><td>Ensures an add-on does not have phrases or templates with version id's above the addon.json file.</td></tr></tbody></table><h2>Scripts</h2>
+<p>There are some wrapper scripts under `scripts` directory provided by <a href="https://xenforo.com/community/members/xon.71874/">Xon</a> which can be helpful.</p>
+
+<h2>License</h2>
+This project is licensed under the MIT License - see the <a href="https://github.com/ticktackk/DeveloperToolsForXF2/blob/master/LICENSE.md">LICENSE.md</a> file for details.
