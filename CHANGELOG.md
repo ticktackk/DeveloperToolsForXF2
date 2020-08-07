@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.3.3 (`1030370`)
+
+- **Fix:** Fixed being unable to save phrases if you accidentally clicked the "Add more phrase" button (#82)
+
 ## 1.3.2 (`1030270`)
 
 - **New:** Button to clear email logs (#90)
@@ -15,7 +19,10 @@ CHANGELOG
 - **New:** A new argument can be passed to `tck-devtools:build-readme` in order to copy the resulting file to the `_no_upload` directory
 - **New:** Support for @Xon's `require-soft` recommendations parameter in `addon.json`
 - **Change:** Stop building readme when building add-on (#83)
+- **Change:** Changed the wording on the "Add more phrase" button to "Add another phrase" (#82)
 - **Fix:** Suppress DOM errors when attempting to convert markdown to HTML (#81)
+- **Fix:** Fix potential server error when attempting to copy files
+- **Fix:** Fixed an error with building the list of requirements if the version was `*` instead of an array
 - **Fix:** Potential server error when attempting to copy files
 - **Fix:** Error with building the list of requirements if the version was `*` instead of an array
 
