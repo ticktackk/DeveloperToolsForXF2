@@ -272,7 +272,7 @@ TEMPLATE;
      *
      * @return array
      */
-    protected function parseSqlType($sqlType) : array
+    protected function parseSqlType(string $sqlType) : array
     {
         $len = $allowedValues = null;
         if (\preg_match('#^([^\(]+)\s*(?:\(([^\)]+)\)){0,1}\s*(unsigned){0,1}$#i', $sqlType, $matches))

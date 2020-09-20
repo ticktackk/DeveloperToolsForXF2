@@ -2,14 +2,7 @@
 
 namespace TickTackk\DeveloperTools\XF\Html\Renderer;
 
-use XF\App as BaseApp;
 use XF\Html\Tag as HtmlTag;
-use XF\Mvc\Entity\Finder;
-use XF\Mvc\Entity\Entity;
-use XF\Mvc\Entity\Repository;
-use XF\Service\AbstractService;
-use XF\Mvc\Entity\Manager as EntityManager;
-use XF\Job\Manager as JobManager;
 
 /**
  * Class BbCode
@@ -27,12 +20,15 @@ class BbCode extends XFCP_BbCode
      */
     public function __construct(array $options = [])
     {
-        $handleCodeTag = $options['handleCodeTagForTckDeveloperTools'] ?? false;
-        unset($options['handleCodeTagForTckDeveloperTools']);
+        if (\XF::$versionId < 2011070)
+        {
+            $handleCodeTag = $options['handleCodeTagForTckDeveloperTools'] ?? false;
+            unset($options['handleCodeTagForTckDeveloperTools']);
+        }
 
         parent::__construct($options);
 
-        if ($handleCodeTag && !\array_key_exists('code', $this->_handlers))
+        if (\XF::$versionId < 2011070 && $handleCodeTag && !\array_key_exists('code', $this->_handlers))
         {
             $this->_handlers['code'] = [
                 'filterCallback' => ['$this', 'handleTagCodeForTckDeveloperTools'],
@@ -49,7 +45,7 @@ class BbCode extends XFCP_BbCode
      *
      * @return string
      */
-    public function handleTagCodeForTckDeveloperTools($text, HtmlTag $tag) : string
+    public function handleTagCodeForTckDeveloperTools(string $text, HtmlTag $tag) : string
     {
         if (\preg_match('#\r\n|\r|\n#', $text))
         {

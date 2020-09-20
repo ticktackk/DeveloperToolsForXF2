@@ -2,10 +2,8 @@
 
 namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
-use XF\Mvc\Entity\Entity;
 use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\Exception as ExceptionReply;
-use XF\Mvc\Reply\Redirect as RedirectReply;
 use XF\Mvc\Reply\View as ViewReply;
 use XF\Service\AddOn\ReleaseBuilder as ReleaseBuilderSvc;
 

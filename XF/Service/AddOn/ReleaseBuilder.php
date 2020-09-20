@@ -2,9 +2,6 @@
 
 namespace TickTackk\DeveloperTools\XF\Service\AddOn;
 
-use TickTackk\DeveloperTools\Service\AddOn\ReadmeBuilder as AddOnReadmeBuilder;
-use XF\PrintableException;
-use XF\Service\AbstractService;
 use XF\Util\File as FileUtil;
 
 /**

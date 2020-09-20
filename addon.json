@@ -19,6 +19,18 @@
         "php": [
             "7.3.0",
             "PHP 7.3.0+"
+        ],
+        "php-ext/intl": [
+            "*",
+            "PHP's Intl extension"
+        ],
+        "php-ext/dom": [
+            "*",
+            "PHP's DOM extension"
+        ],
+        "php-ext/json": [
+            "*",
+            "PHP's JSON extension"
         ]
     },
     "icon": "fa-laptop-code",

@@ -25,11 +25,15 @@ class Mailer extends XFCP_Mailer
      * @param bool $allowRetry
      *
      * @return int
+     *
+     * @throws \XF\PrintableException
+     *
      * @noinspection PhpSignatureMismatchDuringInheritanceInspection
+     * @noinspection PhpUndefinedClassInspection
      */
     public function send(\FinalSwiftMimeMessage $message, SwiftTransport $transport = null, array $queueEntry = null, $allowRetry = true)
     {
-        $sent = parent::send($message, $transport, $queueEntry, $allowRetry);;
+        $sent = parent::send($message, $transport, $queueEntry, $allowRetry);
 
         if ($sent)
         {

@@ -16,6 +16,7 @@ use XF\Mvc\Reply\Exception as ExceptionReply;
 use XF\Mvc\Reply\Error as ErrorReply;
 use XF\Mvc\Reply\View as ViewReply;
 use XF\Mvc\Reply\Reroute as RerouteReply;
+use XF\Entity\Template as TemplateEntity;
 
 /**
  * Class TemplateModification
@@ -42,7 +43,8 @@ class TemplateModification extends XFCP_TemplateModification
             if ($modification->Template->exists() && !$this->request->exists('style_id'))
             {
                 $styleId = $modification->Template->style_id;
-            } else
+            }
+            else
             {
                 $styleId = $this->filter('style_id', 'uint');
             }
@@ -88,6 +90,7 @@ class TemplateModification extends XFCP_TemplateModification
                 return $this->error($errors['find']);
             }
 
+            /** @var TemplateEntity $templateForMasterStyle */
             $templateForMasterStyle = $this->finder('XF:Template')
                 ->where([
                     'style_id' => 0,
@@ -96,6 +99,7 @@ class TemplateModification extends XFCP_TemplateModification
                 ])
                 ->fetchOne();
 
+            /** @var TemplateEntity $templateForStyle */
             $templateForStyle = $this->finder('XF:Template')
                 ->where([
                     'style_id' => $styleId,
