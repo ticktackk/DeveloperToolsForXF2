@@ -86,27 +86,32 @@ Requirements
 ------------
 
 - PHP 7.3.0+
+- PHP's Intl extension
+- PHP's DOM extension
+- PHP's JSON extension
 
 Options
 -------
 
-| Group                        | Name                         | Description                                                                                                                                                               |
-| ---------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Developer Tools (Debug only) | Disable hash checking        | For development purposes disabling XF's hash check is required to hotpatch code                                                                                           |
-| Developer Tools (Debug only) | Disable XF Template watching | XF's template watching causes a large amount of IO per page, and doesn't touch phrases to template modification. Disable for a boost in performance if it isn't required. |
+#### Developer Tools (Debug only)
+
+| Name                         | Description                                                                                                                                                               |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Disable hash checking        | For development purposes disabling XF's hash check is required to hotpatch code                                                                                           |
+| Disable XF Template watching | XF's template watching causes a large amount of IO per page, and doesn't touch phrases to template modification. Disable for a boost in performance if it isn't required. |
 
 CLI Commands
 ------------
 
 | Command                                 | Description                                                                                                  |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `tck-devtools:add-phrase`               | Creates a phrase for an add-on.                                                                              |
 | `tck-devtools:create-class-extension`   | Creates an XF class-extension for an add-on and writes out a basic template file.                            |
-| `tck-devtools:better-export`            | Exports the XML files for an add-on and applies class properties to type hint columns, getters and relations |
-| `tck-devtools:create-entity-from-table` | Creates an XF entity for an add-on from a table.                                                             |
+| `tck-devtools:clamp-versions`           | Ensures an add-on does not have phrases or templates with version id's above the addon.json file.            |
+| `tck-devtools:add-phrase`               | Creates a phrase for an add-on.                                                                              |
 | `tck-devtools:generate-schema-entity`   | Generates schema code from an entity                                                                         |
 | `tck-devtools:build-readme`             | Builds README files for provided add-on.                                                                     |
-| `tck-devtools:clamp-versions`           | Ensures an add-on does not have phrases or templates with version id's above the addon.json file.            |
+| `tck-devtools:create-entity-from-table` | Creates an XF entity for an add-on from a table.                                                             |
+| `tck-devtools:better-export`            | Exports the XML files for an add-on and applies class properties to type hint columns, getters and relations |
 
 Scripts
 -------
