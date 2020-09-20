@@ -3,15 +3,11 @@
 namespace TickTackk\DeveloperTools\XF\Mail;
 
 use TickTackk\DeveloperTools\Repository\EmailLog as EmailLogLog;
-use XF\App as BaseApp;
-use XF\Mvc\Entity\Finder;
-use XF\Mvc\Entity\Entity;
-use XF\Mvc\Entity\Repository;
-use XF\Service\AbstractService;
-use XF\Mvc\Entity\Manager as EntityManager;
-use XF\Job\Manager as JobManager;
-use \Swift_Mime_SimpleMessage as SwiftMessage;
+use \Swift_Mime_SimpleMessage as SwiftMimeSimpleMessage;
+use \Swift_Mime_Message as SwiftMimeMessage;
 use \Swift_Transport as SwiftTransport;
+
+\class_alias(\XF::$versionId < 2020010 ? SwiftMimeMessage::class : SwiftMimeSimpleMessage::class, '\FinalSwiftMimeMessage');
 
 /**
  * Class Mailer
@@ -23,14 +19,15 @@ use \Swift_Transport as SwiftTransport;
 class Mailer extends XFCP_Mailer
 {
     /**
-     * @param SwiftMessage $message
+     * @param \FinalSwiftMimeMessage $message
      * @param SwiftTransport|null $transport
      * @param array|null $queueEntry
      * @param bool $allowRetry
      *
      * @return int
+     * @noinspection PhpSignatureMismatchDuringInheritanceInspection
      */
-    public function send(SwiftMessage $message, SwiftTransport $transport = null, array $queueEntry = null, $allowRetry = true)
+    public function send(\FinalSwiftMimeMessage $message, SwiftTransport $transport = null, array $queueEntry = null, $allowRetry = true)
     {
         $sent = parent::send($message, $transport, $queueEntry, $allowRetry);;
 
