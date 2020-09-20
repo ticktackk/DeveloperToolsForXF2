@@ -42,6 +42,11 @@ class PermissionSet extends BasePermissionSet
             $this->logPermissionError("Permission '$permissionEscaped' is unknown in '$groupEscaped' permission group");
         }
 
+        if (!isset($permissions[$group][$permission]))
+        {
+            return false;
+        }
+
         return $permissions[$group][$permission];
     }
 
