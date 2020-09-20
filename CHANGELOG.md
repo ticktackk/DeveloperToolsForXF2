@@ -3,11 +3,12 @@ CHANGELOG
 
 ## 1.3.3 (`1030370`)
 
-- **Fix:** Exception related `array_key_exists` is thrown when creating a new user (6e6307d75578180d8bb6340367df50a62e7d982f)
+- **Fix:** Exception related to `array_key_exists` is thrown when creating a new user (6e6307d75578180d8bb6340367df50a62e7d982f)
 - **Fix:** Unable to save phrases if you accidentally clicked the "Add more phrase" button (#82)
 - **Fix:** Undefined index exception is thrown when both permission group and permission does not exist (#92)
 - **Fix:** Clamping version returns "No phrases or templates were updated" (#93)
 - **Fix:** Decimal column types are not handled correctly when creating entity from table (#94)
+- **Fix:** Class ProcessBuilder is deprecated and need to switch to Process (#95)
 
 ## 1.3.2 (`1030270`)
 

@@ -417,9 +417,8 @@ TEMPLATE;
             $builderOptions[] = $verbosityOption;
         }
 
-        $builder = ProcessBuilder::create($builderOptions);
-        $builder->setTimeout(null);
-        $process = $builder->getProcess();
+        $process = new Process($builderOptions);
+        $process->setTimeout(null);
 
         /** @var ProcessHelper $processHelper */
         $processHelper = $this->getHelper('process');
