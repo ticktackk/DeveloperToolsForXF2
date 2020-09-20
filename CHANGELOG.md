@@ -3,7 +3,8 @@ CHANGELOG
 
 ## 1.3.3 (`1030370`)
 
-- **Fix:** Fixed being unable to save phrases if you accidentally clicked the "Add more phrase" button (#82)
+- **Fix:** Exception related `array_key_exists` is thrown when creating a new user (6e6307d75578180d8bb6340367df50a62e7d982f)
+- **Fix:** Unable to save phrases if you accidentally clicked the "Add more phrase" button (#82)
 
 ## 1.3.2 (`1030270`)
 
