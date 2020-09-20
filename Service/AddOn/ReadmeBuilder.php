@@ -30,7 +30,6 @@ use XF\Repository\AddOn as AddonRepo;
 use XF\Service\AbstractService;
 use XF\Service\ValidateAndSavableTrait;
 use XF\Util\File as FileUtil;
-use XF\Util\Php as PhpUtil;
 use xprt64\HtmlTableToMarkdownConverter\TableConverter;
 
 /**
@@ -729,15 +728,6 @@ class ReadmeBuilder extends AbstractService
             },
             'Run at minutes' => function(CronEntryEntity $cronEntry)
             {
-                $minutesMap = [
-                    -1 => 'Any'
-                ];
-
-                for($i = 0; $i <= 59; $i++)
-                {
-                    $minutesMap[$i] = $i;
-                }
-
                 $minutes = [];
                 $runRules = $cronEntry->run_rules;
                 foreach ($runRules['minutes'] AS $minute)

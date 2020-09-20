@@ -221,7 +221,7 @@ FUNCTION;
      *
      * @return string
      */
-    protected function resolveTypeDefaults(Entity $entity, $type, &$unsigned = null, &$allowedDefault = true, &$length = null) : string
+    protected function resolveTypeDefaults(Entity $entity, string $type, &$unsigned = null, &$allowedDefault = true, &$length = null) : string
     {
         $unsigned = null;
         $allowedDefault = true;
@@ -287,7 +287,7 @@ FUNCTION;
                 return 'varbinary';
 
             case $entity::SERIALIZED:
-            case $entity::SERIALIZED_ARRAY:
+            /** @noinspection PhpDeprecationInspection */ case $entity::SERIALIZED_ARRAY:
             case $entity::JSON:
             case $entity::JSON_ARRAY:
             case $entity::LIST_LINES:

@@ -2,8 +2,8 @@
     "legacy_addon_id": "",
     "title": "Developer Tools",
     "description": "This add-on provides enhancements for add-on developers.",
-    "version_id": 1030270,
-    "version_string": "1.3.2",
+    "version_id": 1030370,
+    "version_string": "1.3.3",
     "dev": "TickTackk",
     "dev_url": "https://xenforo.com/community/members/ticktackk.90375/",
     "faq_url": "",
@@ -19,6 +19,18 @@
         "php": [
             "7.3.0",
             "PHP 7.3.0+"
+        ],
+        "php-ext/intl": [
+            "*",
+            "PHP's Intl extension"
+        ],
+        "php-ext/dom": [
+            "*",
+            "PHP's DOM extension"
+        ],
+        "php-ext/json": [
+            "*",
+            "PHP's JSON extension"
         ]
     },
     "icon": "fa-laptop-code",

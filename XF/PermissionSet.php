@@ -25,6 +25,11 @@ class PermissionSet extends BasePermissionSet
         $permissionCombinationId = $this->getPermissionCombinationId();
         $permissions = $permissionCache->getGlobalPerms($permissionCombinationId);
 
+        if (!$permissions)
+        {
+            return false;
+        }
+
         $groupEscaped = \XF::escapeString($group);
         $permissionEscaped = \XF::escapeString($permission);
 
@@ -37,7 +42,7 @@ class PermissionSet extends BasePermissionSet
             $this->logPermissionError("Permission '$permissionEscaped' is unknown in '$groupEscaped' permission group");
         }
 
-        if (!$permissions || !isset($permissions[$group][$permission]))
+        if (!isset($permissions[$group][$permission]))
         {
             return false;
         }

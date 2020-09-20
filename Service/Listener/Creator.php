@@ -7,7 +7,6 @@ use TickTackk\DeveloperTools\Service\CodeEvent\DocBlockGenerator as CodeEventDoc
 use TickTackk\DeveloperTools\Service\CodeEvent\SignatureGenerator as CodeEventSignatureGeneratorSvc;
 use TickTackk\DeveloperTools\Service\Listener\Exception\InvalidAddOnIdProvidedException;
 use XF\App as BaseApp;
-use XF\Entity\AddOn as AddOnEntity;
 use XF\Entity\CodeEvent as CodeEventEntity;
 use XF\Service\AbstractService;
 use XF\AddOn\AddOn;

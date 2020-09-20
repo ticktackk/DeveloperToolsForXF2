@@ -11,6 +11,8 @@
     "require": {
         "xprt64/php-markdown-table-converter": "dev-master",
         "ext-intl": "*",
-        "jawira/case-converter": "^3.4"
+        "jawira/case-converter": "^3.4",
+        "ext-dom": "*",
+        "ext-json": "*"
     }
 }

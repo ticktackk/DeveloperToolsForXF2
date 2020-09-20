@@ -10,8 +10,6 @@ use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\AbstractReply;
 use XF\Mvc\Reply\View as ViewReply;
 use XF\Mvc\Reply\Redirect as RedirectReply;
-use XF\Mvc\Reply\Reroute as RerouteReply;
-use XF\Mvc\Reply\Message as MessageReply;
 use XF\Mvc\Reply\Exception as ExceptionReply;
 use XF\Mvc\Reply\Error as ErrorReply;
 use TickTackk\DeveloperTools\Repository\EmailLog as EmailLogRepo;
@@ -34,8 +32,10 @@ class Log extends XFCP_Log
      */
     public function actionEmail(ParameterBag $parameterBag) : AbstractReply
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         if ($parameterBag->email_id)
         {
+            /** @noinspection PhpUndefinedFieldInspection */
             $emailLog = $this->assertEmailLogExists($parameterBag->email_id);
 
             $viewParams = [
@@ -94,6 +94,7 @@ class Log extends XFCP_Log
      */
     public function actionEmailDelete(ParameterBag $parameterBag) : AbstractReply
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         $emailLog = $this->assertEmailLogExists($parameterBag->email_id);
 
         $email = \key($emailLog->to);
@@ -110,8 +111,12 @@ class Log extends XFCP_Log
         );
     }
 
-    public function actionEmailRender(ParameterBag $parameterBag) : AbstractReply
+    /**
+     * @throws ExceptionReply
+     */
+    public function actionEmailRender(ParameterBag $parameterBag) : ViewReply
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         $emailLog = $this->assertEmailLogExists($parameterBag->email_id);
 
         $viewParams = [

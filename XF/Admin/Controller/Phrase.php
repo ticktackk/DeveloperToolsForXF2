@@ -4,13 +4,9 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
 use XF\Mvc\FormAction;
 use XF\Mvc\ParameterBag;
-use XF\Mvc\Reply\AbstractReply;
 use XF\Mvc\Reply\View as ViewReply;
 use XF\Mvc\Reply\Redirect as RedirectReply;
-use XF\Mvc\Reply\Reroute as RerouteReply;
-use XF\Mvc\Reply\Message as MessageReply;
 use XF\Mvc\Reply\Exception as ExceptionReply;
-use XF\Mvc\Reply\Error as ErrorReply;
 use XF\Entity\Phrase as PhraseEntity;
 
 /**
@@ -56,10 +52,11 @@ class Phrase extends XFCP_Phrase
     public function actionSave(ParameterBag $parameterBag)
     {
         $db = $this->app()->db();
-        $db->beginTransaction();;
+        $db->beginTransaction();
 
         $reply = parent::actionSave($parameterBag);
 
+        /** @noinspection PhpUndefinedFieldInspection */
         if (!$parameterBag->phrase_id && $reply instanceof RedirectReply)
         {
             $phrases = $this->filter('phrases', 'array');
@@ -87,6 +84,11 @@ class Phrase extends XFCP_Phrase
 
                 foreach ($phrases AS $input)
                 {
+                    if (empty($input['title']))
+                    {
+                        continue;
+                    }
+
                     /** @var PhraseEntity $phrase */
                     $phrase = $this->em()->create('XF:Phrase');
 

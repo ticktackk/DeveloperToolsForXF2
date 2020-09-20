@@ -146,13 +146,14 @@ class EntityFromTable extends Command
         if (\count($primaryKey) === 1)
         {
             $primaryKey = $primaryKey[0];
-        } else
+        }
+        else
         {
             $primaryKey = '[' . \implode(', ', $primaryKey) . ']';
         }
 
         $columns = '';
-        foreach ($tableColDefinition AS $colDefinition)
+        foreach ($tableColDefinition AS $column => $colDefinition)
         {
             $fieldData = [];
             [$type, $len, $allowedValues] = $this->parseSqlType($colDefinition['Type']);
@@ -170,10 +171,12 @@ class EntityFromTable extends Command
             {
                 $fieldData['allowedValues'] = $allowedValues;
             }
+
             if (isset($fieldData['Null']) && $fieldData['Null'] !== 'NO')
             {
                 $fieldData['nullable'] = \var_export(true, true);
             }
+
             if (isset($colDefinition['Default']) && ($colDefinition['Default'] !== null || !empty($fieldData['nullable'])))
             {
                 $default = $colDefinition['Default'];
@@ -215,7 +218,7 @@ class EntityFromTable extends Command
 
                 $definition[] = \var_export($key, true) . ' => ' . $value;
             }
-            $definition = \implode($definition, ', ');
+            $definition = \implode(', ', $definition);
 
             $columns .= '            ' . \var_export($colDefinition['Field'], true) . ' => [' . $definition . "],\n";
         }
@@ -272,65 +275,77 @@ TEMPLATE;
      *
      * @return array
      */
-    protected function parseSqlType($sqlType) : array
+    protected function parseSqlType(string $sqlType) : array
     {
         $len = $allowedValues = null;
-        if (\preg_match('#^([^\(]+)\s*(?:\(([^\)]+)\)){0,1}\s*(unsigned){0,1}$#i', $sqlType, $matches))
+        if (\preg_match('#^([a-zA-Z0-9_]*)(?:\(([^\)]+)\)){0,1}(\sunsigned){0,1}$#i', $sqlType, $matches))
         {
             $proposedType = \utf8_strtolower($matches[1]);
             $proposedLen = empty($matches[2]) ? null : (int) $matches[2];
             $isUnsigned = !empty($matches[3]);
+
             switch ($proposedType)
             {
                 case 'double precision':
-                case 'dec':
+                case 'decimal':
                 case 'fixed':
                 case 'numeric':
                 case 'real':
                 case 'float':
                 case 'double':
-                    $type = 'self::FLOAT';
+                    $type = 'static::FLOAT';
                     break;
+
                 case 'char':
-                    $type = 'self::STR';
+                    $type = 'static::STR';
                     $len = 1;
                     break;
+
                 case 'longblob':
-                    $type = 'self::BINARY';
+                    $type = 'static::BINARY';
                     $len = 4294967295;
                     break;
+
                 case 'mediumblob':
-                    $type = 'self::BINARY';
+                    $type = 'static::BINARY';
                     $len = 16777215;
                     break;
+
                 case 'blob':
-                    $type = 'self::BINARY';
+                    $type = 'static::BINARY';
                     $len = 65535;
                     break;
+
                 case 'varbinary':
-                    $type = 'self::BINARY';
+                    $type = 'static::BINARY';
                     $len = $proposedLen ? $proposedLen : null;
                     break;
+
                 case 'longtext':
-                    $type = 'self::STR';
+                    $type = 'static::STR';
                     $len = 4294967295;
                     break;
+
                 case 'mediumtext':
-                    $type = 'self::STR';
+                    $type = 'static::STR';
                     $len = 16777215;
                     break;
+
                 case 'text':
-                    $type = 'self::STR';
+                    $type = 'static::STR';
                     $len = 65535;
                     break;
+
                 case 'varchar':
-                    $type = 'self::STR';
+                    $type = 'static::STR';
                     $len = $proposedLen ? $proposedLen : null;
                     break;
+
                 case 'bool':
                 case 'boolean':
-                    $type = 'self::BOOL';
+                    $type = 'static::BOOL';
                     break;
+
                 case 'int':
                 case 'bigint':
                 case 'shortint':
@@ -338,14 +353,16 @@ TEMPLATE;
                 case 'tinyint':
                     if ($proposedLen === 1)
                     {
-                        $type = 'self::BOOL';
-                    } else
+                        $type = 'static::BOOL';
+                    }
+                    else
                     {
-                        $type = $isUnsigned ? 'self::UINT' : 'self::INT';
+                        $type = $isUnsigned ? 'static::UINT' : 'static::INT';
                         if ($proposedType === 'tinyint')
                         {
                             $len = $isUnsigned ? 255 : 128;
-                        } else
+                        }
+                        else
                         {
                             if ($proposedType === 'shortint' || $proposedType === 'smallint')
                             {
@@ -354,9 +371,9 @@ TEMPLATE;
                         }
                     }
                     break;
+
                 case 'enum':
-                    //case 'SET':
-                    $type = 'self::STR';
+                    $type = 'static::STR';
                     $allowedValues = explode(',', $matches[2]);
                     foreach ($allowedValues as &$allowedValue)
                     {
@@ -367,10 +384,12 @@ TEMPLATE;
                     }
                     unset($allowedValue);
                     break;
+
                 default:
                     throw new \RuntimeException("Unknown SQL type: {$sqlType}");
             }
-        } else
+        }
+        else
         {
             throw new \RuntimeException("Unknown SQL type: {$sqlType}");
         }
@@ -398,9 +417,8 @@ TEMPLATE;
             $builderOptions[] = $verbosityOption;
         }
 
-        $builder = ProcessBuilder::create($builderOptions);
-        $builder->setTimeout(null);
-        $process = $builder->getProcess();
+        $process = new Process($builderOptions);
+        $process->setTimeout(null);
 
         /** @var ProcessHelper $processHelper */
         $processHelper = $this->getHelper('process');
