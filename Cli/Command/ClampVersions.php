@@ -129,6 +129,7 @@ class ClampVersions extends Command
             $entity->save();
             $devOutput->export($entity);
             $progress->advance();
+            $totalUpdated++;
         }
 
         $progress->finish();
