@@ -1,0 +1,9 @@
+{
+    "template": "template_modification_edit",
+    "description": "Add \"style_id\" hidden input which will contain the style for testing styles",
+    "execution_order": 6119,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "</xf:form>",
+    "replace": "<xf:if is=\"($modification.type === 'public') && ($style is not empty)\">\n\t<xf:hiddenval name=\"style_id\" value=\"{$style.style_id}\" />\n</xf:if>\n\n$0"
+}

@@ -131,7 +131,7 @@ class TemplateModification extends XFCP_TemplateModification
                 'contentModified' => $contentModified,
                 'diffs' => $diffs,
                 'style' => $style
-            ]);
+            ], false);
         }
 
         return $response;

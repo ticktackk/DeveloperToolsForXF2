@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.3.4 (`1030470`)
+
+- **Fix:** Testing template modification for specific style does not work (#97)
+
 ## 1.3.3 (`1030370`)
 
 - **Fix:** Exception related to `array_key_exists` is thrown when creating a new user (6e6307d75578180d8bb6340367df50a62e7d982f)
