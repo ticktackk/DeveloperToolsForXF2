@@ -1,0 +1,6 @@
+{
+    "from_class": "XF\\PermissionCache",
+    "to_class": "TickTackk\\DeveloperTools\\XF\\PermissionCache",
+    "execute_order": 6119,
+    "active": true
+}
