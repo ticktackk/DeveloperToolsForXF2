@@ -3,7 +3,7 @@ CHANGELOG
 
 ## 1.3.5 (`1030570`)
 
-- **Change:** Improvement to how `XF\PermissionCache` class is extended (#99)
+- **Change:** Improvement to how `XF\PermissionCache` class is extended (#99) (Thanks @Xon)
 
 ## 1.3.4 (`1030470`)
 
