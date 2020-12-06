@@ -70,7 +70,8 @@ class Listener
      */
     public static function appSetup(BaseApp $app) : void
     {
-        $app->offsetSet('permission.cache', function ($c) use ($app) {
+        $app->offsetSet('permission.cache', function ($c) use ($app)
+        {
             $class = $app->extendClass(PermissionCache::class);
 
             return new $class($c['db']);
