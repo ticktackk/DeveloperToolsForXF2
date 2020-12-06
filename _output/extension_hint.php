@@ -13,6 +13,11 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller
 	class XFCP_TemplateModification extends \XF\Admin\Controller\TemplateModification {}
 }
 
+namespace TickTackk\DeveloperTools\XF
+{
+    class XFCP_PermissionCache extends \XF\PermissionCache {}
+}
+
 namespace TickTackk\DeveloperTools\XF\Entity
 {
 	class XFCP_CodeEventListener extends \XF\Entity\CodeEventListener {}
