@@ -1,4 +1,4 @@
-<xf:title>{$template->title} - {{ count($activeMods)|number }}/{{ count($mods)|number }} Template Modifications</xf:title>
+<xf:title>{$template->title} - {{ count($activeMods)|number }}/{{ count($mods)|number }} {{ phrase('template_modifications') }}</xf:title>
 
 <xf:page option="breadcrumbPath" value="styles" />
 <xf:breadcrumb href="{{ link('styles/templates', $style, {'type': $template.type}) }}">{$style.title} - {{ phrase('templates') }}</xf:breadcrumb>
@@ -16,9 +16,8 @@
 					<xf:foreach loop="$mods" value="$mod">
 						<xf:option name="id[]"
 								   value="{$mod.modification_id}"
-								   checked="{{ $activeMods.{$mod.modification_id} ? 'checked' : '' }}"
-								   label="{{ $mod.addon_id ? $mod.addon_id . ' - ' : '' }}{{ $mod.modification_key }} - {{ $mod.description }} (<a href='{{ link('template-modifications/edit', $mod) }}'>Edit</a>)"
-								   >
+								   checked="{{ $activeMods.{$mod.modification_id} ? 'checked' : '' }}">
+							<xf:label>{{ $mod.addon_id ? $mod.addon_id . ' - ' : '' }}{{ $mod.modification_key }} - {{ $mod.description }} (<a href='{{ link('template-modifications/edit', $mod) }}'>{{ phrase('edit') }}</a>)</xf:label>
 							<xf:hint>{$status.{$mod->modification_id}}</xf:hint>
 						</xf:option>
 					</xf:foreach>

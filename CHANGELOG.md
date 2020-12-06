@@ -4,6 +4,7 @@ CHANGELOG
 ## 1.3.5 (`1030570`)
 
 - **Change:** Improvement to how `XF\PermissionCache` class is extended (#99) (Thanks @Xon)
+- **Fix:** Many hard-coded text instead of using phrases in "View template modifications" page (#100)
 
 ## 1.3.4 (`1030470`)
 

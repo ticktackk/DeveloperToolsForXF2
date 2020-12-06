@@ -99,7 +99,9 @@ class Template extends XFCP_Template
         {
             if (\is_numeric($status))
             {
-                return 'Match count:' . $status;
+                return \XF::phrase('tckDeveloperTools_match_count_x', [
+                    'count' => $this->app()->language()->numberFormat($status)
+                ]);
             }
             return $status;
         }, $statuses);
@@ -114,7 +116,10 @@ class Template extends XFCP_Template
             'status' => $statuses,
             '_xfWithData' => $this->filter('_xfWithData', 'bool'),
         ];
-
-        return $this->view('TickTackk\DeveloperTools:Template\Modifications\Compare', 'developerTools_template_modifications_compare', $viewParams);
+        return $this->view(
+            'TickTackk\DeveloperTools:Template\Modifications\Compare',
+            'tckDeveloperTools_template_modifications_compare',
+            $viewParams
+        );
     }
 }
