@@ -3,10 +3,13 @@
 namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
 use XF\Diff;
-use XF\Entity\TemplateModification;
+use XF\Entity\TemplateModification as TemplateModificationEntity;
+use XF\Mvc\Entity\AbstractCollection;
 use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\View as ViewReply;
 use XF\Mvc\Reply\Error as ErrorReply;
+use XF\Entity\Template as TemplateEntity;
+use XF\Repository\TemplateModification as TemplateModificationRepo;
 
 /**
  * Extends \XF\Admin\Controller\Template
@@ -22,10 +25,17 @@ class Template extends XFCP_Template
     {
         $reply = parent::actionEdit($params);
 
-        if ($reply instanceof ViewReply &&
-            ($template = $reply->getParam('template')))
+        $addModificationCount = true;
+        $addOns = \XF::app()->container('addon.cache');
+        if (isset($addOns['SV/StandardLib']) && $addOns['SV/StandardLib'] >= 1050000)
         {
-            /** @var \XF\Entity\Template $template */
+            $addModificationCount = false;
+        }
+
+        /** @var TemplateEntity $template */
+        $template = $reply->getParam('template');
+        if ($addModificationCount && $reply instanceof ViewReply && $template)
+        {
             $modifications = $this->finder('XF:TemplateModification')
                 ->where([
                     'type' => $template->type,
@@ -55,7 +65,7 @@ class Template extends XFCP_Template
 
         $templateRepo = $this->getTemplateRepo();
 
-        /** @var \XF\Entity\Template $template */
+        /** @var TemplateEntity $template */
         $template = $templateRepo->findEffectiveTemplateInStyle($style, $masterTemplate->title, $masterTemplate->type)->fetchOne();
 
         $reload = $this->filter('reload', 'bool');
@@ -68,8 +78,10 @@ class Template extends XFCP_Template
 
         $status = null;
 
-        /** @var \XF\Repository\TemplateModification $templateModRepo */
+        /** @var TemplateModificationRepo $templateModRepo */
         $templateModRepo = $this->repository('XF:TemplateModification');
+
+        /** @var TemplateModificationEntity[]|AbstractCollection $modifications */
         $modifications = $this->finder('XF:TemplateModification')
             ->where([
                 'type' => $template->type,
@@ -79,7 +91,7 @@ class Template extends XFCP_Template
             ->order('execution_order')
             ->fetch();
 
-        $filtered = $modifications->filter(function (TemplateModification $mod) use ($ids)
+        $filtered = $modifications->filter(function (TemplateModificationEntity $mod) use ($ids)
         {
             if ($ids === null)
             {
@@ -89,7 +101,6 @@ class Template extends XFCP_Template
             return isset($ids[$mod->modification_id]);
         });
         $filtered = $filtered->toArray();
-        /** @var TemplateModification[] $modifications */
         $templateText = $templateModRepo->applyTemplateModifications($template->template, $filtered, $statuses);
 
         $diff = new Diff();
@@ -99,11 +110,12 @@ class Template extends XFCP_Template
         {
             if (\is_numeric($status))
             {
-                return 'Match count:' . $status;
+                return \XF::phrase('tckDeveloperTools_match_count_x', [
+                    'count' => $this->app()->language()->numberFormat($status)
+                ]);
             }
             return $status;
         }, $statuses);
-
 
         $viewParams = [
             'style' => $style,
@@ -114,7 +126,10 @@ class Template extends XFCP_Template
             'status' => $statuses,
             '_xfWithData' => $this->filter('_xfWithData', 'bool'),
         ];
-
-        return $this->view('TickTackk\DeveloperTools:Template\Modifications\Compare', 'developerTools_template_modifications_compare', $viewParams);
+        return $this->view(
+            'TickTackk\DeveloperTools:Template\Modifications\Compare',
+            'tckDeveloperTools_template_modifications_compare',
+            $viewParams
+        );
     }
 }

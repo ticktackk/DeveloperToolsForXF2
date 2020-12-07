@@ -5,5 +5,5 @@
     "enabled": true,
     "action": "str_replace",
     "find": "<div class=\"block-outer-opposite\">",
-    "replace": "$0\n<xf:if is=\"$modificationCount\">\n<span>\n<a href=\"{{ link('templates/view-modifications', $template) }}\" data-xf-click=\"overlay\">{{ phrase('tckDeveloperTools_view_x_template_modifications', {'count': {$modificationCount|number}}) }}</a>\n</span>\n</xf:if>"
+    "replace": "$0\n<xf:if is=\"$modificationCount && !is_addon_active('SV/StandardLib', 1050000)\">\n\t<span>\n\t<a href=\"{{ link('templates/view-modifications', $template) }}\" data-xf-click=\"overlay\">{{ phrase('tckDeveloperTools_view_x_template_modifications', {'count': {$modificationCount|number}}) }}</a>\n\t</span>\n</xf:if>"
 }

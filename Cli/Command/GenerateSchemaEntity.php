@@ -51,6 +51,7 @@ class GenerateSchemaEntity extends Command
         {
             $entity = \XF::em()->create($id);
         }
+            /** @noinspection PhpUnusedLocalVariableInspection */
         catch (\Exception $e)
         {
             $class = \XF::stringToClass($id, '%s\Entity\%s');

@@ -2,14 +2,13 @@
 
 namespace TickTackk\DeveloperTools;
 
-use TickTackk\DeveloperTools\XF\PermissionCache as ExtendedPermissionCache;
 use TickTackk\DeveloperTools\XF\Template\Templater as ExtendedTemplater;
 use XF\App as BaseApp;
-use XF\Container;
 use XF\Http\Response;
 use XF\Mvc\Dispatcher;
 use XF\Mvc\Reply\AbstractReply;
 use XF\Mvc\Renderer\AbstractRenderer;
+use XF\PermissionCache;
 use XF\Util\File as FileUtil;
 
 /**
@@ -28,7 +27,15 @@ class Listener
      * @param AbstractRenderer $renderer   Renderer object.
      * @param Response         $response   HTTP Response object.
      */
-    public static function dispatcherPostRender(Dispatcher $dispatcher, ?string &$content, AbstractReply $reply, AbstractRenderer $renderer, Response $response) : void
+    public static function dispatcherPostRender
+    (
+        /** @noinspection PhpUnusedParameterInspection */
+        Dispatcher $dispatcher,
+        ?string &$content,
+        AbstractReply $reply,
+        AbstractRenderer $renderer,
+        Response $response
+    ) : void
     {
         if (!\is_string($content))
         {
@@ -71,11 +78,11 @@ class Listener
      */
     public static function appSetup(BaseApp $app) : void
     {
-        $container = $app->container();
-
-        $container['permission.cache'] = function (Container $container)
+        $app->offsetSet('permission.cache', function ($c) use ($app)
         {
-            return new ExtendedPermissionCache($container['db']);
-        };
+            $class = $app->extendClass(PermissionCache::class);
+
+            return new $class($c['db']);
+        });
     }
 }

@@ -4,17 +4,13 @@ namespace TickTackk\DeveloperTools\Cli\Command;
 
 use Closure;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessBuilder;
 use XF\Cli\Command\AddOnActionTrait;
 use XF\Cli\Command\Development\RequiresDevModeTrait;
 use XF\Util\File;
@@ -45,7 +41,7 @@ class EntityFromTable extends Command
                 'table to inspect'
             )
             ->addArgument(
-                'RelationName',
+                'name',
                 InputArgument::REQUIRED,
                 'The entity\'s name'
             )
@@ -58,10 +54,12 @@ class EntityFromTable extends Command
     }
 
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return int
+     *
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
@@ -94,7 +92,7 @@ class EntityFromTable extends Command
             $output->writeln('');
         }
 
-        $name = $input->getArgument('RelationName');
+        $name = $input->getArgument('name');
         if (!$name)
         {
             $question = new Question('<question>Enter the relationship name for the entity:</question> ');
@@ -252,20 +250,20 @@ class {$name} extends Entity
 TEMPLATE;
         $entityName = "{$namespace}:{$name}";
         $entityName = str_replace('/', '\\', $entityName);
-
-        $output->writeln("Writing entity for {$entityName}");
-        echo $template . "\n\n";
         File::writeFile($filename, $template, false);
 
-        $this->runSubAction($output, [
-            'xf-dev:entity-class-properties',
-            $entityName
-        ]);
+        $output->writeln("Writing entity for {$entityName}");
+        $output->writeln($template);
 
-        $this->runSubAction($output, [
-            'tdt-addon:generate-schema-entity',
-            $entityName
-        ]);
+        $command = $this->getApplication()->find('xf-dev:entity-class-properties');
+        $childInput = new ArrayInput(['addon-or-entity' => $entityName]);
+        $command->run($childInput, $output);
+        $output->writeln('');
+
+        $command = $this->getApplication()->find('tck-dt:generate-schema-entity');
+        $childInput = new ArrayInput(['id' => $entityName]);
+        $command->run($childInput, $output);
+        $output->writeln('');
 
         return 0;
     }
@@ -395,56 +393,6 @@ TEMPLATE;
         }
 
         return [$type, $len, $allowedValues];
-    }
-
-    /**
-     * @param OutputInterface $output
-     * @param array           $args
-     */
-    public function runSubAction(OutputInterface $output, array $args = []) : void
-    {
-        $execFinder = new PhpExecutableFinder();
-
-        $builderOptions = [
-            $execFinder->find(false),
-            \XF::getRootDirectory() . DIRECTORY_SEPARATOR . 'cmd.php',
-            '-n'
-        ];
-        $builderOptions = \array_merge($builderOptions, $args);
-
-        if ($verbosityOption = $this->getVerbosityOption($output->getVerbosity()))
-        {
-            $builderOptions[] = $verbosityOption;
-        }
-
-        $process = new Process($builderOptions);
-        $process->setTimeout(null);
-
-        /** @var ProcessHelper $processHelper */
-        $processHelper = $this->getHelper('process');
-
-        try
-        {
-            $processHelper->mustRun($output, $process, null, function ($type, $data) use ($output)
-            {
-                if ($type === Process::OUT)
-                {
-                    $output->write($data);
-                }
-                // Note that progress bar output is in Process::ERR/stderr, but they get streamed to this callback
-                // interleaved, so displaying both is difficult. Thus, we need to only display stuff sent stdout.
-            });
-        }
-        catch (ProcessFailedException $e)
-        {
-            $process = $e->getProcess();
-            if ($process->getExitCode() === 222)
-            {
-                // This indicates that the sub-process threw an exception. It will have been printed and logged
-                // so don't trigger the normal exception handling. However, we can't continue so exit.
-                exit(1);
-            }
-        }
     }
 
     /**
