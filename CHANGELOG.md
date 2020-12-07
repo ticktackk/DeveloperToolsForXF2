@@ -6,6 +6,7 @@ CHANGELOG
 - **Change:** Improvement to how `XF\PermissionCache` class is extended (#99) (Thanks @Xon)
 - **Change:** Disable the "View template modifications" feature of this add-on if standard library 1.5.0+ is detected (#101)
 - **Fix:** Many hard-coded text instead of using phrases in "View template modifications" page (#100)
+- General code improvements and compatibility fixes
 
 ## 1.3.4 (`1030470`)
 
