@@ -163,13 +163,12 @@ class {$listenerClass}
 PHP;
     }
 
-    /**
-     * @param string $listenerMethod
-     * @param string $indent
-     *
-     * @return string
-     */
-    public function getListenerMethodBlock(string $listenerMethod, string $indent = null)
+    public function getListenerMethodBlock
+    (
+        /** @noinspection PhpUnusedParameterInspection */
+        string $listenerMethod,
+        string $indent = null
+    ) : string
     {
         $codeEvent = $this->getCodeEvent();
 

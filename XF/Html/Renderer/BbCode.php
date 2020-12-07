@@ -20,6 +20,7 @@ class BbCode extends XFCP_BbCode
      */
     public function __construct(array $options = [])
     {
+        $handleCodeTag = false;
         if (\XF::$versionId < 2011070)
         {
             $handleCodeTag = $options['handleCodeTagForTckDeveloperTools'] ?? false;
@@ -45,7 +46,12 @@ class BbCode extends XFCP_BbCode
      *
      * @return string
      */
-    public function handleTagCodeForTckDeveloperTools(string $text, HtmlTag $tag) : string
+    public function handleTagCodeForTckDeveloperTools
+    (
+        /** @noinspection PhpUnusedParameterInspection */
+        string $text,
+        HtmlTag $tag
+    ) : string
     {
         if (\preg_match('#\r\n|\r|\n#', $text))
         {

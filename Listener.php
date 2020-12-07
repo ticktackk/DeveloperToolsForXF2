@@ -27,7 +27,15 @@ class Listener
      * @param AbstractRenderer $renderer   Renderer object.
      * @param Response         $response   HTTP Response object.
      */
-    public static function dispatcherPostRender(Dispatcher $dispatcher, ?string &$content, AbstractReply $reply, AbstractRenderer $renderer, Response $response) : void
+    public static function dispatcherPostRender
+    (
+        /** @noinspection PhpUnusedParameterInspection */
+        Dispatcher $dispatcher,
+        ?string &$content,
+        AbstractReply $reply,
+        AbstractRenderer $renderer,
+        Response $response
+    ) : void
     {
         if (!\is_string($content))
         {

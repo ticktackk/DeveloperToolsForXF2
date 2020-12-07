@@ -6,23 +6,19 @@ use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure as EntityStructure;
 
 /**
- * Class EmailLog
- *
- * @package TickTackk\DeveloperTools\Entity
- *
  * COLUMNS
  * @property int|null email_id
  * @property string subject
  * @property int log_date
  * @property string return_path
- * @property array<string, string> sender
- * @property array<string, string> from
- * @property string[] reply_to
- * @property string[] to
- * @property string[] cc
- * @property string[] bcc
- * @property string html_message
- * @property string text_message
+ * @property array|null|null sender
+ * @property array|null from
+ * @property array|null|null reply_to
+ * @property array|null to
+ * @property array|null|null cc
+ * @property array|null|null bcc
+ * @property string|null html_message
+ * @property string|null text_message
  */
 class EmailLog extends Entity
 {

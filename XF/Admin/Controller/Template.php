@@ -4,6 +4,7 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 
 use XF\Diff;
 use XF\Entity\TemplateModification as TemplateModificationEntity;
+use XF\Mvc\Entity\AbstractCollection;
 use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\View as ViewReply;
 use XF\Mvc\Reply\Error as ErrorReply;
@@ -79,6 +80,8 @@ class Template extends XFCP_Template
 
         /** @var TemplateModificationRepo $templateModRepo */
         $templateModRepo = $this->repository('XF:TemplateModification');
+
+        /** @var TemplateModificationEntity[]|AbstractCollection $modifications */
         $modifications = $this->finder('XF:TemplateModification')
             ->where([
                 'type' => $template->type,
@@ -98,7 +101,6 @@ class Template extends XFCP_Template
             return isset($ids[$mod->modification_id]);
         });
         $filtered = $filtered->toArray();
-        /** @var TemplateModificationEntity[] $modifications */
         $templateText = $templateModRepo->applyTemplateModifications($template->template, $filtered, $statuses);
 
         $diff = new Diff();
