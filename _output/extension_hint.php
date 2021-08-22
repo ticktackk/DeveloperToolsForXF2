@@ -13,11 +13,6 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller
 	class XFCP_TemplateModification extends \XF\Admin\Controller\TemplateModification {}
 }
 
-namespace TickTackk\DeveloperTools\XF
-{
-    class XFCP_PermissionCache extends \XF\PermissionCache {}
-}
-
 namespace TickTackk\DeveloperTools\XF\Entity
 {
 	class XFCP_CodeEventListener extends \XF\Entity\CodeEventListener {}
@@ -42,6 +37,11 @@ namespace TickTackk\DeveloperTools\XF\Mail
 namespace TickTackk\DeveloperTools\XF\Mvc\Renderer
 {
 	class XFCP_Json extends \XF\Mvc\Renderer\Json {}
+}
+
+namespace TickTackk\DeveloperTools\XF
+{
+	class XFCP_PermissionCache extends \XF\PermissionCache {}
 }
 
 namespace TickTackk\DeveloperTools\XF\Repository

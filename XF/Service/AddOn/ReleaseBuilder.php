@@ -2,15 +2,43 @@
 
 namespace TickTackk\DeveloperTools\XF\Service\AddOn;
 
+use XF\Service\AbstractService;
+use XF\Service\AddOn\Exporter as AddOnExporterSvc;
 use XF\Util\File as FileUtil;
 
 /**
- * Class ReleaseBuilder
- *
- * @package TickTackk\DeveloperTools
+ * @version 1.3.6
  */
 class ReleaseBuilder extends XFCP_ReleaseBuilder
 {
+    /**
+     * @since 1.3.6
+     */
+    protected function prepareDataDirectory() : void
+    {
+        $addOnExporterSvc = $this->getAddonExporterSvc();
+
+        foreach ($addOnExporterSvc->getContainers() AS $containerName)
+        {
+            $addOnExporterSvc->export($containerName);
+        }
+    }
+
+    /**
+     * @version 1.3.6
+     */
+    protected function prepareFilesToCopy()
+    {
+        $this->prepareDataDirectory();
+
+        parent::prepareFilesToCopy();
+
+        foreach (['LICENSE', "README", 'CHANGELOG'] AS $fileName)
+        {
+            $this->copyFileToBuildRoot($fileName, ['md', '', 'txt', 'html']);
+        }
+    }
+
     /**
      * @throws \XF\PrintableException
      */
@@ -45,16 +73,6 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
             {
                 \unlink($filePath);
             }
-        }
-    }
-
-    protected function prepareFilesToCopy()
-    {
-        parent::prepareFilesToCopy();
-
-        foreach (['LICENSE', "README", 'CHANGELOG'] AS $fileName)
-        {
-            $this->copyFileToBuildRoot($fileName, ['md', '', 'txt', 'html']);
         }
     }
 
@@ -125,5 +143,15 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
         \array_push($excludedDirectories, ...$excludedDirectoriesFromBuildFile);
 
         return \array_unique($excludedDirectories);
+    }
+
+    /**
+     * @since 1.3.6
+     *
+     * @return AbstractService|AddOnExporterSvc
+     */
+    protected function getAddonExporterSvc() : AddOnExporterSvc
+    {
+        return $this->service('XF:AddOn\Exporter', $this->addOn);
     }
 }

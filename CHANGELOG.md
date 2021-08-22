@@ -1,6 +1,11 @@
 CHANGELOG
 ==========================
 
+## 1.3.6 (`1030670`)
+
+- **Fix:** Large email HTML body causes "Data too long for column" exception to be thrown (#103)
+- **Fix:** Building add-on from admin control panel does not rebuild data directory (#107)
+
 ## 1.3.5 (`1030570`)
 
 - **Change:** Improvement to how `XF\PermissionCache` class is extended (#99) (Thanks @Xon)

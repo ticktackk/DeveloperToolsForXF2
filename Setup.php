@@ -6,15 +6,14 @@ use XF\AddOn\AbstractSetup;
 use XF\AddOn\StepRunnerInstallTrait;
 use XF\AddOn\StepRunnerUninstallTrait;
 use XF\AddOn\StepRunnerUpgradeTrait;
-use XF\Db\Schema\Alter;
+use XF\Db\Schema\Alter as DbAlterSchema;
 use XF\Util\File as FileUtil;
 use XF\Util\Json as JsonUtil;
 use XF\AddOn\AddOn;
 
 /**
- * Class Setup
- *
- * @package TickTackk\DeveloperTools
+ * @since 1.0.0
+ * @version 1.3.6
  */
 class Setup extends AbstractSetup
 {
@@ -22,6 +21,9 @@ class Setup extends AbstractSetup
     use StepRunnerUpgradeTrait;
     use StepRunnerUninstallTrait;
 
+    /**
+     * @version 1.3.6
+     */
     public function installStep1() : void
     {
         $sm = $this->schemaManager();
@@ -38,8 +40,8 @@ class Setup extends AbstractSetup
             $table->addColumn('to', 'blob');
             $table->addColumn('cc', 'blob')->nullable();
             $table->addColumn('bcc', 'blob')->nullable();
-            $table->addColumn('html_message', 'text')->nullable();
-            $table->addColumn('text_message', 'text')->nullable();
+            $table->addColumn('html_message', 'blob')->nullable();
+            $table->addColumn('text_message', 'blob')->nullable();
 
             $table->addKey('log_date');
         });
@@ -76,9 +78,12 @@ class Setup extends AbstractSetup
         }
     }
 
+    /**
+     * @version 1.3.6
+     */
     public function upgrade1000033Step2() : void
     {
-        $this->schemaManager()->alterTable('xf_addon', function (Alter $table)
+        $this->schemaManager()->alterTable('xf_addon', function (DbAlterSchema $table)
         {
             $table->dropColumns(['devTools_license', 'devTools_gitignore', 'devTools_readme_md', 'devTools_parse_additional_files']);
         });
@@ -237,5 +242,19 @@ class Setup extends AbstractSetup
     public function upgrade1030070Step1() : void
     {
         $this->installStep1();
+    }
+
+    /**
+     * @since 1.3.6
+     */
+    public function upgrade1030670Step1() : void
+    {
+        $sm = $this->schemaManager();
+
+        $sm->alterTable('xf_tck_developer_tools_email_log', function(DbAlterSchema $table)
+        {
+            $table->addColumn('html_message', 'blob')->nullable();
+            $table->addColumn('text_message', 'blob')->nullable();
+        });
     }
 }
