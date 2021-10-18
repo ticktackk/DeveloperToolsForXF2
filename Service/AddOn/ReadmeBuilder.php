@@ -89,6 +89,8 @@ class ReadmeBuilder extends AbstractService
     }
 
     /**
+     * @version 1.3.7
+     *
      * @param AddOn|null $addOn
      *
      * @return array
@@ -114,6 +116,8 @@ class ReadmeBuilder extends AbstractService
             $finder = $this->finder($identifier);
             $this->applyAddOnIdCondition($finder);
             $this->applyDefaultOrder($finder);
+            $this->applyIdentifierSpecificConditions($finder);
+
             $data[$dataKey] = $finder->fetch();
         }
 
@@ -346,6 +350,72 @@ class ReadmeBuilder extends AbstractService
         }
 
         return $finder;
+    }
+
+    /**
+     * @since 1.3.7
+     *
+     * @param Finder $finder
+     */
+    protected function applyIdentifierSpecificConditions(
+        Finder $finder
+    ) : void
+    {
+        $phraseRelations = [];
+
+        switch ($finder->getStructure()->shortName)
+        {
+            case 'XF:BbCode':
+                $phraseRelations[] = 'MasterTitle';
+                $phraseRelations[] = 'MasterDesc';
+                $phraseRelations[] = 'MasterExample';
+                $phraseRelations[] = 'MasterOutput';
+                break;
+
+            case 'XF:BbCodeMediaSite':
+                break;
+
+            case 'XF:AdminPermission':
+            case 'XF:CronEntry':
+                $phraseRelations[] = 'MasterTitle';
+                break;
+
+            case 'XF:Option':
+                $phraseRelations[] = 'MasterTitle';
+                $phraseRelations[] = 'MasterExplain';
+                break;
+
+            case 'XF:Permission':
+                $phraseRelations[] = 'MasterTitle';
+                $phraseRelations[] = 'Interface.MasterTitle';
+                break;
+
+            case 'XF:StyleProperty':
+                $phraseRelations[] = 'MasterTitle';
+                $phraseRelations[] = 'MasterDescription';
+                $phraseRelations[] = 'Group.MasterTitle';
+                $phraseRelations[] = 'Group.MasterDescription';
+                break;
+
+            case 'XF:WidgetDefinition':
+            case 'XF:AdvertisingPosition':
+            case 'XF:WidgetPosition':
+                $phraseRelations[] = 'MasterTitle';
+                $phraseRelations[] = 'MasterDescription';
+                break;
+
+            case 'XF:ApiScope':
+                $phraseRelations[] = 'MasterDescription';
+                break;
+        }
+
+        if (\count($phraseRelations))
+        {
+            foreach ($phraseRelations AS $phraseRelation)
+            {
+                $finder->where("{$phraseRelation}.phrase_id", '<>', null);
+            }
+        }
     }
 
     /**

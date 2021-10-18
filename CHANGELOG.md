@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.3.7 (`1030770`)
+
+- **Fix:** Exception thrown when the add-on assigned to permission interface has been removed (#108)
+
 ## 1.3.6 (`1030670`)
 
 - **Fix:** Large email HTML body causes "Data too long for column" exception to be thrown (#103)
