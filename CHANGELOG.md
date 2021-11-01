@@ -3,6 +3,7 @@ CHANGELOG
 
 ## 1.3.7 (`1030770`)
 
+- **Change:** On XF 2.2.7+ when minifying JS files go with the stock minifier service (#109)
 - **Fix:** Exception thrown when the add-on assigned to permission interface has been removed (#108)
 
 ## 1.3.6 (`1030670`)

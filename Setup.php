@@ -257,4 +257,26 @@ class Setup extends AbstractSetup
             $table->addColumn('text_message', 'blob')->nullable();
         });
     }
+
+    /**
+     * @since 1.3.7
+     */
+    public function upgrade1030770Step1() : void
+    {
+        $development = $this->app->config('development');
+        $closureJarPath = $development['closureJar'] ?? null; // from add-on
+        $closureCompilerPath = $development['closureCompilerPath'] ?? null; // from xf
+
+        // We have add-on specific closure jar path set? If so, apply it to the XF 2.2.7+ config value
+        if ($closureJarPath && !$closureCompilerPath)
+        {
+            $configLine = '$config[\'development\'][\'closureCompilerPath\'] = \'' . $closureJarPath . '\';';
+
+            \file_put_contents(
+                $this->app->container('config.file'),
+                \PHP_EOL . $configLine,
+                \FILE_APPEND
+            );
+        }
+    }
 }
