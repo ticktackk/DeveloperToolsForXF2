@@ -6,6 +6,8 @@ use TickTackk\DeveloperTools\XF\Template\Templater as ExtendedTemplater;
 use XF\App as BaseApp;
 use XF\PermissionSet as BasePermissionSet;
 
+use function array_key_exists;
+
 /**
  * Class PermissionSet
  *
@@ -33,11 +35,11 @@ class PermissionSet extends BasePermissionSet
         $groupEscaped = \XF::escapeString($group);
         $permissionEscaped = \XF::escapeString($permission);
 
-        if (!\array_key_exists($group, $permissions))
+        if (!array_key_exists($group, $permissions))
         {
             $this->logPermissionError("Permission group '$groupEscaped' is unknown for permission '$permissionEscaped'");
         }
-        else if (!\array_key_exists($permission, $permissions[$group]))
+        else if (!array_key_exists($permission, $permissions[$group]))
         {
             $this->logPermissionError("Permission '$permissionEscaped' is unknown in '$groupEscaped' permission group");
         }
@@ -68,7 +70,7 @@ class PermissionSet extends BasePermissionSet
 
         if ($permissions)
         {
-            if (!\array_key_exists($permission, $permissions))
+            if (!array_key_exists($permission, $permissions))
             {
                 $this->logPermissionError("Permission '$permissionEscaped' unknown for content type '$contentTypeEscaped'");
             }

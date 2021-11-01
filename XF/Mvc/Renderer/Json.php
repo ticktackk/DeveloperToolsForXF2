@@ -5,6 +5,8 @@ namespace TickTackk\DeveloperTools\XF\Mvc\Renderer;
 use TickTackk\DeveloperTools\XF\Template\Templater as ExtendedTemplater;
 use XF\Util\File;
 
+use function count;
+
 /**
  * Class Json
  * 
@@ -27,14 +29,14 @@ class Json extends XFCP_Json
         $templater = $this->getTemplater();
         $permissionErrors = $templater->getPermissionErrors();
 
-        if (\count($permissionErrors))
+        if (count($permissionErrors))
         {
             $output['permissionErrors'] = true;
 
             $permissionErrorDetails = [];
             foreach ($permissionErrors AS $permissionError)
             {
-                $permissionErrorDetails[] = \sprintf('%s (%s:%d)',
+                $permissionErrorDetails[] = sprintf('%s (%s:%d)',
                     $permissionError['error'],
                     File::stripRootPathPrefix($permissionError['file']),
                     $permissionError['line']

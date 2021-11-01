@@ -97,7 +97,7 @@ class Log extends XFCP_Log
         /** @noinspection PhpUndefinedFieldInspection */
         $emailLog = $this->assertEmailLogExists($parameterBag->email_id);
 
-        $email = \key($emailLog->to);
+        $email = key($emailLog->to);
         $name = $emailLog->to[$email];
 
         /** @var DeleteControllerPlugin $deleteControllerPlugin */

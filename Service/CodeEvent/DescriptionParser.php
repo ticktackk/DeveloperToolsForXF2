@@ -102,7 +102,7 @@ class DescriptionParser extends AbstractService
         }
 
         $eventHintNode->removeChild($eventHintLabelNodes->first()->getNode(0));
-        return \trim($eventHintNode->nodeValue);
+        return trim($eventHintNode->nodeValue);
     }
 
     /**
@@ -160,22 +160,22 @@ class DescriptionParser extends AbstractService
             {
                 $nameNode->removeChild($hintTypeNode);
             }
-            $name = \trim($nameNode->nodeValue);
+            $name = trim($nameNode->nodeValue);
 
             $listItem->removeChild($nameNode); // remove the code element
             $description = $listItem->nodeValue;
 
             // if not then we don't care because this unwritten standard
-            if (\substr($description, 0, 3) === ' - ')
+            if (substr($description, 0, 3) === ' - ')
             {
-                $description = \substr($description, 3);
+                $description = substr($description, 3);
             }
             else
             {
                 $description = '';
             }
 
-            $passedByRef = \substr($name, 0, 1) === '&';
+            $passedByRef = substr($name, 0, 1) === '&';
             if ($passedByRef)
             {
                 $name = substr($name, 1);
@@ -185,7 +185,7 @@ class DescriptionParser extends AbstractService
                 'hint' => $this->getFinalHint($hintType),
                 'name' => $name,
                 'passedByRef' => $passedByRef,
-                'description' => \ucfirst($description)
+                'description' => ucfirst($description)
             ];
         }
 

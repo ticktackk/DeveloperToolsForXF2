@@ -11,6 +11,8 @@ use XF\Util\File as FileUtil;
 use XF\Util\Json as JsonUtil;
 use XF\AddOn\AddOn;
 
+use function array_key_exists, count, is_string;
+
 /**
  * @since 1.0.0
  * @version 1.3.6
@@ -60,7 +62,7 @@ class Setup extends AbstractSetup
     		  AND addon_id NOT IN('XF', 'XFRM', 'XFMG', 'XFES', 'XFI')
     	");
 
-        if (\count($addOns))
+        if (count($addOns))
         {
             foreach ($addOns AS $addOn)
             {
@@ -120,7 +122,7 @@ class Setup extends AbstractSetup
             {
                 $dev = \json_decode(\file_get_contents($devJsonPath), true);
 
-                if (\array_key_exists('parse_additional_files', $dev))
+                if (array_key_exists('parse_additional_files', $dev))
                 {
                     unset($dev['parse_additional_files']);
                 }
@@ -132,7 +134,7 @@ class Setup extends AbstractSetup
 
                 foreach ($markdownFiles AS $key => $details)
                 {
-                    if (\array_key_exists($key, $dev))
+                    if (array_key_exists($key, $dev))
                     {
                         $fileNameWithoutExtension = $dev[0];
                         $preferredFileName = $dev[1];
@@ -185,7 +187,7 @@ class Setup extends AbstractSetup
 
                         if ($createFile)
                         {
-                            if (\is_string($fileContents) && !empty($fileContents))
+                            if (is_string($fileContents) && !empty($fileContents))
                             {
                                 $markdownPath = FileUtil::canonicalizePath($preferredFileName, $addOnDir);
                                 FileUtil::writeFile($markdownPath, $fileContents, false);
@@ -196,18 +198,18 @@ class Setup extends AbstractSetup
                     }
                 }
 
-                if (\array_key_exists('gitignore', $dev))
+                if (array_key_exists('gitignore', $dev))
                 {
                     $finalGitIgnore = preg_split('/\r?\n/', $dev['gitignore'], \PREG_SPLIT_NO_EMPTY);
                     \array_push($finalGitIgnore, ['_releases', '/.idea/', '_build', '_vendor', '.DS_Store', 'hashes.json', '.phpstorm.meta.php', '_metadata.json', '.php_cs.cache']);
 
-                    if (\count($finalGitIgnore))
+                    if (count($finalGitIgnore))
                     {
                         $gitIgnoreFileInAddOnRoot = FileUtil::canonicalizePath('.gitignore', $addOnDir);
                         if (\file_exists($gitIgnoreFileInAddOnRoot))
                         {
                             $gitIgnoreFileContentsFromAddOnRoot = preg_split('/\r?\n/', \file_get_contents($gitIgnoreFileInAddOnRoot), \PREG_SPLIT_NO_EMPTY);
-                            if (\count($gitIgnoreFileContentsFromAddOnRoot))
+                            if (count($gitIgnoreFileContentsFromAddOnRoot))
                             {
                                 \array_push($finalGitIgnore, ...$gitIgnoreFileContentsFromAddOnRoot);
                             }

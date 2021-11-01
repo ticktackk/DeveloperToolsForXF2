@@ -54,7 +54,7 @@ class ClampVersions extends Command
         $addOnId = $addOnObj->getAddOnId();
         $jsonPath = $addOnObj->getJsonPath();
 
-        if (!\file_exists($jsonPath))
+        if (!file_exists($jsonPath))
         {
             $output->writeln("<error>The addon.json file must exist at {$jsonPath}.</error>");
 
@@ -135,7 +135,7 @@ class ClampVersions extends Command
         $devOutput->clearBatchMode();
 
         $output->writeln(\sprintf(ucfirst($friendlyName) . " exported. (%.02fs)",
-            \microtime(true) - $start
+            microtime(true) - $start
         ));
     }
 

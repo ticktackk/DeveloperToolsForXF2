@@ -9,6 +9,8 @@ use XF\Mvc\Reply\Redirect as RedirectReply;
 use XF\Mvc\Reply\Exception as ExceptionReply;
 use XF\Entity\Phrase as PhraseEntity;
 
+use function array_key_exists, count;
+
 /**
  * Class Phrase
  * 
@@ -60,13 +62,13 @@ class Phrase extends XFCP_Phrase
         if (!$parameterBag->phrase_id && $reply instanceof RedirectReply)
         {
             $phrases = $this->filter('phrases', 'array');
-            if (\count($phrases))
+            if (count($phrases))
             {
                 $languageId = $this->filter('language_id', 'uint');
 
-                $phrases = \array_map(function ($input) use ($languageId)
+                $phrases = array_map(function ($input) use ($languageId)
                 {
-                    $input = \array_replace([
+                    $input = array_replace([
                         'title' => '',
                         'phrase_text' => '',
                         'global_cache' => false,
@@ -74,7 +76,7 @@ class Phrase extends XFCP_Phrase
                         'language_id' => $languageId
                     ], $input);
 
-                    if (\array_key_exists('global_cache', $input))
+                    if (array_key_exists('global_cache', $input))
                     {
                         $input['global_cache'] = $input['global_cache'] === '1';
                     }

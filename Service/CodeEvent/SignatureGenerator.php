@@ -63,6 +63,6 @@ class SignatureGenerator extends AbstractService
             $signature .= "{$argument}, ";
         }
 
-        return \rtrim(\trim($signature), ',');
+        return rtrim(trim($signature), ',');
     }
 }

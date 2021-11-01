@@ -9,6 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use XF\Cli\Command\Development\RequiresDevModeTrait;
 use XF\Mvc\Entity\Entity;
 
+use function count, is_array, is_bool, is_string;
+
 /**
  * Class GenerateSchemaEntity
  *
@@ -120,9 +122,9 @@ class GenerateSchemaEntity extends Command
             if (isset($column['allowedValues']))
             {
                 $type = 'enum';
-                if (\count($column['allowedValues']) > 1)
+                if (count($column['allowedValues']) > 1)
                 {
-                    $values = '[\'' . \implode('\', \'', $column['allowedValues']) . '\']';
+                    $values = '[\'' . implode('\', \'', $column['allowedValues']) . '\']';
                 } else
                 {
                     $values = '\'' . $column['allowedValues'] . '\'';
@@ -158,12 +160,12 @@ class GenerateSchemaEntity extends Command
                     $default = 0;
                 } else
                 {
-                    if (\is_string($column['default']))
+                    if (is_string($column['default']))
                     {
                         $default = '\'' . $column['default'] . '\'';
                     } else
                     {
-                        if (\is_bool($column['default']))
+                        if (is_bool($column['default']))
                         {
                             $default = ($column['default'] === true) ? 1 : 0;
                         } else
@@ -190,16 +192,16 @@ class GenerateSchemaEntity extends Command
         if (!$primaryKeySet && $primaryKey)
         {
             $primaryKeyString = "\n    ";
-            if (\is_array($primaryKey) && \count($primaryKey) > 1)
+            if (is_array($primaryKey) && count($primaryKey) > 1)
             {
-                $primaryKeyString .= '$table->addPrimaryKey([\'' . \implode('\', \'', $primaryKey) . '\']);';
+                $primaryKeyString .= '$table->addPrimaryKey([\'' . implode('\', \'', $primaryKey) . '\']);';
             } else
             {
                 $primaryKeyString .= '$table->addPrimaryKey(\'' . $primaryKey . '\');';
             }
         }
 
-        $columnOutput = \implode("\n    ", $columnStrings);
+        $columnOutput = implode("\n    ", $columnStrings);
 
         $sm = <<< FUNCTION
 \$tables['$table'] = function (\$table) {

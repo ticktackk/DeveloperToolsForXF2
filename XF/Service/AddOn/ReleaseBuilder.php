@@ -53,7 +53,7 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
         {
             $excludeFiles = $buildJson['exclude_files'] ?? [];
             $excludeFiles = (array) $excludeFiles;
-            \array_push($excludeFiles, ...['git.json', 'dev.json']);
+            array_push($excludeFiles, ...['git.json', 'dev.json']);
 
             $this->excludeFiles($excludeFiles);
         }
@@ -69,9 +69,9 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
         foreach ($excludedFiles AS $excludedFile)
         {
             $filePath = FileUtil::canonicalizePath($excludedFile, $addOnBase);
-            if (\file_exists($filePath))
+            if (file_exists($filePath))
             {
-                \unlink($filePath);
+                unlink($filePath);
             }
         }
     }
@@ -96,7 +96,7 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
                 }
 
                 $possibleFilePath = FileUtil::canonicalizePath($possibleFileNameFinal, $buildRoot);
-                if (\file_exists($possibleFilePath))
+                if (file_exists($possibleFilePath))
                 {
                     return;
                 }
@@ -119,7 +119,7 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
                 }
 
                 $filePath = FileUtil::canonicalizePath($possibleFileNameFinal, $addOnRoot);
-                if (\file_exists($filePath) && \is_readable($filePath) && \is_file($filePath))
+                if (file_exists($filePath) && is_readable($filePath) && is_file($filePath))
                 {
                     $destinationPath = FileUtil::canonicalizePath($possibleFileNameFinal, $buildRoot);
                     FileUtil::copyFile($filePath, $destinationPath);
@@ -139,10 +139,10 @@ class ReleaseBuilder extends XFCP_ReleaseBuilder
         $excludedDirectories = parent::getExcludedDirectories();
 
         $excludedDirectoriesFromBuildFile = (array) ($buildJson['exclude_directories'] ?? []);
-        \array_push($excludedDirectoriesFromBuildFile, ...['_repo', '_tests', '_dev', '.idea']);
-        \array_push($excludedDirectories, ...$excludedDirectoriesFromBuildFile);
+        array_push($excludedDirectoriesFromBuildFile, ...['_repo', '_tests', '_dev', '.idea']);
+        array_push($excludedDirectories, ...$excludedDirectoriesFromBuildFile);
 
-        return \array_unique($excludedDirectories);
+        return array_unique($excludedDirectories);
     }
 
     /**

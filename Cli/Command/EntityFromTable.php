@@ -15,6 +15,8 @@ use XF\Cli\Command\AddOnActionTrait;
 use XF\Cli\Command\Development\RequiresDevModeTrait;
 use XF\Util\File;
 
+use function array_key_exists, count, floatval, is_array, is_scalar, strlen, strval;
+
 /**
  * Class EntityFromTable
  *
@@ -104,7 +106,7 @@ class EntityFromTable extends Command
         $filename = $manager->getAddOnPath($addOnId) . DIRECTORY_SEPARATOR . 'Entity' . DIRECTORY_SEPARATOR . $name . '.php';
         $force = $input->getOption('force');
 
-        if (\file_exists($filename))
+        if (file_exists($filename))
         {
             if ($force)
             {
@@ -141,7 +143,7 @@ class EntityFromTable extends Command
         {
             $primaryKey[] = var_export($column['Column_name'], true);
         }
-        if (\count($primaryKey) === 1)
+        if (count($primaryKey) === 1)
         {
             $primaryKey = $primaryKey[0];
         }
@@ -162,7 +164,7 @@ class EntityFromTable extends Command
             }
             if (stripos($colDefinition['Extra'], 'auto_increment') !== false)
             {
-                $fieldData['autoIncrement'] = \var_export(true, true);
+                $fieldData['autoIncrement'] = var_export(true, true);
             }
 
             if ($allowedValues)
@@ -172,7 +174,7 @@ class EntityFromTable extends Command
 
             if (isset($fieldData['Null']) && $fieldData['Null'] !== 'NO')
             {
-                $fieldData['nullable'] = \var_export(true, true);
+                $fieldData['nullable'] = var_export(true, true);
             }
 
             if (isset($colDefinition['Default']) && ($colDefinition['Default'] !== null || !empty($fieldData['nullable'])))
@@ -182,13 +184,13 @@ class EntityFromTable extends Command
                 {
                     case 'self::INT':
                     case 'self::UINT':
-                        if (\is_scalar($default))
+                        if (is_scalar($default))
                         {
                             $default = (int) $default;
                         }
                         break;
                     case 'self::FLOAT':
-                        if (\is_scalar($default))
+                        if (is_scalar($default))
                         {
                             $default = strval(floatval($default)) + 0;
                         }
@@ -198,27 +200,27 @@ class EntityFromTable extends Command
                         break;
                 }
 
-                $fieldData['default'] = \var_export($default, true);
+                $fieldData['default'] = var_export($default, true);
             }
 
-            if (!\array_key_exists('default', $fieldData) && empty($fieldData['nullable']))
+            if (!array_key_exists('default', $fieldData) && empty($fieldData['nullable']))
             {
-                $fieldData['required'] = \var_export(true, true);
+                $fieldData['required'] = var_export(true, true);
             }
 
             $definition = [];
             foreach ($fieldData AS $key => $value)
             {
-                if (\is_array($value))
+                if (is_array($value))
                 {
-                    $value = \var_export($value, true);
+                    $value = var_export($value, true);
                 }
 
-                $definition[] = \var_export($key, true) . ' => ' . $value;
+                $definition[] = var_export($key, true) . ' => ' . $value;
             }
-            $definition = \implode(', ', $definition);
+            $definition = implode(', ', $definition);
 
-            $columns .= '            ' . \var_export($colDefinition['Field'], true) . ' => [' . $definition . "],\n";
+            $columns .= '            ' . var_export($colDefinition['Field'], true) . ' => [' . $definition . "],\n";
         }
 
 
@@ -276,9 +278,9 @@ TEMPLATE;
     protected function parseSqlType(string $sqlType) : array
     {
         $len = $allowedValues = null;
-        if (\preg_match('#^([a-zA-Z0-9_]*)(?:\(([^\)]+)\)){0,1}(\sunsigned){0,1}$#i', $sqlType, $matches))
+        if (preg_match('#^([a-zA-Z0-9_]*)(?:\(([^\)]+)\)){0,1}(\sunsigned){0,1}$#i', $sqlType, $matches))
         {
-            $proposedType = \utf8_strtolower($matches[1]);
+            $proposedType = utf8_strtolower($matches[1]);
             $proposedLen = empty($matches[2]) ? null : (int) $matches[2];
             $isUnsigned = !empty($matches[3]);
 
@@ -377,7 +379,7 @@ TEMPLATE;
                     {
                         if ($allowedValue && $allowedValue[0] === '\'')
                         {
-                            $allowedValue = \substr($allowedValue, 1, \strlen($allowedValue) - 2);
+                            $allowedValue = substr($allowedValue, 1, strlen($allowedValue) - 2);
                         }
                     }
                     unset($allowedValue);

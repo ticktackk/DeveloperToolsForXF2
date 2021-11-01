@@ -13,6 +13,8 @@ use XF\AddOn\AddOn;
 use XF\Util\File as FileUtil;
 use XF\Util\Php as PhpUtil;
 
+use function strlen;
+
 /**
  * Class
  *
@@ -110,7 +112,7 @@ class Creator extends AbstractService
     {
         $addOn = $this->getAddOn();
         $addOnRoot = $addOn->getAddOnDirectory();
-        $listenerFileName = \str_replace('\\', \XF::$DS, \substr($listenerClass, \strlen($addOn->getAddOnId()) + 1));
+        $listenerFileName = str_replace('\\', \XF::$DS, substr($listenerClass, strlen($addOn->getAddOnId()) + 1));
 
         return FileUtil::canonicalizePath($listenerFileName, $addOnRoot) . '.php';
     }
@@ -136,7 +138,7 @@ class Creator extends AbstractService
      */
     public function getFallbackListenerMethod() : string
     {
-        return \lcfirst(PhpUtil::camelCase($this->getCodeEvent()->event_id));
+        return lcfirst(PhpUtil::camelCase($this->getCodeEvent()->event_id));
     }
 
     /**
@@ -192,30 +194,30 @@ PHP;
     }
 PHP;
 
-        return $listenerMethodBlock . \PHP_EOL;
+        return $listenerMethodBlock . PHP_EOL;
     }
 
     public function create() : void
     {
         $listenerFullClass = $this->getListenerClass() ?: $this->getFallbackListenerClass();
-        $listenerNamespace = \substr($listenerFullClass, 0, strrpos($listenerFullClass, '\\'));
-        $listenerClass = \substr($listenerFullClass, \strlen($listenerNamespace) + 1);
+        $listenerNamespace = substr($listenerFullClass, 0, strrpos($listenerFullClass, '\\'));
+        $listenerClass = substr($listenerFullClass, strlen($listenerNamespace) + 1);
         $listenerMethod = $this->getListenerMethod() ?: $this->getFallbackListenerMethod();
         $listenerPath = $this->getListenerPath($listenerFullClass);
 
-        $listenerContents = \file_exists($listenerPath)
-            ? \file_get_contents($listenerPath)
+        $listenerContents = file_exists($listenerPath)
+            ? file_get_contents($listenerPath)
             : $this->getFallbackListenerContents($listenerClass, $listenerNamespace);
         $listenerContents = utf8_trim($listenerContents);
 
-        if (!\method_exists($listenerFullClass, $listenerMethod))
+        if (!method_exists($listenerFullClass, $listenerMethod))
         {
-            $listenerContents = \utf8_substr($listenerContents, 0, \utf8_strlen($listenerContents) - 1);
+            $listenerContents = utf8_substr($listenerContents, 0, utf8_strlen($listenerContents) - 1);
             $listenerContents .= $this->getListenerMethodBlock($listenerMethod);
-            $listenerContents .= \PHP_EOL .'}';
+            $listenerContents .= PHP_EOL .'}';
         }
 
-        \file_put_contents($listenerPath, $listenerContents);
+        file_put_contents($listenerPath, $listenerContents);
     }
 
     /**

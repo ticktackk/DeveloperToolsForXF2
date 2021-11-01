@@ -78,7 +78,7 @@ class BetterExport extends Command
         $command->run($childInput, $output);
 
         $entityPath = $addOn->getAddOnDirectory() . DIRECTORY_SEPARATOR . 'Entity';
-        if (\is_dir($entityPath))
+        if (is_dir($entityPath))
         {
             $command = $this->getApplication()->find('xf-dev:entity-class-properties');
             $childInput = new ArrayInput([
