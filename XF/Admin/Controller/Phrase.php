@@ -46,12 +46,12 @@ class Phrase extends XFCP_Phrase
     }
 
     /**
-     * @param ParameterBag $parameterBag ParameterBag object containing router related params
+     * @param ParameterBag $params ParameterBag object containing router related params
      *
      * @return RedirectReply Reply object. On success this will be redirect reply
      * @throws \XF\PrintableException
      */
-    public function actionSave(ParameterBag $parameterBag)
+    public function actionSave(ParameterBag $params)
     {
         $db = $this->app()->db();
         $db->beginTransaction();

@@ -7,6 +7,16 @@ use TickTackk\DeveloperTools\XF\Mail\XFCP_Mailer;
 
 class Mailer extends XFCP_Mailer
 {
+    /**
+     * @param \Swift_Mime_SimpleMessage $message
+     * @param \Swift_Transport|null $transport
+     * @param array|null $queueEntry
+     * @param $allowRetry
+     *
+     * @return int
+     *
+     * @throws \XF\PrintableException
+     */
     public function send
     (
         \Swift_Mime_SimpleMessage $message,
