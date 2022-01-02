@@ -1,5 +1,6 @@
 {
     "icon": "fa-laptop-code",
     "display_order": 9015,
+    "advanced": false,
     "debug_only": true
 }
