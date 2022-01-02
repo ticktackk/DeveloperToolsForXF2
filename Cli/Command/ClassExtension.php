@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use XF\Util\File;
 use XF\AddOn\AddOn;
-use function dirname;
+const USE_FUNCTION_PLACEHOLDER = true;
 use function str_replace;
 
 /**
@@ -64,9 +64,9 @@ class ClassExtension extends Command
 
         $jsonPath = $addOnObj->getJsonPath();
 
-        if (!\file_exists($jsonPath))
+        if (!file_exists($jsonPath))
         {
-            $output->writeln(\sprintf('<error>The addon.json file must exist at %s.</error>', $jsonPath));
+            $output->writeln(sprintf('<error>The addon.json file must exist at %s.</error>', $jsonPath));
 
             return 1;
         }
@@ -88,7 +88,7 @@ class ClassExtension extends Command
 
         File::createDirectory(dirname($toClassPath), false);
 
-        if (!\file_exists($outputPath))
+        if (!file_exists($outputPath))
         {
             $className = basename($fromClassPath);
             $namespace = dirname(str_replace('\\', DIRECTORY_SEPARATOR, $toClass));

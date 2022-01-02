@@ -11,6 +11,8 @@ use XF\Mvc\Renderer\AbstractRenderer;
 use XF\PermissionCache;
 use XF\Util\File as FileUtil;
 
+use function count, is_string;
+
 /**
  * Class Listener
  * 
@@ -37,7 +39,7 @@ class Listener
         Response $response
     ) : void
     {
-        if (!\is_string($content))
+        if (!is_string($content))
         {
             return;
         }
@@ -46,7 +48,7 @@ class Listener
         $templater = $renderer->getTemplater();
         $permissionErrors = $templater->getPermissionErrors();
 
-        if (\count($permissionErrors))
+        if (count($permissionErrors))
         {
             $warningHtml = '<div class="blockMessage blockMessage--warning"><h2 style="margin: 0 0 .5em 0">Permission errors</h2><ul>';
             foreach ($permissionErrors AS $permissionError)

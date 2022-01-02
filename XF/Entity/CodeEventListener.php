@@ -8,6 +8,8 @@ use XF\Entity\CodeEvent as CodeEventEntity;
 use XF\Mvc\Entity\Repository;
 use XF\Repository\CodeEvent as CodeEventRepo;
 
+use function array_key_exists;
+
 /**
  * Class CodeEventListener
  * 
@@ -21,7 +23,7 @@ class CodeEventListener extends XFCP_CodeEventListener
     {
         parent::_preSave();
 
-        if (\array_key_exists('callback_method', $this->getErrors()))
+        if (array_key_exists('callback_method', $this->getErrors()))
         {
             unset($this->_errors['callback_method']);
 

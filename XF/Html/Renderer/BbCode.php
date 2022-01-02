@@ -4,6 +4,8 @@ namespace TickTackk\DeveloperTools\XF\Html\Renderer;
 
 use XF\Html\Tag as HtmlTag;
 
+use function array_key_exists;
+
 /**
  * Class BbCode
  * 
@@ -29,7 +31,7 @@ class BbCode extends XFCP_BbCode
 
         parent::__construct($options);
 
-        if (\XF::$versionId < 2011070 && $handleCodeTag && !\array_key_exists('code', $this->_handlers))
+        if (\XF::$versionId < 2011070 && $handleCodeTag && !array_key_exists('code', $this->_handlers))
         {
             $this->_handlers['code'] = [
                 'filterCallback' => ['$this', 'handleTagCodeForTckDeveloperTools'],
@@ -53,7 +55,7 @@ class BbCode extends XFCP_BbCode
         HtmlTag $tag
     ) : string
     {
-        if (\preg_match('#\r\n|\r|\n#', $text))
+        if (preg_match('#\r\n|\r|\n#', $text))
         {
             return '[CODE]' . $text . '[/CODE]';
         }

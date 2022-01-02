@@ -30,7 +30,9 @@ use XF\Repository\AddOn as AddonRepo;
 use XF\Service\AbstractService;
 use XF\Service\ValidateAndSavableTrait;
 use XF\Util\File as FileUtil;
-use xprt64\HtmlTableToMarkdownConverter\TableConverter;
+use League\HTMLToMarkdown\Converter\TableConverter;
+
+use function array_key_exists, count, in_array;
 
 /**
  * Class ReadmeBuilder
@@ -89,6 +91,8 @@ class ReadmeBuilder extends AbstractService
     }
 
     /**
+     * @version 1.3.7
+     *
      * @param AddOn|null $addOn
      *
      * @return array
@@ -114,6 +118,8 @@ class ReadmeBuilder extends AbstractService
             $finder = $this->finder($identifier);
             $this->applyAddOnIdCondition($finder);
             $this->applyDefaultOrder($finder);
+            $this->applyIdentifierSpecificConditions($finder);
+
             $data[$dataKey] = $finder->fetch();
         }
 
@@ -183,9 +189,9 @@ class ReadmeBuilder extends AbstractService
             $readmeHookDir = FileUtil::canonicalizePath("README_HOOK", $docsDir);
             $hookFilePath = FileUtil::canonicalizePath("{$fullHook}.html", $readmeHookDir);
 
-            if (\file_exists($hookFilePath) && \is_readable($hookFilePath))
+            if (file_exists($hookFilePath) && is_readable($hookFilePath))
             {
-                $readme .= \utf8_trim(\file_get_contents($hookFilePath));
+                $readme .= utf8_trim(file_get_contents($hookFilePath));
             }
         };
 
@@ -227,7 +233,7 @@ class ReadmeBuilder extends AbstractService
         $addOnDir = $addOn->getAddOnDirectory();
 
         $commandsPath = FileUtil::canonicalizePath('Command', FileUtil::canonicalizePath('Cli', $addOnDir));
-        if (!\file_exists($commandsPath) || !\is_dir($commandsPath))
+        if (!file_exists($commandsPath) || !is_dir($commandsPath))
         {
             return [];
         }
@@ -245,18 +251,18 @@ class ReadmeBuilder extends AbstractService
             }
         );
 
-        $baseClass = '\\' . \str_replace('/', '\\', $addOnId) . '\Cli\Command';
+        $baseClass = '\\' . str_replace('/', '\\', $addOnId) . '\Cli\Command';
         $cliCommands = [];
         foreach (new \RecursiveIteratorIterator($iterator) AS $file)
         {
             /** @var \DirectoryIterator $file */
-            $localPath = \str_replace($commandsPath, '', $file->getPathname());
-            $localPath = \trim(str_replace('\\', '/', $localPath), '/');
+            $localPath = str_replace($commandsPath, '', $file->getPathname());
+            $localPath = trim(str_replace('\\', '/', $localPath), '/');
 
             $className = $baseClass . '\\' . str_replace('/', '\\', $localPath);
             $className = preg_replace('/\.php$/', '', $className);
 
-            if (!\class_exists($className))
+            if (!class_exists($className))
             {
                 continue;
             }
@@ -319,7 +325,7 @@ class ReadmeBuilder extends AbstractService
         $addOn = $this->getAddOn();
         $finder->where('addon_id', $addOn->getAddOnId());
 
-        if (\array_key_exists('display_order', $finder->getStructure()->columns))
+        if (array_key_exists('display_order', $finder->getStructure()->columns))
         {
             $finder->setDefaultOrder('display_order', 'ASC');
         }
@@ -337,15 +343,81 @@ class ReadmeBuilder extends AbstractService
         $structure = $finder->getStructure();
         $columns = $structure->columns;
 
-        if (\array_key_exists('display_order', $columns))
+        if (array_key_exists('display_order', $columns))
         {
             $finder->setDefaultOrder(
-                (\array_key_exists('lft', $columns) && \array_key_exists('rgt', $columns)) ?
+                (array_key_exists('lft', $columns) && array_key_exists('rgt', $columns)) ?
                 'lft' : 'display_order'
             );
         }
 
         return $finder;
+    }
+
+    /**
+     * @since 1.3.7
+     *
+     * @param Finder $finder
+     */
+    protected function applyIdentifierSpecificConditions(
+        Finder $finder
+    ) : void
+    {
+        $phraseRelations = [];
+
+        switch ($finder->getStructure()->shortName)
+        {
+            case 'XF:BbCode':
+                $phraseRelations[] = 'MasterTitle';
+                $phraseRelations[] = 'MasterDesc';
+                $phraseRelations[] = 'MasterExample';
+                $phraseRelations[] = 'MasterOutput';
+                break;
+
+            case 'XF:BbCodeMediaSite':
+                break;
+
+            case 'XF:AdminPermission':
+            case 'XF:CronEntry':
+                $phraseRelations[] = 'MasterTitle';
+                break;
+
+            case 'XF:Option':
+                $phraseRelations[] = 'MasterTitle';
+                $phraseRelations[] = 'MasterExplain';
+                break;
+
+            case 'XF:Permission':
+                $phraseRelations[] = 'MasterTitle';
+                $phraseRelations[] = 'Interface.MasterTitle';
+                break;
+
+            case 'XF:StyleProperty':
+                $phraseRelations[] = 'MasterTitle';
+                $phraseRelations[] = 'MasterDescription';
+                $phraseRelations[] = 'Group.MasterTitle';
+                $phraseRelations[] = 'Group.MasterDescription';
+                break;
+
+            case 'XF:WidgetDefinition':
+            case 'XF:AdvertisingPosition':
+            case 'XF:WidgetPosition':
+                $phraseRelations[] = 'MasterTitle';
+                $phraseRelations[] = 'MasterDescription';
+                break;
+
+            case 'XF:ApiScope':
+                $phraseRelations[] = 'MasterDescription';
+                break;
+        }
+
+        if (count($phraseRelations))
+        {
+            foreach ($phraseRelations AS $phraseRelation)
+            {
+                $finder->where("{$phraseRelation}.phrase_id", '<>', null);
+            }
+        }
     }
 
     /**
@@ -381,12 +453,12 @@ class ReadmeBuilder extends AbstractService
 
         $titleBlock = "<h1>{$data['title']}";
         $requirements = $data['requirements'];
-        if (\count($requirements))
+        if (count($requirements))
         {
             $addOnRepo = $this->getAddonRepo();
-            if (\array_key_exists('XF', $requirements))
+            if (array_key_exists('XF', $requirements))
             {
-                $versionString = $addOnRepo->inferVersionStringFromId(\reset($requirements['XF']));
+                $versionString = $addOnRepo->inferVersionStringFromId(reset($requirements['XF']));
                 $titleBlock .= " for XenForo {$versionString}+";
                 unset($requirements['XF']);
             }
@@ -403,12 +475,12 @@ class ReadmeBuilder extends AbstractService
         $this->handleHookContents('Description', $descriptionBlock, $readme);
 
         $requirementsBlock = '';
-        if (\count($requirements))
+        if (count($requirements))
         {
             $requirementsBlock .= '<h2>Requirements</h2><ul>';
             foreach ($requirements AS $requirement => $version)
             {
-                $readableRequirement = ($version === '*') ? $requirement : \end($version);
+                $readableRequirement = ($version === '*') ? $requirement : end($version);
                 $requirementsBlock .= "<li>{$readableRequirement}</li>";
             }
             $requirementsBlock .= '</ul>';
@@ -417,7 +489,7 @@ class ReadmeBuilder extends AbstractService
 
         $softRequirements = $data['softRequirements'];
         $softRequirementsBlock = '';
-        if (\count($softRequirements))
+        if (count($softRequirements))
         {
             $softRequirementsBlock .= '<h2>Recommendations</h2><ul>';
             foreach ($softRequirements AS $softRequirement => $version)
@@ -442,7 +514,7 @@ class ReadmeBuilder extends AbstractService
                 $block .= '<table style="width:100%">';
                 // header row
                 $block .= '<thead><tr>';
-                foreach (\array_keys($headerMap) AS $header)
+                foreach (array_keys($headerMap) AS $header)
                 {
                     $block .= "<th>{$header}</th>";
                 }
@@ -478,7 +550,7 @@ class ReadmeBuilder extends AbstractService
                 // entity row
                 foreach ($entities AS $entity)
                 {
-                    $getter = \end($headerMap);
+                    $getter = end($headerMap);
 
                     if ($getter instanceof \Closure)
                     {
@@ -497,7 +569,7 @@ class ReadmeBuilder extends AbstractService
 
             $block = '';
 
-            if (\count($entities))
+            if (count($entities))
             {
                 $block .= "<h2>{$tableTitle}</h2>";
 
@@ -554,7 +626,7 @@ class ReadmeBuilder extends AbstractService
             },
             'Tag' => function(BbCodeEntity $bbCode)
             {
-                $tag = \strtoupper($bbCode->bb_code_id);
+                $tag = strtoupper($bbCode->bb_code_id);
                 return "<code>{$tag}</code>";
             },
             'Description' => function(BbCodeEntity $bbCode)
@@ -609,7 +681,7 @@ class ReadmeBuilder extends AbstractService
             'Arguments' => function(AdvertisingPositionEntity $advertisingPosition)
             {
                 $positionArguments = $advertisingPosition->arguments;
-                if (!\count($positionArguments))
+                if (!count($positionArguments))
                 {
                     return '';
                 }
@@ -662,7 +734,7 @@ class ReadmeBuilder extends AbstractService
                 $runRules = $cronEntry->run_rules;
                 if ($runRules['day_type'] === 'dom')
                 {
-                    if (\in_array(-1, $runRules['dom'], true))
+                    if (in_array(-1, $runRules['dom'], true))
                     {
                         return 'Any day of the month';
                     }
@@ -680,10 +752,10 @@ class ReadmeBuilder extends AbstractService
                         $days[] = $dayMap[$dayOfMonth];
                     }
 
-                    return 'The ' . \implode(', ', $days) . ' of the month';
+                    return 'The ' . implode(', ', $days) . ' of the month';
                 }
 
-                if (\in_array(-1, $runRules['dow']))
+                if (in_array(-1, $runRules['dow']))
                 {
                     return 'Any day of the week';
                 }
@@ -704,7 +776,7 @@ class ReadmeBuilder extends AbstractService
                     $days[] = $daysMap[$dayOfWeek];
                 }
 
-                return 'Every ' . \implode(', ', $days);
+                return 'Every ' . implode(', ', $days);
             },
             'Run at hours' => function(CronEntryEntity $cronEntry)
             {
@@ -714,7 +786,7 @@ class ReadmeBuilder extends AbstractService
 
                 for($i = 0; $i <= 23; $i++)
                 {
-                    $hoursMap[$i] = \date("gA", \strtotime("{$i}:00:00 UTC"));
+                    $hoursMap[$i] = date("gA", strtotime("{$i}:00:00 UTC"));
                 }
 
                 $hours = [];
@@ -724,7 +796,7 @@ class ReadmeBuilder extends AbstractService
                     $hours[] = $hoursMap[$hour];
                 }
 
-                return \implode(', ', $hours);
+                return implode(', ', $hours);
             },
             'Run at minutes' => function(CronEntryEntity $cronEntry)
             {
@@ -735,7 +807,7 @@ class ReadmeBuilder extends AbstractService
                     $minutes[] = $minute;
                 }
 
-                return \implode(', ', $minutes);
+                return implode(', ', $minutes);
             }
         ]);
 
@@ -817,9 +889,9 @@ class ReadmeBuilder extends AbstractService
                     'handleCodeTagForTckDeveloperTools' => true
                 ]);
                 $contents = \XF::cleanString($contents);
-                $contents = \preg_replace_callback('#(^\[SIZE=\d].*?\[/SIZE]\n)#sm', function ($header)
+                $contents = preg_replace_callback('#(^\[SIZE=\d].*?\[/SIZE]\n)#sm', function ($header)
                 {
-                    $header = \utf8_trim($header[0]);
+                    $header = utf8_trim($header[0]);
                     return "\n{$header}";
                 }, $contents);
             }

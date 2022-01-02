@@ -10,6 +10,8 @@ use TickTackk\DeveloperTools\XF\Service\AddOn\Exception\ClosureCompilerNotFoundE
 class JsMinifier extends XFCP_JsMinifier
 {
     /**
+     * @version 1.3.7
+     *
      * @return bool|string|null
      *
      * @throws ClosureCompilerNotFoundException
@@ -17,6 +19,11 @@ class JsMinifier extends XFCP_JsMinifier
      */
     public function minify()
     {
+        if (\XF::$versionId < 2020770)
+        {
+            return parent::minify();
+        }
+
         $development = $this->app->config('development');
         $jsPath = $this->jsPath;
 
@@ -27,12 +34,12 @@ class JsMinifier extends XFCP_JsMinifier
             return parent::minify();
         }
 
-        if (!\file_exists($closureJarPath))
+        if (!file_exists($closureJarPath))
         {
             throw new ClosureCompilerNotFoundException();
         }
 
-        \passthru("java -jar {$closureJarPath} --rewrite_polyfills=false --warning_level=QUIET --js {$jsPath} --js_output_file {$this->minPath}", $exitCode);
+        passthru("java -jar {$closureJarPath} --rewrite_polyfills=false --warning_level=QUIET --js {$jsPath} --js_output_file {$this->minPath}", $exitCode);
         if ($exitCode !== 0)
         {
             throw new \ErrorException('Unable to minify ' . $jsPath);

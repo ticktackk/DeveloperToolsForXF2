@@ -33,7 +33,7 @@ class EmailLog extends Repository
 
         $emailLog->bulkSet([
             'subject' => $message->getSubject(),
-            'log_date' => \time(),
+            'log_date' => time(),
             'return_path' => $message->getReturnPath(),
             'sender' => $message->getSender(),
             'from' => $message->getFrom(),

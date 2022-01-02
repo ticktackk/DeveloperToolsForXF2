@@ -5,6 +5,8 @@ namespace TickTackk\DeveloperTools\Service\CodeEvent;
 use XF\Service\AbstractService;
 use XF\App as BaseApp;
 
+use function array_key_exists, count, strlen;
+
 /**
  * Class DocBlockGenerator
  *
@@ -44,9 +46,9 @@ class DocBlockGenerator extends AbstractService
 
         foreach ($arguments AS $argument)
         {
-            if (\array_key_exists($key, $argument))
+            if (array_key_exists($key, $argument))
             {
-                $possiblePadLength = \strlen($argument[$key]);
+                $possiblePadLength = strlen($argument[$key]);
                 if ($possiblePadLength > $padLength)
                 {
                     $padLength = $possiblePadLength;
@@ -64,7 +66,7 @@ class DocBlockGenerator extends AbstractService
     {
         $parsedDescription = $this->getParsedDescription();
 
-        $wrappedDescription = \wordwrap($parsedDescription['description'], 95, \PHP_EOL . '     * ');
+        $wrappedDescription = wordwrap($parsedDescription['description'], 95, PHP_EOL . '     * ');
 
         $docBlock = <<<TEXT
 
@@ -72,7 +74,7 @@ class DocBlockGenerator extends AbstractService
 TEXT;
         if ($wrappedDescription)
         {
-            $docBlock .= \PHP_EOL . <<<TEXT
+            $docBlock .= PHP_EOL . <<<TEXT
      * {$wrappedDescription}
      *
 TEXT;
@@ -80,31 +82,31 @@ TEXT;
 
         if ($parsedDescription['eventHint'])
         {
-            $docBlock .= \PHP_EOL . <<<TEXT
+            $docBlock .= PHP_EOL . <<<TEXT
      * Event hint: {$parsedDescription['eventHint']}
      * 
 TEXT;
         }
 
-        if (\count($parsedDescription['arguments']))
+        if (count($parsedDescription['arguments']))
         {
-            $docBlock .= \PHP_EOL;
+            $docBlock .= PHP_EOL;
 
             $hintPadLength = $this->getPadLengthForArgument($parsedDescription['arguments'], 'hint');
             $namePadLength = $this->getPadLengthForArgument($parsedDescription['arguments'], 'name');
-            $descriptionPadLength = (\strlen('* @param ') + $hintPadLength + $namePadLength);
+            $descriptionPadLength = (strlen('* @param ') + $hintPadLength + $namePadLength);
 
             foreach ($parsedDescription['arguments'] AS $argument)
             {
-                $paddedHint = \str_pad($argument['hint'], $hintPadLength);
-                $paddedName = \str_pad($argument['name'], $namePadLength);
-                $lineBreak = \PHP_EOL . '     * ' . \str_repeat(' ', $descriptionPadLength);
+                $paddedHint = str_pad($argument['hint'], $hintPadLength);
+                $paddedName = str_pad($argument['name'], $namePadLength);
+                $lineBreak = PHP_EOL . '     * ' . str_repeat(' ', $descriptionPadLength);
 
-                $docBlock .= \wordwrap(
+                $docBlock .= wordwrap(
                     "     * @param {$paddedHint} {$paddedName} {$argument['description']}",
                     95,
                     $lineBreak
-                ) . \PHP_EOL;
+                ) . PHP_EOL;
             }
         }
 

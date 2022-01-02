@@ -73,7 +73,7 @@ class Template extends XFCP_Template
         if ($reload)
         {
             $ids = $this->filter('id', 'array-uint', []);
-            $ids = \array_fill_keys($ids, true);
+            $ids = array_fill_keys($ids, true);
         }
 
         $status = null;
@@ -106,9 +106,9 @@ class Template extends XFCP_Template
         $diff = new Diff();
         $diffs = $diff->findDifferences($template->template, $templateText);
 
-        $statuses = \array_map(function ($status)
+        $statuses = array_map(function ($status)
         {
-            if (\is_numeric($status))
+            if (is_numeric($status))
             {
                 return \XF::phrase('tckDeveloperTools_match_count_x', [
                     'count' => $this->app()->language()->numberFormat($status)
