@@ -30,7 +30,7 @@ use XF\Repository\AddOn as AddonRepo;
 use XF\Service\AbstractService;
 use XF\Service\ValidateAndSavableTrait;
 use XF\Util\File as FileUtil;
-use xprt64\HtmlTableToMarkdownConverter\TableConverter;
+use League\HTMLToMarkdown\Converter\TableConverter;
 
 use function array_key_exists, count, in_array;
 

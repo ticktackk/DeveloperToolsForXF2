@@ -4,25 +4,31 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "05db19f9f93741cb73fdcad3cdc2db69",
+    "content-hash": "9bbdab951980b4f1159b686705a3f280",
     "packages": [
         {
             "name": "jawira/case-converter",
-            "version": "v3.4.1",
+            "version": "v3.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jawira/case-converter.git",
-                "reference": "756089a523ce268fb173a9f4af4ca95629b3a7f0"
+                "reference": "2f284c0760ee8085ab463f57275cf1f887fb78ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jawira/case-converter/zipball/756089a523ce268fb173a9f4af4ca95629b3a7f0",
-                "reference": "756089a523ce268fb173a9f4af4ca95629b3a7f0",
+                "url": "https://api.github.com/repos/jawira/case-converter/zipball/2f284c0760ee8085ab463f57275cf1f887fb78ae",
+                "reference": "2f284c0760ee8085ab463f57275cf1f887fb78ae",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "php": "^7.1"
+                "php": "^7.1 || ^8.0"
+            },
+            "require-dev": {
+                "behat/behat": "^3.0",
+                "phpstan/phpstan": "^1.0",
+                "phpunit/phpunit": "^9.0",
+                "vimeo/psalm": "^4.0"
             },
             "suggest": {
                 "pds/skeleton": "PHP Package Development Standards",
@@ -41,8 +47,7 @@
             "authors": [
                 {
                     "name": "Jawira Portugal",
-                    "email": "dev@tugal.be",
-                    "homepage": "http://jawira.com/"
+                    "email": "dev@tugal.be"
                 }
             ],
             "description": "Convert strings between 13 naming conventions: Snake case, Camel case, Pascal case, Kebab case, Ada case, Train case, Cobol case, Macro case, Upper case, Lower case, Sentence case, Title case and Dot notation.",
@@ -62,31 +67,38 @@
                 "title case",
                 "upper case"
             ],
-            "time": "2019-12-15T14:31:43+00:00"
+            "support": {
+                "issues": "https://github.com/jawira/case-converter/issues",
+                "source": "https://github.com/jawira/case-converter/tree/v3.4.6"
+            },
+            "time": "2021-11-21T19:52:51+00:00"
         },
         {
             "name": "league/html-to-markdown",
-            "version": "4.10.0",
+            "version": "5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/html-to-markdown.git",
-                "reference": "0868ae7a552e809e5cd8f93ba022071640408e88"
+                "reference": "4d0394e120dc14b0d5c52fd1755fd48656da2ec9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/html-to-markdown/zipball/0868ae7a552e809e5cd8f93ba022071640408e88",
-                "reference": "0868ae7a552e809e5cd8f93ba022071640408e88",
+                "url": "https://api.github.com/repos/thephpleague/html-to-markdown/zipball/4d0394e120dc14b0d5c52fd1755fd48656da2ec9",
+                "reference": "4d0394e120dc14b0d5c52fd1755fd48656da2ec9",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-xml": "*",
-                "php": ">=5.3.3"
+                "php": "^7.2.5 || ^8.0"
             },
             "require-dev": {
-                "mikehaertl/php-shellcommand": "~1.1.0",
-                "phpunit/phpunit": "^4.8|^5.7",
-                "scrutinizer/ocular": "~1.1"
+                "mikehaertl/php-shellcommand": "^1.1.0",
+                "phpstan/phpstan": "^0.12.82",
+                "phpunit/phpunit": "^8.5 || ^9.2",
+                "scrutinizer/ocular": "^1.6",
+                "unleashedtech/php-coding-standard": "^2.7",
+                "vimeo/psalm": "^4.6"
             },
             "bin": [
                 "bin/html-to-markdown"
@@ -94,7 +106,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.10-dev"
+                    "dev-master": "5.1-dev"
                 }
             },
             "autoload": {
@@ -126,6 +138,10 @@
                 "html",
                 "markdown"
             ],
+            "support": {
+                "issues": "https://github.com/thephpleague/html-to-markdown/issues",
+                "source": "https://github.com/thephpleague/html-to-markdown/tree/5.0.2"
+            },
             "funding": [
                 {
                     "url": "https://www.colinodell.com/sponsor",
@@ -140,64 +156,24 @@
                     "type": "github"
                 },
                 {
-                    "url": "https://www.patreon.com/colinodell",
-                    "type": "patreon"
+                    "url": "https://tidelift.com/funding/github/packagist/league/html-to-markdown",
+                    "type": "tidelift"
                 }
             ],
-            "time": "2020-07-01T00:34:03+00:00"
-        },
-        {
-            "name": "xprt64/php-markdown-table-converter",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ticktackk/php-markdown-table-converter",
-                "reference": "342586840eeec9b7b7408ff69525bbb44ea3eb8a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ticktackk/php-markdown-table-converter/zipball/342586840eeec9b7b7408ff69525bbb44ea3eb8a",
-                "reference": "342586840eeec9b7b7408ff69525bbb44ea3eb8a",
-                "shasum": ""
-            },
-            "require": {
-                "league/html-to-markdown": "^4.8"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^8.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "xprt64\\HtmlTableToMarkdownConverter\\": "src/"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Constantin Galbenu",
-                    "email": "gica.galbenu@gmail.com"
-                }
-            ],
-            "description": "A TableConverter for thephpleague/html-to-markdown",
-            "support": {
-                "source": "https://github.com/ticktackk/php-markdown-table-converter/tree/master"
-            },
-            "time": "2020-04-04T22:10:49+00:00"
+            "time": "2021-11-06T05:38:26+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "xprt64/php-markdown-table-converter": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "ext-intl": "*",
         "ext-dom": "*",
+        "ext-intl": "*",
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.2.0"
 }
