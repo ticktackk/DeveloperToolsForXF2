@@ -46,28 +46,31 @@ class Listener
 
         /** @var ExtendedTemplater $templater */
         $templater = $renderer->getTemplater();
-        $permissionErrors = $templater->getPermissionErrors();
-
-        if (count($permissionErrors))
+        if (\is_callable([$templater, 'getPermissionErrors']))
         {
-            $warningHtml = '<div class="blockMessage blockMessage--warning"><h2 style="margin: 0 0 .5em 0">Permission errors</h2><ul>';
-            foreach ($permissionErrors AS $permissionError)
-            {
-                $warningHtml .= sprintf('<li>%s (%s:%d)</li>',
-                    htmlspecialchars($permissionError['error']),
-                    htmlspecialchars(FileUtil::stripRootPathPrefix($permissionError['file'])),
-                    $permissionError['line']
-                );
-            }
-            $warningHtml .= '</ul></div>';
+            $permissionErrors = $templater->getPermissionErrors();
 
-            if (strpos($content, '<!--XF:EXTRA_OUTPUT-->') !== false)
+            if (count($permissionErrors))
             {
-                $content = str_replace('<!--XF:EXTRA_OUTPUT-->', $warningHtml . '<!--XF:EXTRA_OUTPUT-->', $content);
-            }
-            else
-            {
-                $content = preg_replace('#<body[^>]*>#i', "\\0$warningHtml", $content);
+                $warningHtml = '<div class="blockMessage blockMessage--warning"><h2 style="margin: 0 0 .5em 0">Permission errors</h2><ul>';
+                foreach ($permissionErrors AS $permissionError)
+                {
+                    $warningHtml .= sprintf('<li>%s (%s:%d)</li>',
+                        htmlspecialchars($permissionError['error']),
+                        htmlspecialchars(FileUtil::stripRootPathPrefix($permissionError['file'])),
+                        $permissionError['line']
+                    );
+                }
+                $warningHtml .= '</ul></div>';
+
+                if (strpos($content, '<!--XF:EXTRA_OUTPUT-->') !== false)
+                {
+                    $content = str_replace('<!--XF:EXTRA_OUTPUT-->', $warningHtml . '<!--XF:EXTRA_OUTPUT-->', $content);
+                }
+                else
+                {
+                    $content = preg_replace('#<body[^>]*>#i', "\\0$warningHtml", $content);
+                }
             }
         }
     }
