@@ -56,10 +56,10 @@ class Phrase extends XFCP_Phrase
         $db = $this->app()->db();
         $db->beginTransaction();
 
-        $reply = parent::actionSave($parameterBag);
+        $reply = parent::actionSave($params);
 
         /** @noinspection PhpUndefinedFieldInspection */
-        if (!$parameterBag->phrase_id && $reply instanceof RedirectReply)
+        if (!$params->phrase_id && $reply instanceof RedirectReply)
         {
             $phrases = $this->filter('phrases', 'array');
             if (count($phrases))
