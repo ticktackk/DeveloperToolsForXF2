@@ -1,6 +1,11 @@
 CHANGELOG
 ==========================
 
+## 1.3.8 (`1030870`)
+
+- **Fix:** `XF\Api\Templater` error message when calling API endpoints
+- **Fix:** Inability to save phrases via admin control panel
+
 ## 1.3.7 (`1030770`)
 
 - **Change:** On XF 2.2.7+ when minifying JS files go with the stock minifier service (#109)
