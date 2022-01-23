@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.4.0 (`1040070`)
+
+- **New:** A new CLI command which will add class properties to entities similar to stock installation but with slight tweaks (#116)
+
 ## 1.3.8 (`1030870`)
 
 - **Fix:** `XF\Api\Templater` error message when calling API endpoints
