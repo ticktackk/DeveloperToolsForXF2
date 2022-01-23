@@ -4,6 +4,7 @@ CHANGELOG
 ## 1.4.0 (`1040070`)
 
 - **New:** A new CLI command which will add class properties to entities similar to stock installation but with slight tweaks (#116)
+- **New:** Prefer template type in title over the type set in URL when creating template (#114)
 
 ## 1.3.8 (`1030870`)
 
