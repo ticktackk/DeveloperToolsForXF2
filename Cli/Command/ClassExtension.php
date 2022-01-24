@@ -2,25 +2,24 @@
 
 namespace TickTackk\DeveloperTools\Cli\Command;
 
-use Closure;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use XF\Util\File;
-use XF\AddOn\AddOn;
+use XF\Cli\Command\AddOnActionTrait;
+use XF\Util\File as FileUtil;
 const USE_FUNCTION_PLACEHOLDER = true;
 use function str_replace;
 
 /**
- * Class ClassExtension
- *
- * @package TickTackk\DeveloperTools\Cli\Command\AddOn
+ * @version 1.4.0
  */
 class ClassExtension extends Command
 {
+    use AddOnActionTrait;
+
     protected function configure() : void
     {
         $this
@@ -40,6 +39,8 @@ class ClassExtension extends Command
     }
 
     /**
+     * @version 1.4.0
+     *
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
@@ -55,15 +56,18 @@ class ClassExtension extends Command
         if (!$addOnId)
         {
             $question = new Question('<question>Enter the ID for the add-on:</question>');
-            $question->setValidator($this->getAddOnQuestionFieldValidator('addon_id'));
             $addOnId = $helper->ask($input, $output, $question);
             $output->writeln('');
         }
 
-        $addOnObj = new AddOn($addOnId, \XF::app()->addOnManager());
+        $addOnObj = $this->checkEditableAddOn($addOnId, $error);
+        if (!$addOnObj)
+        {
+            $output->writeln('<error>' . $error . '</error>');
+            return 1;
+        }
 
         $jsonPath = $addOnObj->getJsonPath();
-
         if (!file_exists($jsonPath))
         {
             $output->writeln(sprintf('<error>The addon.json file must exist at %s.</error>', $jsonPath));
@@ -86,7 +90,7 @@ class ClassExtension extends Command
         $toClassPath = $addOnObj->getAddOnDirectory() . DIRECTORY_SEPARATOR . $fromClassPath;
         $outputPath = $toClassPath . '.php';
 
-        File::createDirectory(dirname($toClassPath), false);
+        FileUtil::createDirectory(dirname($toClassPath), false);
 
         if (!file_exists($outputPath))
         {
@@ -158,7 +162,7 @@ class {$className} extends XFCP_{$className}
 }
 TEMPLATE;
 
-            $written = File::writeFile($outputPath, $template, false);
+            $written = FileUtil::writeFile($outputPath, $template, false);
             if ($written)
             {
                 $output->writeln("Wrote class extension template to {$outputPath}");
@@ -205,29 +209,5 @@ use XF\Mvc\Entity\Manager as EntityManager;
 use XF\Job\Manager as JobManager;
 TEMPLATE;
 
-    }
-
-    /**
-     * @param $key
-     *
-     * @return Closure
-     */
-    protected function getAddOnQuestionFieldValidator($key) : callable
-    {
-        return function ($value) use ($key)
-        {
-            $addOn = \XF::em()->create('XF:AddOn');
-
-            $valid = $addOn->set($key, $value);
-            if (!$valid)
-            {
-                $errors = $addOn->getErrors();
-                if (isset($errors[$key]))
-                {
-                    throw new \InvalidArgumentException($errors[$key]);
-                }
-            }
-            return $value;
-        };
     }
 }
