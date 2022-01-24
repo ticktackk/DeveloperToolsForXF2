@@ -1,0 +1,9 @@
+{
+    "template": "app.less",
+    "description": "Declare p-main-inner--fullWidth class",
+    "execution_order": 6119,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "#(^\\.p-main-inner.*?)(.^}$)#sim",
+    "replace": "$1\n\n\t&.p-main-inner--fullWidth\n\t{\n\t\tmax-width: 100%;\n\t}\n$2"
+}
