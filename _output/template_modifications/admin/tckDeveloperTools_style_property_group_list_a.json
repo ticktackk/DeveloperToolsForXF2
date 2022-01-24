@@ -1,0 +1,9 @@
+{
+    "template": "style_property_group_list",
+    "description": "Add style property group name and display order",
+    "execution_order": 6119,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "$^\\s*colspan=\"{{ .*?>$sim",
+    "replace": "\t\t\t\t\t\thint=\"{{ ($canEdit && $xf.development) ? $group.group_name . ' ' . $group.display_order|parens : null }}\"\n$0"
+}
