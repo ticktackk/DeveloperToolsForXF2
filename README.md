@@ -19,6 +19,7 @@ Features
 - Show template modification type in breadcrumb
 - Show option group when adding option
 - Show execution order for template modifications, class extensions and code event listeners (Since 1.2)
+- Show style property group name and display order (Since 1.4)
 - Show warnings when attempted to check for permissions or permission groups that do not exist (Since 1.2)
 - Allow creating permission via permission interface even if permissions already exist (Since 1.2)
 - Automatically fill out code event listener callback class and method as well creating listener file or adding just the function
@@ -28,6 +29,8 @@ Features
 - View template modifications applied on a specific template
 - Minify JavaScript files locally
 - Lookup what email HTML and plain text was sent (Since 1.3)
+- Ability to use full width in admin control panel to make use entire screen (Since 1.4)
+- Ability to quickly copy-paste template name shown in template error without needing to change the type (Since 1.4)
 - Automatically generate `README.md`... 
     - The following information will be available in README with description whenever possible: 
         - Add-on title
@@ -99,6 +102,7 @@ Options
 |---|---|
 | Disable hash checking | For development purposes disabling XF's hash check is required to hotpatch code |
 | Disable XF Template watching | XF's template watching causes a large amount of IO per page, and doesn't touch phrases to template modification. Disable for a boost in performance if it isn't required. |
+| Use full width for admin control panel | If checked, admin control panel will have fluid width instead of fixed width. |
 
 CLI Commands
 ------------
@@ -109,6 +113,7 @@ CLI Commands
 | `tck-devtools:create-entity-from-table` | Creates an XF entity for an add-on from a table. |
 | `tck-devtools:better-export` | Exports the XML files for an add-on and applies class properties to type hint columns, getters and relations |
 | `tck-devtools:create-class-extension` | Creates an XF class-extension for an add-on and writes out a basic template file. |
+| `tck-devtools:entity-class-properties` | Applies class properties to type hint columns, relations and getters |
 | `tck-devtools:build-readme` | Builds README files for provided add-on. |
 | `tck-devtools:clamp-versions` | Ensures an add-on does not have phrases or templates with version id's above the addon.json file. |
 | `tck-devtools:generate-schema-entity` | Generates schema code from an entity |
