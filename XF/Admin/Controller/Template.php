@@ -5,6 +5,7 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller;
 use XF\Diff;
 use XF\Entity\TemplateModification as TemplateModificationEntity;
 use XF\Mvc\Entity\AbstractCollection;
+use XF\Mvc\FormAction;
 use XF\Mvc\ParameterBag;
 use XF\Mvc\Reply\View as ViewReply;
 use XF\Mvc\Reply\Error as ErrorReply;
@@ -131,5 +132,33 @@ class Template extends XFCP_Template
             'tckDeveloperTools_template_modifications_compare',
             $viewParams
         );
+    }
+
+    /**
+     * @since 1.4.0
+     *
+     * @param TemplateEntity $template
+     *
+     * @return FormAction
+     */
+    protected function templateSaveProcess(TemplateEntity $template)
+    {
+        if (!$template->exists())
+        {
+            $title = $this->filter('title', 'str');
+            $titleParts = explode(':', $title, 2);
+            if (count($titleParts) !== 1)
+            {
+                $type = $titleParts[0];
+                $title = $titleParts[1];
+                if (in_array($type, $template->structure()->columns['type']['allowedValues']))
+                {
+                    $this->request()->set('type', $type);
+                    $this->request()->set('title', $title);
+                }
+            }
+        }
+
+        return parent::templateSaveProcess($template);
     }
 }

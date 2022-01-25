@@ -1,0 +1,9 @@
+{
+    "template": "PAGE_CONTAINER",
+    "description": "Add p-main-inner--fullWidth class to main.p-main-inner element if needed",
+    "execution_order": 6119,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "p-main-inner",
+    "replace": "$0{{ $xf.options.tckDeveloperTools_useFullWidthAcp ? ' p-main-inner--fullWidth' : '' }}"
+}

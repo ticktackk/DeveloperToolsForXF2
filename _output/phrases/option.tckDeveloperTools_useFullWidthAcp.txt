@@ -1,0 +1,1 @@
+Use full width for admin control panel

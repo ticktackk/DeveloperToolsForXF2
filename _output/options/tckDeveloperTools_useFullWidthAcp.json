@@ -1,0 +1,13 @@
+{
+    "edit_format": "onoff",
+    "edit_format_params": "",
+    "data_type": "boolean",
+    "sub_options": [],
+    "validation_class": "",
+    "validation_method": "",
+    "advanced": false,
+    "default_value": "0",
+    "relations": {
+        "developerTools": 120
+    }
+}
