@@ -3,7 +3,7 @@ CHANGELOG
 
 ## 1.4.1 (`1040170`)
 
-- **Fix:** tck-devtools:create-entity-from-table marks auto increment primary key as required (#118)
+- **Fix:** Command `tck-devtools:create-entity-from-table` marks auto increment primary key as required (#118)
 
 ## 1.4.0 (`1040070`)
 
