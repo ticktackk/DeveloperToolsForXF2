@@ -208,6 +208,12 @@ class EntityFromTable extends Command
                 $fieldData['required'] = var_export(true, true);
             }
 
+            // Single column primary key and auto increment so this needs to marked as not required
+            if (!is_array($primaryKey) && array_key_exists('autoIncrement', $fieldData))
+            {
+                unset($fieldData['required']);
+            }
+
             $definition = [];
             foreach ($fieldData AS $key => $value)
             {

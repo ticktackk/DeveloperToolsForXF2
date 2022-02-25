@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.4.1 (`1040170`)
+
+- **Fix:** Command `tck-devtools:create-entity-from-table` marks auto increment primary key as required (#118)
+
 ## 1.4.0 (`1040070`)
 
 - **New:** A new CLI command which will add class properties to entities similar to stock installation but with slight tweaks (#116)
