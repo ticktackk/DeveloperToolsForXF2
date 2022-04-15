@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.4.2 (`1040270`)
+
+- **Fix:** Command `tck-dt:entity-class-properties` duplicates class hint for getters (#120)
+
 ## 1.4.1 (`1040170`)
 
 - **Fix:** Command `tck-devtools:create-entity-from-table` marks auto increment primary key as required (#118)

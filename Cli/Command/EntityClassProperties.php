@@ -256,6 +256,7 @@ class EntityClassProperties extends Command
                             $newType[] = '\\' . $class . ($isMulti ? '[]' : '');
                         }
                     }
+                    $newType = array_unique($newType);
 
                     $type = implode('|', $newType);
                 }
@@ -279,12 +280,17 @@ class EntityClassProperties extends Command
                     'type' => !empty($def['typeHint']) ? $def['typeHint'] : $typeMap[$def['type']],
                     'null' => !empty($def['nullable'])
                 ];
+
                 if (array_key_exists('list', $def)
                     && array_key_exists('type', $def['list'])
                     && isset($listMap[$def['list']['type']])
                 )
                 {
                     $columns[$column]['type'] = 'array|' . $listMap[$def['list']['type']] . '[]';
+                }
+                else if ($def['type'] === Entity::STR && array_key_exists('censor', $def))
+                {
+                    $columns[$column . '_'] = $columns[$column];
                 }
             }
 
@@ -452,7 +458,7 @@ class EntityClassProperties extends Command
             $classes[] = $classExtension->to_class;
         }
 
-        return $classes;
+        return array_unique($classes);
     }
 
     /**
