@@ -262,7 +262,8 @@ class EntityClassProperties extends Command
                 }
 
                 $getters[$getter] = [
-                    'type' => $type ? (is_array($type) ? $type : trim($type)) : 'mixed'
+                    'type' => $type ? (is_array($type) ? $type : trim($type)) : 'mixed',
+                    'readOnly' => true
                 ];
             }
 
@@ -271,6 +272,8 @@ class EntityClassProperties extends Command
             {
                 if (isset($getters[$column]))
                 {
+                    $getters[$column]['readOnly'] = false;
+
                     // There's an overlapping getter so this column
                     // is only accessible via the bypass suffix.
                     $column .= '_';
@@ -314,7 +317,8 @@ class EntityClassProperties extends Command
 
                 $relations[$relation] = [
                     'type' => $relationEntityClasses,
-                    'many' => ($def['type'] === Entity::TO_MANY)
+                    'many' => ($def['type'] === Entity::TO_MANY),
+                    'readOnly' => true
                 ];
             }
 
@@ -349,7 +353,7 @@ class EntityClassProperties extends Command
                         $typeProp = '\XF\Mvc\Entity\AbstractCollection|' . $typeProp . '[]';
                     }
 
-                    $newComment .= "\n" . ' * @property ' . $typeProp . ' $' . $relation;
+                    $newComment .= "\n" . ' * @property' . ($type['readOnly'] ? '-read' : '') . ' ' . $typeProp . ' $' . $relation;
                 }
             }
 
@@ -371,7 +375,7 @@ class EntityClassProperties extends Command
                         $type['type'] = '\\' . implode('|\\', $type['type']);
                     }
 
-                    $newComment .= "\n" . ' * @property ' . $type['type'] . ' $' . $getter;
+                    $newComment .= "\n" . ' * @property' . ($type['readOnly'] ? '-read' : '') . ' ' . $type['type'] . ' $' . $getter;
                 }
             }
 
