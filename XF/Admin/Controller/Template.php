@@ -26,28 +26,31 @@ class Template extends XFCP_Template
     {
         $reply = parent::actionEdit($params);
 
-        $addModificationCount = true;
-        $addOns = \XF::app()->container('addon.cache');
-        if (isset($addOns['SV/StandardLib']) && $addOns['SV/StandardLib'] >= 1050000)
+        if ($reply instanceof ViewReply)
         {
-            $addModificationCount = false;
-        }
+            $addModificationCount = true;
+            $addOns = \XF::app()->container('addon.cache');
+            if (isset($addOns['SV/StandardLib']) && $addOns['SV/StandardLib'] >= 1050000)
+            {
+                $addModificationCount = false;
+            }
 
-        /** @var TemplateEntity $template */
-        $template = $reply->getParam('template');
-        if ($addModificationCount && $reply instanceof ViewReply && $template)
-        {
-            $modifications = $this->finder('XF:TemplateModification')
-                ->where([
-                    'type' => $template->type,
-                    'template' => $template->title,
-                    //'enabled'  => 1
-                ])
-                ->whereAddOnActive()
-                ->order('execution_order')
-                ->total();
+            /** @var TemplateEntity $template */
+            $template = $reply->getParam('template');
+            if ($addModificationCount && $template)
+            {
+                $modifications = $this->finder('XF:TemplateModification')
+                    ->where([
+                        'type' => $template->type,
+                        'template' => $template->title,
+                        //'enabled'  => 1
+                    ])
+                    ->whereAddOnActive()
+                    ->order('execution_order')
+                    ->total();
 
-            $reply->setParam('modificationCount', $modifications);
+                $reply->setParam('modificationCount', $modifications);
+            }
         }
 
         return $reply;
