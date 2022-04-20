@@ -4,6 +4,7 @@ CHANGELOG
 ## 1.4.3 (`1040370`)
 
 - **Fix:** Command `tck-dt:entity-class-properties` does not set getters and relations make use of `@property-read` tag as it should (#122)
+- **Fix:** Error: Call to undefined method `XF\Mvc\Reply\Error::getParam()` (#123)
 
 ## 1.4.2 (`1040270`)
 
