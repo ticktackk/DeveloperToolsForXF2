@@ -26,7 +26,7 @@ use function is_array, is_string, strlen;
  */
 class EntityClassProperties extends Command
 {
-    use RequiresDevModeTrait;
+    use RequiresDevModeTrait, ClassPropertiesCommandTrait;
 
     protected function configure() : void
     {
@@ -117,13 +117,13 @@ class EntityClassProperties extends Command
         }
 
         $requireAddOnIds = null;
-        $requireSoftAddOnIds = null;
+        $softRequireAddOnIds = null;
         if (is_array($addOnJson))
         {
             $requireAddOnIds = array_keys($addOnJson['require']);
             if (isset($addOnJson['require-soft']))
             {
-                $requireSoftAddOnIds = array_keys($addOnJson['require-require']);
+                $softRequireAddOnIds = array_keys($addOnJson['require-require']);
             }
         }
 
@@ -251,9 +251,15 @@ class EntityClassProperties extends Command
                             $typePart = substr($typePart, 0, strlen($typePart) - 2);
                         }
 
-                        foreach ($this->getAllClassesExtendingClass($addOnId, $requireAddOnIds, $requireSoftAddOnIds, $typePart) AS $class)
+                        $typeHintClasses = $this->getTypeHintForClass(
+                            $typePart,
+                            $addOnId,
+                            $requireAddOnIds,
+                            $softRequireAddOnIds
+                        );
+                        foreach ($typeHintClasses AS $typeHintClass)
                         {
-                            $newType[] = '\\' . $class . ($isMulti ? '[]' : '');
+                            $newType[] = '\\' . $typeHintClass . ($isMulti ? '[]' : '');
                         }
                     }
                     $newType = array_unique($newType);
@@ -307,12 +313,11 @@ class EntityClassProperties extends Command
                     $relation .= '_';
                 }
 
-                $relationEntityClass = \XF::stringToClass($def['entity'], '%s\Entity\%s');
-                $relationEntityClasses = $this->getAllClassesExtendingClass(
+                $relationEntityClasses = $this->getTypeHintForClass(
+                    \XF::stringToClass($def['entity'], '%s\Entity\%s'),
                     $addOnId,
                     $requireAddOnIds,
-                    $requireSoftAddOnIds,
-                    $relationEntityClass
+                    $softRequireAddOnIds,
                 );
 
                 $relations[$relation] = [
@@ -430,39 +435,6 @@ class EntityClassProperties extends Command
             'posint' => 'int',
             'str' => 'string'
         ];
-    }
-
-    protected function getAllClassesExtendingClass(
-        string $addOnId,
-        ?array $requireAddOnIds,
-        ?array $softRequireAddOnIds,
-        string $class
-    ) : array
-    {
-        $addOnIds = [$addOnId];
-        $classes = [$class];
-
-        if (is_array($requireAddOnIds))
-        {
-            array_push($addOnIds, ...$requireAddOnIds);
-        }
-
-        if (is_array($softRequireAddOnIds))
-        {
-            array_push($addOnIds, ...$softRequireAddOnIds);
-        }
-
-        /** @var AbstractCollection|ClassExtensionEntity[] $classExtensions */
-        $classExtensions = $this->getClassExtensionRepo()->findExtensionsForList()
-            ->where('from_class', '=', $class)
-            ->where('addon_id', '=', $addOnIds)
-            ->fetch();
-        foreach ($classExtensions AS $classExtension)
-        {
-            $classes[] = $classExtension->to_class;
-        }
-
-        return array_unique($classes);
     }
 
     /**

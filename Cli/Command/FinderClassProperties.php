@@ -23,7 +23,7 @@ use function is_array, is_string, strlen;
  */
 class FinderClassProperties extends Command
 {
-    use RequiresDevModeTrait;
+    use RequiresDevModeTrait, ClassPropertiesCommandTrait;
 
     protected function configure() : void
     {
@@ -120,13 +120,13 @@ class FinderClassProperties extends Command
         }
 
         $requireAddOnIds = null;
-        $requireSoftAddOnIds = null;
+        $softRequireAddOnIds = null;
         if (is_array($addOnJson))
         {
             $requireAddOnIds = array_keys($addOnJson['require']);
             if (isset($addOnJson['require-soft']))
             {
-                $requireSoftAddOnIds = array_keys($addOnJson['require-require']);
+                $softRequireAddOnIds = array_keys($addOnJson['require-require']);
             }
         }
 
@@ -186,11 +186,12 @@ class FinderClassProperties extends Command
             $relations = [];
             foreach ($structure->relations AS $relation => $def)
             {
-                $relations[$relation] = $this->getTypeHintForRelation(
+                $relations[$relation] = $this->getTypeHintForClass(
+                    $finderClass,
                     $addOnId,
                     $requireAddOnIds,
-                    $requireSoftAddOnIds,
-                    \XF::stringToClass($def['entity'], '%s\Finder\%s')
+                    $softRequireAddOnIds,
+                    'XF\Mvc\Entity\Finder'
                 );
             }
             if (!$relations)
@@ -245,52 +246,6 @@ class {$class} extends Finder
 }
 PHP;
 
-    }
-
-    protected function getTypeHintForRelation(
-        string $addOnId,
-        ?array $requireAddOnIds,
-        ?array $softRequireAddOnIds,
-        string $finderClass
-    ) : array
-    {
-        $classes = [
-            '\XF\Mvc\Entity\Finder',
-        ];
-
-        if (!class_exists($finderClass))
-        {
-            return $classes;
-        }
-
-        $finderReflection = new \ReflectionClass($finderClass);
-        if ($finderReflection->isInstantiable() && $finderReflection->isSubclassOf('XF\Mvc\Entity\Finder'))
-        {
-            $addOnIds = [$addOnId];
-            $classes[] = "\\$finderClass";
-
-            if (is_array($requireAddOnIds))
-            {
-                array_push($addOnIds, ...$requireAddOnIds);
-            }
-
-            if (is_array($softRequireAddOnIds))
-            {
-                array_push($addOnIds, ...$softRequireAddOnIds);
-            }
-
-            /** @var AbstractCollection|ClassExtensionEntity[] $classExtensions */
-            $classExtensions = $this->getClassExtensionRepo()->findExtensionsForList()
-                ->where('from_class', '=', $finderClass)
-                ->where('addon_id', '=', $addOnIds)
-                ->fetch();
-            foreach ($classExtensions AS $classExtension)
-            {
-                $classes[] = $classExtension->to_class;
-            }
-        }
-
-        return array_unique($classes);
     }
 
     /**
