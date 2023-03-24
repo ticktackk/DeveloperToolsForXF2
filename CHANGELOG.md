@@ -1,6 +1,10 @@
 CHANGELOG
 ==========================
 
+## 1.5.0 (`1050070`)
+
+- **New:** Add tck-devtools:finder-class-properties command to apply class properties to type hint relations in finder (#126)
+
 ## 1.4.3 (`1040370`)
 
 - **Fix:** Command `tck-dt:entity-class-properties` does not set getters and relations make use of `@property-read` tag as it should (#122)
