@@ -4,6 +4,7 @@ CHANGELOG
 ## 1.5.0 (`1050070`)
 
 - **New:** Add `tck-devtools:finder-class-properties` command to apply class properties to type hint relations in finder (#126)
+- **New:** Add tck-devtools:generate-schema-addon command to generate schema for every entity at once (#128)
 - **Fix:** Permission interface groups are not sorted correctly when building readme (#125)
 
 ## 1.4.3 (`1040370`)
