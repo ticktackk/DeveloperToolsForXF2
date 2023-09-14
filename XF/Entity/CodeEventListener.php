@@ -32,7 +32,7 @@ class CodeEventListener extends XFCP_CodeEventListener
             $callbackMethod = $this->callback_method;
             $addOnId = $this->addon_id;
 
-            if ($eventId && $callbackClass && $callbackMethod && $addOnId)
+            if ($eventId && strlen($callbackClass) && strlen($callbackMethod) && strlen($addOnId))
             {
                 /** @var CodeEventEntity $codeEvent */
                 $codeEvent = $this->em()->find('XF:CodeEvent', $eventId);
@@ -47,6 +47,14 @@ class CodeEventListener extends XFCP_CodeEventListener
                     'TickTackk\DeveloperTools:Listener\Creator',
                     $codeEvent, $this->addon_id
                 );
+
+                $callbackClassParts = explode('\\', $callbackClass);
+                $callbackClassPartsIndex = count($callbackClassParts) - 1;
+                $callbackClass = $callbackClassParts[$callbackClassPartsIndex];
+                unset($callbackClassParts[$callbackClassPartsIndex]);
+                $callbackNamespace = implode('\\', $callbackClassParts);
+
+                $listenerCreatorSvc->setListenerNamespace($callbackNamespace);
                 $listenerCreatorSvc->setListenerClass($callbackClass);
                 $listenerCreatorSvc->setListenerMethod($callbackMethod);
                 $listenerCreatorSvc->create();

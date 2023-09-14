@@ -6,49 +6,46 @@ use TickTackk\DeveloperTools\XF\Template\Templater as ExtendedTemplater;
 use XF\App as BaseApp;
 use XF\Http\Response;
 use XF\Mvc\Dispatcher;
-use XF\Mvc\Reply\AbstractReply;
 use XF\Mvc\Renderer\AbstractRenderer;
+use XF\Mvc\Reply\AbstractReply;
 use XF\PermissionCache;
 use XF\Util\File as FileUtil;
-
-use function count, is_string;
+use function count;
+use function is_string;
 
 /**
  * Class Listener
- * 
+ *
  * This class declares code event listeners for the add-on.
- * 
+ *
  * @package TickTackk\DeveloperTools
  */
 class Listener
 {
-    /**
-     * @param Dispatcher       $dispatcher Dispatcher object
-     * @param string|null      $content    The rendered content.
-     * @param AbstractReply    $reply      Reply object.
-     * @param AbstractRenderer $renderer   Renderer object.
-     * @param Response         $response   HTTP Response object.
-     */
-    public static function dispatcherPostRender
-    (
-        /** @noinspection PhpUnusedParameterInspection */
-        Dispatcher $dispatcher,
-        ?string &$content,
-        AbstractReply $reply,
-        AbstractRenderer $renderer,
-        Response $response
-    ) : void
-    {
-        if (!is_string($content))
-        {
-            return;
-        }
+	/**
+	 * @param Dispatcher       $dispatcher Dispatcher object
+	 * @param string|null      $content    The rendered content.
+	 * @param AbstractReply    $reply      Reply object.
+	 * @param AbstractRenderer $renderer   Renderer object.
+	 * @param Response         $response   HTTP Response object.
+	 */
+	public static function dispatcherPostRender(
+		Dispatcher $dispatcher,
+		?string &$content,
+		AbstractReply $reply,
+		AbstractRenderer $renderer,
+		Response $response
+	): void {
+		if (!is_string($content))
+		{
+		    return;
+		}
 
-        /** @var ExtendedTemplater $templater */
-        $templater = $renderer->getTemplater();
-        if (\is_callable([$templater, 'getPermissionErrors']))
-        {
-            $permissionErrors = $templater->getPermissionErrors();
+		/** @var ExtendedTemplater $templater */
+		$templater = $renderer->getTemplater();
+		if (\is_callable([$templater, 'getPermissionErrors']))
+		{
+		    $permissionErrors = $templater->getPermissionErrors();
 
             if (count($permissionErrors))
             {
@@ -75,19 +72,20 @@ class Listener
         }
     }
 
-    /**
-     * Called after the global \XF\App object has been setup. This will fire regardless of
-     * the application type.
-     *
-     * @param BaseApp $app Global App object.
-     */
-    public static function appSetup(BaseApp $app) : void
-    {
-        $app->offsetSet('permission.cache', function ($c) use ($app)
-        {
-            $class = $app->extendClass(PermissionCache::class);
 
-            return new $class($c['db']);
-        });
-    }
+	/**
+	 * Called after the global \XF\App object has been setup. This will fire regardless of
+	 * the application type.
+	 *
+	 * @param BaseApp $app Global App object.
+	 */
+	public static function appSetup(BaseApp $app): void
+	{
+		$app->offsetSet('permission.cache', function ($c) use ($app)
+		{
+		    $class = $app->extendClass(PermissionCache::class);
+
+		    return new $class($c['db']);
+		});
+	}
 }

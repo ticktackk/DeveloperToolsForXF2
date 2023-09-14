@@ -3,6 +3,7 @@
 namespace TickTackk\DeveloperTools\Service\CodeEvent;
 
 use Symfony\Component\DomCrawler\Crawler as DOMCrawler;
+use XF\AddOn\AddOn;
 use XF\Entity\CodeEvent as CodeEventEntity;
 use XF\Service\AbstractService;
 use XF\App as BaseApp;
@@ -65,7 +66,7 @@ class DescriptionParser extends AbstractService
     /**
      * @return string
      */
-    protected function parseDescription() : string
+    protected function parseDescription(AddOn $addOn) : string
     {
         $codeEventDOMCrawler = $this->getCodeEventDOMCrawler();
 
@@ -84,7 +85,7 @@ class DescriptionParser extends AbstractService
     /**
      * @return string
      */
-    protected function parseEventHint() : string
+    protected function parseEventHint(AddOn $addOn) : string
     {
         $codeEventDOMCrawler = $this->getCodeEventDOMCrawler();
 
@@ -105,12 +106,29 @@ class DescriptionParser extends AbstractService
         return trim($eventHintNode->nodeValue);
     }
 
-    /**
-     * @param string $hint
-     *
-     * @return string
-     */
-    protected function getFinalHint(string $hint)
+    protected function getMinPhpRequire(AddOn $addOn) : string
+    {
+        $requirePhpversion = '5.6.0';
+        $json = $addOn->getJson();
+
+        if (isset($json['require']['XF']))
+        {
+            $requireXfVersion = $json['require']['XF'];
+            if ($requireXfVersion[0] >= 2020010)
+            {
+                $requirePhpversion = '7.0.0';
+            }
+        }
+
+        if (isset($json['require']['php']))
+        {
+            $requirePhpversion = $json['require']['php'][0];
+        }
+
+        return $requirePhpversion;
+    }
+
+    protected function getFinalHint(string $hint, AddOn $addOn)
     {
         switch ($hint)
         {
@@ -121,7 +139,7 @@ class DescriptionParser extends AbstractService
                 return 'int';
 
             case '':
-                return 'mixed';
+                return '';
         }
 
         return $hint;
@@ -130,7 +148,7 @@ class DescriptionParser extends AbstractService
     /**
      * @return array
      */
-    protected function parseArguments() : array
+    protected function parseArguments(AddOn $addOn) : array
     {
         $codeEventDOMCrawler = $this->getCodeEventDOMCrawler();
         $arguments = [];
@@ -182,8 +200,8 @@ class DescriptionParser extends AbstractService
             }
 
             $arguments[] = [
-                'hint' => $this->getFinalHint($hintType),
-                'name' => $name,
+                'hint' => $this->getFinalHint($hintType, $addOn),
+                'name' => substr($name, 1), // Removes $
                 'passedByRef' => $passedByRef,
                 'description' => ucfirst($description)
             ];
@@ -193,14 +211,17 @@ class DescriptionParser extends AbstractService
     }
 
     /**
+     * @param AddOn $addOn
+     *
      * @return array
      */
-    public function parse() : array
+    public function parse(AddOn $addOn) : array
     {
         return [
-            'description' => $this->parseDescription(),
-            'eventHint' => $this->parseEventHint(),
-            'arguments' => $this->parseArguments()
+            'description' => $this->parseDescription($addOn),
+            'eventHint' => $this->parseEventHint($addOn),
+            'arguments' => $this->parseArguments($addOn),
+            'returnType' => version_compare($this->getMinPhpRequire($addOn), '7.1.0', '>=') ? 'void' : null
         ];
     }
 }

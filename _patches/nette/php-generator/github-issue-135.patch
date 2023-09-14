@@ -1,0 +1,36 @@
+From df22ef134ee83a0b132b37946747d1a08fe59ea8 Mon Sep 17 00:00:00 2001
+From: David Grudl <david@grudl.com>
+Date: Tue, 29 Aug 2023 19:03:41 +0200
+Subject: [PATCH] Extractor::toPhp() removes doc comments [Closes #135]
+
+---
+ src/PhpGenerator/Extractor.php | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/PhpGenerator/Extractor.php b/src/PhpGenerator/Extractor.php
+--- a/src/PhpGenerator/Extractor.php
++++ b/src/PhpGenerator/Extractor.php
+@@ -424,7 +424,9 @@
+
+ 	private function toPhp($value): string
+ 	{
+-		return $this->printer->prettyPrint([$value]);
++       $dolly = clone $value;
++       $dolly->setAttribute('comments', []);
++		return $this->printer->prettyPrint([$dolly]);
+ 	}
+
+
+---
+
+diff --git a/src/PhpGenerator/Parameter.php b/src/PhpGenerator/Parameter.php
+--- a/src/PhpGenerator/Parameter.php
++++ b/src/PhpGenerator/Parameter.php
+@@ -22,6 +22,7 @@
+ {
+ 	use Nette\SmartObject;
+ 	use Traits\NameAware;
++    use Traits\CommentAware;
+ 	use Traits\AttributeAware;
+
+ 	/** @var bool */

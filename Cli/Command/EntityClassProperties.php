@@ -437,6 +437,39 @@ class EntityClassProperties extends Command
         ];
     }
 
+    protected function getAllClassesExtendingClass(
+        string $addOnId,
+        ?array $requireAddOnIds,
+        ?array $softRequireAddOnIds,
+        string $class
+    ) : array
+    {
+        $addOnIds = [$addOnId];
+        $classes = [$class];
+
+        if (is_array($requireAddOnIds))
+        {
+            array_push($addOnIds, ...$requireAddOnIds);
+        }
+
+        if (is_array($softRequireAddOnIds))
+        {
+            array_push($addOnIds, ...$softRequireAddOnIds);
+        }
+
+        /** @var AbstractCollection|ClassExtensionEntity[] $classExtensions */
+        $classExtensions = $this->getClassExtensionRepo()->findExtensionsForList()
+            ->where('from_class', '=', $class)
+            ->where('addon_id', '=', $addOnIds)
+            ->fetch();
+        foreach ($classExtensions AS $classExtension)
+        {
+            $classes[] = $classExtension->to_class;
+        }
+
+        return array_unique($classes);
+    }
+
     /**
      * @return Repository|ClassExtensionRepo
      */

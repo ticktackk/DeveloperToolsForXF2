@@ -1,13 +1,25 @@
 {
     "config": {
         "sort-packages": true,
-        "vendor-dir": "_vendor"
+        "vendor-dir": "_vendor",
+        "allow-plugins": {
+            "cweagans/composer-patches": true
+        }
     },
     "require": {
         "ext-dom": "*",
         "ext-intl": "*",
         "ext-json": "*",
+        "cweagans/composer-patches": "^1.7",
         "jawira/case-converter": "^3.4",
-        "league/html-to-markdown": "^5.0"
+        "league/html-to-markdown": "^5.0",
+        "nette/php-generator": "^3.6"
+    },
+    "extra": {
+        "patches": {
+            "nette/php-generator": {
+                "Fixes: Using comment before for parameter throws exception (#135)": "_patches/nette/php-generator/github-issue-135.patch"
+            }
+        }
     }
 }

@@ -2,9 +2,8 @@
 
 namespace TickTackk\DeveloperTools\Service\Listener;
 
+use Nette\PhpGenerator\PhpFile as NettePhpFile;
 use TickTackk\DeveloperTools\Service\CodeEvent\DescriptionParser as CodeEventDescriptionParserSvc;
-use TickTackk\DeveloperTools\Service\CodeEvent\DocBlockGenerator as CodeEventDocBlockGeneratorSvc;
-use TickTackk\DeveloperTools\Service\CodeEvent\SignatureGenerator as CodeEventSignatureGeneratorSvc;
 use TickTackk\DeveloperTools\Service\Listener\Exception\InvalidAddOnIdProvidedException;
 use XF\App as BaseApp;
 use XF\Entity\CodeEvent as CodeEventEntity;
@@ -32,6 +31,8 @@ class Creator extends AbstractService
      */
     protected $addOn;
 
+    protected $listenerNamespace;
+
     /**
      * @var null|string
      */
@@ -43,24 +44,102 @@ class Creator extends AbstractService
     protected $listenerMethod;
 
     /**
-     * Creator constructor.
-     *
-     * @param BaseApp $app
-     * @param CodeEventEntity $codeEvent
-     * @param string $addOnId
+     * @var null|string
      */
-    public function __construct(BaseApp $app, CodeEventEntity $codeEvent, string $addOnId)
+    protected $listenerPath;
+
+    /**
+     * @var null|NettePhpFile
+     */
+    protected $listenerContents;
+
+    public function __construct(
+        BaseApp $app,
+        CodeEventEntity $codeEvent,
+        string $addOnId,
+        ?string $listenerNamespace = null,
+        ?string $listenerClass = null,
+        ?string $listenerMethod = null
+    )
     {
-        parent::__construct($app);
-
-        $this->codeEvent = $codeEvent;
-
-        $addOn = $this->app()->addOnManager()->getById($addOnId);
+        $addOn = $app->addOnManager()->getById($addOnId);
         if ($addOn === null)
         {
             throw new InvalidAddOnIdProvidedException($addOnId);
         }
+
         $this->addOn = $addOn;
+        $this->listenerNamespace = $listenerNamespace;
+        $this->listenerClass = $listenerClass;
+        $this->listenerMethod = $listenerMethod;
+        $this->codeEvent = $codeEvent;
+
+        parent::__construct($app);
+    }
+
+    protected function setup() : void
+    {
+        $this->setupListenerNamespaceClassMethod();;
+        $this->setupListenerPath();
+        $this->setupPhpGenerator();
+    }
+
+    protected function setupListenerNamespaceClassMethod() : void
+    {
+        if (is_null($this->getListenerNamespace()))
+        {
+            $this->listenerNamespace = $this->getAddOn()->prepareAddOnIdForClass();
+        }
+
+        if (is_null($this->getListenerClass()))
+        {
+            $this->listenerClass = 'Listener';
+        }
+
+        if (is_null($this->getListenerMethod()))
+        {
+            $this->listenerMethod = lcfirst(PhpUtil::camelCase($this->getCodeEvent()->event_id));
+        }
+    }
+
+    protected function setupListenerPath() : void
+    {
+        $listenerClass = $this->getListenerNamespace() . '\\' . $this->getListenerClass();
+        $this->listenerPath = realpath(\XF::$autoLoader->findFile($listenerClass));
+    }
+
+    protected function setupPhpGenerator() : void
+    {
+        $listenerPath = $this->getListenerPath();
+        if (file_exists($listenerPath))
+        {
+            $fileContents = file_get_contents($listenerPath);
+        }
+        else
+        {
+            $fileContents = <<<PHP
+<?php
+PHP;
+        }
+
+        $listenerContents = NettePhpFile::fromCode($fileContents);
+
+        $namespaces = $listenerContents->getNamespaces();
+        $listenerNamespace = $this->getListenerNamespace();
+        if (!count($namespaces) || !isset($namespacesp[$listenerNamespace]))
+        {
+            $listenerContents->addNamespace($listenerNamespace);
+        }
+
+        $listenerNamespaceObj = $listenerContents->getNamespaces()[$listenerNamespace];
+        $classes = $listenerNamespaceObj->getClasses();
+        $listenerClass = $this->getListenerClass();
+        if (!count($classes) || !isset($classes[$listenerClass]))
+        {
+            $listenerNamespaceObj->addClass($listenerClass);
+        }
+
+        $this->listenerContents = $listenerContents;
     }
 
     /**
@@ -85,6 +164,21 @@ class Creator extends AbstractService
     public function setListenerClass(?string $listenerClass) : void
     {
         $this->listenerClass = $listenerClass;
+
+        $this->setupPhpGenerator();
+    }
+
+    public function getListenerNamespace() :? string
+    {
+        return $this->listenerNamespace;
+    }
+
+    public function setListenerNamespace(?string $listenerNamespace) : void
+    {
+        $this->listenerNamespace = $listenerNamespace;
+
+        $this->setupListenerPath();
+        $this->setupPhpGenerator();
     }
 
     /**
@@ -96,33 +190,13 @@ class Creator extends AbstractService
     }
 
     /**
-     * @return string
-     */
-    public function getFallbackListenerClass() : string
-    {
-        return $this->getAddOn()->prepareAddOnIdForClass() . '\\Listener';
-    }
-
-    /**
-     * @param string $listenerClass
-     *
-     * @return string
-     */
-    public function getListenerPath(string $listenerClass) : string
-    {
-        $addOn = $this->getAddOn();
-        $addOnRoot = $addOn->getAddOnDirectory();
-        $listenerFileName = str_replace('\\', \XF::$DS, substr($listenerClass, strlen($addOn->getAddOnId()) + 1));
-
-        return FileUtil::canonicalizePath($listenerFileName, $addOnRoot) . '.php';
-    }
-
-    /**
      * @param string|null $listenerMethod
      */
     public function setListenerMethod(?string $listenerMethod) : void
     {
         $this->listenerMethod = $listenerMethod;
+
+        $this->setupPhpGenerator();
     }
 
     /**
@@ -133,91 +207,85 @@ class Creator extends AbstractService
         return $this->listenerMethod;
     }
 
-    /**
-     * @return string
-     */
-    public function getFallbackListenerMethod() : string
+    public function getListenerPath() : string
     {
-        return lcfirst(PhpUtil::camelCase($this->getCodeEvent()->event_id));
+        return $this->listenerPath;
     }
 
-    /**
-     * @param string $listenerClass
-     * @param string $listenerNamespace
-     *
-     * @return string
-     */
-    public function getFallbackListenerContents(string $listenerClass, string $listenerNamespace) : string
+    public function getListenerContents() : NettePhpFile
     {
-        return <<<PHP
-<?php
-
-namespace {$listenerNamespace};
-
-/**
-* Class {$listenerClass}
- * 
- * @package {$listenerNamespace}
- */
-class {$listenerClass}
-{
-}
-PHP;
-    }
-
-    public function getListenerMethodBlock
-    (
-        /** @noinspection PhpUnusedParameterInspection */
-        string $listenerMethod,
-        string $indent = null
-    ) : string
-    {
-        $codeEvent = $this->getCodeEvent();
-
-        /** @var CodeEventDescriptionParserSvc $descriptionParserSvc */
-        $descriptionParserSvc = $this->service('TickTackk\DeveloperTools:CodeEvent\DescriptionParser', $codeEvent);
-        $parsedDescription = $descriptionParserSvc->parse();
-
-        /** @var CodeEventDocBlockGeneratorSvc $docBlockGeneratorSvc */
-        $docBlockGeneratorSvc = $this->service('TickTackk\DeveloperTools:CodeEvent\DocBlockGenerator', $parsedDescription);
-        $docBlock = $docBlockGeneratorSvc->generate();
-
-        /** @var CodeEventSignatureGeneratorSvc $signatureGeneratorSvc */
-        $signatureGeneratorSvc = $this->service('TickTackk\DeveloperTools:CodeEvent\SignatureGenerator', $parsedDescription);
-        $signature = $signatureGeneratorSvc->generate();
-
-        $listenerMethodBlock = <<<PHP
-{$docBlock}
-    public static function {$listenerMethod}($signature)
-    {
-        
-    }
-PHP;
-
-        return $listenerMethodBlock . PHP_EOL;
+        return $this->listenerContents;
     }
 
     public function create() : void
     {
-        $listenerFullClass = $this->getListenerClass() ?: $this->getFallbackListenerClass();
-        $listenerNamespace = substr($listenerFullClass, 0, strrpos($listenerFullClass, '\\'));
-        $listenerClass = substr($listenerFullClass, strlen($listenerNamespace) + 1);
-        $listenerMethod = $this->getListenerMethod() ?: $this->getFallbackListenerMethod();
-        $listenerPath = $this->getListenerPath($listenerFullClass);
+        $listenerContents = $this->getListenerContents();
+        $listenerNamespaceObj = $listenerContents->getNamespaces()[$this->getListenerNamespace()];
+        $listenerClassObj = $listenerNamespaceObj->getClasses()[$this->getListenerClass()];
+        $listenerMethod = $this->getListenerMethod();
 
-        $listenerContents = file_exists($listenerPath)
-            ? file_get_contents($listenerPath)
-            : $this->getFallbackListenerContents($listenerClass, $listenerNamespace);
-        $listenerContents = utf8_trim($listenerContents);
-
-        if (!method_exists($listenerFullClass, $listenerMethod))
+        try
         {
-            $listenerContents = utf8_substr($listenerContents, 0, utf8_strlen($listenerContents) - 1);
-            $listenerContents .= $this->getListenerMethodBlock($listenerMethod);
-            $listenerContents .= PHP_EOL .'}';
+           $listenerClassObj->getMethod($listenerMethod);
+        }
+        catch (\Nette\InvalidArgumentException $e)
+        {
+            $method = $listenerClassObj->addMethod($listenerMethod)->setPublic()->setStatic();
+            $codeEvent = $this->getCodeEvent();
+
+            /** @var CodeEventDescriptionParserSvc $descriptionParserSvc */
+            $descriptionParserSvc = $this->service('TickTackk\DeveloperTools:CodeEvent\DescriptionParser', $codeEvent);
+            $parsedDescription = $descriptionParserSvc->parse($this->getAddOn());
+
+            if (!is_null($parsedDescription['returnType']))
+            {
+                $method->setReturnType($parsedDescription['returnType']);
+            }
+
+            foreach ($parsedDescription['arguments'] AS $argument)
+            {
+                $method->addParameter($argument['name'])
+                    ->setType($argument['hint'])
+                    ->setReference($argument['passedByRef']);
+            }
+
+            if (strlen($parsedDescription['description']))
+            {
+                $method->addComment($parsedDescription['description']);
+            }
+
+            if (strlen($parsedDescription['eventHint']))
+            {
+                if (strlen($parsedDescription['description']))
+                {
+                    $method->addComment('');
+                }
+
+                $method->addComment('Event hint: ' . $parsedDescription['eventHint']);
+            }
+
+            if (strlen($parsedDescription['description']) || strlen($parsedDescription['eventHint']))
+            {
+                $method->addComment('');
+            }
+
+            foreach ($parsedDescription['arguments'] AS $argument)
+            {
+                $comment = '@param';
+
+                if ($argument['hint'])
+                {
+                    $comment .= ' ' . $argument['hint'];
+                }
+
+                $comment .= ' $' . $argument['name'];
+                $comment .= ' ' . $argument['description'];
+
+                $method->addComment($comment);
+            }
         }
 
-        file_put_contents($listenerPath, $listenerContents);
+        FileUtil::writeFile($this->getListenerPath(), (string) $listenerContents, false);
     }
 
     /**
