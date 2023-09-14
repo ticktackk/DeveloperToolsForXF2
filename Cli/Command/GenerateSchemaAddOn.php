@@ -33,6 +33,14 @@ class GenerateSchemaAddOn extends Command
             );
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     *
+     * @throws \Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $entities = [];
@@ -97,9 +105,7 @@ class GenerateSchemaAddOn extends Command
                 $exporter = 'tck-devtools:generate-schema-entity';
             }
 
-            if ($input->getOption(''))
             $command = $this->getApplication()->find($exporter);
-
             $i = ['command' => $exporter, 'id' => $entity];
 
             $childInput = new ArrayInput($i);

@@ -240,11 +240,6 @@ class ReadmeBuilder extends AbstractService
         ];
     }
 
-    /**
-     * @return array
-     *
-     * @throws \ReflectionException
-     */
     protected function getCliCommands() : array
     {
         $addOn = $this->getAddOn();
@@ -554,6 +549,10 @@ class ReadmeBuilder extends AbstractService
          * @param ArrayCollection|array|Entity[] $entities
          * @param array $headerMap
          * @param bool $groupedEntities
+         *
+         * @return void
+         *
+         * @throws \Jawira\CaseConverter\CaseConverterException
          */
         $generateTableFromEntity = function (string $tableTitle, $entities, array $headerMap, bool $groupedEntities = false) use(&$readme) : void
         {

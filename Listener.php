@@ -28,7 +28,9 @@ class Listener
 	 * @param AbstractReply    $reply      Reply object.
 	 * @param AbstractRenderer $renderer   Renderer object.
 	 * @param Response         $response   HTTP Response object.
-	 */
+     *
+     * @noinspection PhpUnusedParameterInspection
+     */
 	public static function dispatcherPostRender(
 		Dispatcher $dispatcher,
 		?string &$content,
@@ -78,6 +80,8 @@ class Listener
 	 * the application type.
 	 *
 	 * @param BaseApp $app Global App object.
+     *
+     * @noinspection PhpUnusedParameterInspection
 	 */
 	public static function appSetup(BaseApp $app): void
 	{

@@ -67,7 +67,7 @@ class CodeEventListener extends XFCP_CodeEventListener
      *
      * @return Repository|CodeEventRepo|ExtendedCodeEventRepo
      */
-    protected function getCodeEventRepo()
+    protected function getCodeEventRepo() : CodeEventRepo
     {
         return $this->repository('XF:CodeEvent');
     }

@@ -17,7 +17,7 @@ class Mailer extends XFCP_Mailer
      *
      * @throws \XF\PrintableException
      *
-     * @noinspection PhpHierarchyChecksInspection
+     * @noinspection PhpUndefinedClassInspection
      */
     public function send
     (

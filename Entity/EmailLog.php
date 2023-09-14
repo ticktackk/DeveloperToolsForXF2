@@ -11,12 +11,12 @@ use XF\Mvc\Entity\Structure as EntityStructure;
  * @property string subject
  * @property int log_date
  * @property string return_path
- * @property array|null|null sender
+ * @property array|null sender
  * @property array|null from
- * @property array|null|null reply_to
+ * @property array|null reply_to
  * @property array|null to
- * @property array|null|null cc
- * @property array|null|null bcc
+ * @property array|null cc
+ * @property array|null bcc
  * @property string|null html_message
  * @property string|null text_message
  */

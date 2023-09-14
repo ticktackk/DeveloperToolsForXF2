@@ -7,16 +7,14 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use XF\App as BaseApp;
-use XF\Mvc\Entity\AbstractCollection;
 use XF\Cli\Command\Development\RequiresDevModeTrait;
 use XF\Mvc\Entity\Repository;
 use XF\Util\File as FileUtil;
 use XF\Mvc\Entity\Structure as EntityStructure;
-use XF\Entity\ClassExtension as ClassExtensionEntity;
 use XF\Repository\ClassExtension as ClassExtensionRepo;
 use XF\AddOn\Manager as AddOnManager;
 
-use function is_array, is_string, strlen;
+use function is_array, strlen;
 
 /**
  * @since 1.4.4

@@ -201,18 +201,15 @@ class TemplateModification extends XFCP_TemplateModification
 
         $templateTitle = $this->filter('template', 'str');
 
-        /** @var \XF\Entity\Template $templateForStyle */
-        if (
-        $templateForStyle = $this->finder('XF:Template')
-            ->where([
-                'style_id' => $styleId,
-                'title' => $templateTitle,
-                'type' => $type
-            ])
-            ->fetchOne()
-        )
+        /** @var TemplateEntity $templateForStyle */
+        $templateForStyle = $this->finder('XF:Template')->where([
+            'style_id' => $styleId,
+            'title' => $templateTitle,
+            'type' => $type
+        ])->fetchOne();
+        if ($templateForStyle)
         {
-            $response->setJsonParam('template', $templateForStyle ? $templateForStyle->template : false);
+            $response->setJsonParam('template', $templateForStyle);
         }
 
         return $response;

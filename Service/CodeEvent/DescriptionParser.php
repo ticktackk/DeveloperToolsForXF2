@@ -63,9 +63,7 @@ class DescriptionParser extends AbstractService
         return $this->getDOMCrawler($codeEvent->description);
     }
 
-    /**
-     * @return string
-     */
+    /** @noinspection PhpUnusedParameterInspection */
     protected function parseDescription(AddOn $addOn) : string
     {
         $codeEventDOMCrawler = $this->getCodeEventDOMCrawler();
@@ -82,9 +80,7 @@ class DescriptionParser extends AbstractService
             ->nodeValue;
     }
 
-    /**
-     * @return string
-     */
+    /** @noinspection PhpUnusedParameterInspection */
     protected function parseEventHint(AddOn $addOn) : string
     {
         $codeEventDOMCrawler = $this->getCodeEventDOMCrawler();
@@ -128,6 +124,7 @@ class DescriptionParser extends AbstractService
         return $requirePhpversion;
     }
 
+    /** @noinspection PhpUnusedParameterInspection */
     protected function getFinalHint(string $hint, AddOn $addOn)
     {
         switch ($hint)
@@ -145,9 +142,6 @@ class DescriptionParser extends AbstractService
         return $hint;
     }
 
-    /**
-     * @return array
-     */
     protected function parseArguments(AddOn $addOn) : array
     {
         $codeEventDOMCrawler = $this->getCodeEventDOMCrawler();

@@ -10,7 +10,6 @@ use XF\App as BaseApp;
 use XF\Mvc\Entity\AbstractCollection;
 use XF\Mvc\Entity\Entity;
 use XF\Cli\Command\Development\RequiresDevModeTrait;
-use XF\Mvc\Entity\Finder;
 use XF\Mvc\Entity\Repository;
 use XF\Util\File as FileUtil;
 use XF\Util\Php as PhpUtil;
@@ -186,6 +185,7 @@ class EntityClassProperties extends Command
                 }
                 else if ($returnType)
                 {
+                    /** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
                     if ($returnType instanceof \ReflectionUnionType)
                     {
                         $returnTypes = $returnType->getTypes();
@@ -410,6 +410,7 @@ class EntityClassProperties extends Command
 
     protected function getEntityTypeMap() : array
     {
+        /** @noinspection PhpDeprecationInspection */
         return [
             Entity::INT => 'int',
             Entity::UINT => 'int',

@@ -10,6 +10,17 @@ use XF\Repository\ClassExtension as ClassExtensionRepo;
 
 trait ClassPropertiesCommandTrait
 {
+    /**
+     * @param string $class
+     * @param string $addOnId
+     * @param array|null $requireAddonIds
+     * @param array|null $softRequireAddonIds
+     * @param string|null $subClassOf
+     *
+     * @return array
+     *
+     * @throws \ReflectionException
+     */
     protected function getTypeHintForClass(
         string $class,
         string $addOnId,
