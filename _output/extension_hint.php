@@ -14,6 +14,11 @@ namespace TickTackk\DeveloperTools\XF\Admin\Controller
 	class XFCP_TemplateModification extends \XF\Admin\Controller\TemplateModification {}
 }
 
+namespace TickTackk\DeveloperTools\XF\Api
+{
+	class XFCP_Templater extends \XF\Api\Templater {}
+}
+
 namespace TickTackk\DeveloperTools\XF\Entity
 {
 	class XFCP_CodeEventListener extends \XF\Entity\CodeEventListener {}
@@ -33,6 +38,7 @@ namespace TickTackk\DeveloperTools\XF\Job
 namespace TickTackk\DeveloperTools\XF\Mail
 {
 	class XFCP_Mailer extends \XF\Mail\Mailer {}
+	class XFCP_Templater extends \XF\Mail\Templater {}
 }
 
 namespace TickTackk\DeveloperTools\XF\Mvc\Renderer

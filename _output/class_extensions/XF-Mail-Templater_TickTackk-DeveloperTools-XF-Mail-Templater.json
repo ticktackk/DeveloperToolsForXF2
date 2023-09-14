@@ -1,0 +1,6 @@
+{
+    "from_class": "XF\\Mail\\Templater",
+    "to_class": "TickTackk\\DeveloperTools\\XF\\Mail\\Templater",
+    "execute_order": 6119,
+    "active": true
+}

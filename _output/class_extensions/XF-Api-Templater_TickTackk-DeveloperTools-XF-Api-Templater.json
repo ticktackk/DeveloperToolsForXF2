@@ -1,0 +1,6 @@
+{
+    "from_class": "XF\\Api\\Templater",
+    "to_class": "TickTackk\\DeveloperTools\\XF\\Api\\Templater",
+    "execute_order": 6119,
+    "active": true
+}
