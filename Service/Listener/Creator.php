@@ -283,6 +283,8 @@ PHP;
 
                 $method->addComment($comment);
             }
+
+            $method->addComment(PHP_EOL . '@noinspection PhpUnusedParameterInspection');
         }
 
         FileUtil::writeFile($this->getListenerPath(), (string) $listenerContents, false);
