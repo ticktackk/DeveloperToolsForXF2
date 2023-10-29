@@ -33,6 +33,7 @@ use XF\Util\File as FileUtil;
 use League\HTMLToMarkdown\Converter\TableConverter;
 
 use function array_key_exists, count, in_array;
+use function reset;
 
 /**
  * Class ReadmeBuilder
@@ -501,7 +502,11 @@ class ReadmeBuilder extends AbstractService
             $addOnRepo = $this->getAddonRepo();
             if (array_key_exists('XF', $requirements))
             {
-                $versionString = $addOnRepo->inferVersionStringFromId(reset($requirements['XF']));
+                $versionString = reset($requirements['XF']);
+                if (is_numeric($versionString) || is_int($versionString))
+                {
+                    $versionString = $addOnRepo->inferVersionStringFromId($versionString);
+                }
                 $titleBlock .= " for XenForo {$versionString}+";
                 unset($requirements['XF']);
             }
