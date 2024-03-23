@@ -100,7 +100,7 @@ class ReadmeBuilder extends AbstractService
      *
      * @throws \ReflectionException
      */
-    protected function getData(AddOn $addOn = null) : array
+    protected function getData(?AddOn $addOn = null) : array
     {
         $addOn = $addOn ?: $this->getAddOn();
         $installedAddOn = $addOn->getInstalledAddOn();

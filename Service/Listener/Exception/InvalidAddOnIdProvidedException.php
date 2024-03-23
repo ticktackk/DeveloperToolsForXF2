@@ -23,7 +23,7 @@ class InvalidAddOnIdProvidedException extends \InvalidArgumentException
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct(string $addOnId, $code = 0, Throwable $previous = null)
+    public function __construct(string $addOnId, $code = 0, ?Throwable $previous = null)
     {
         $this->addOnId = $addOnId;
 

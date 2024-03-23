@@ -25,7 +25,7 @@ class CodeEventNotFoundException extends \InvalidArgumentException
      * @param int            $code      Exit code.
      * @param Throwable|null $previous  Previously thrown exception (if any)
      */
-    public function __construct(string $codeEvent, int $code = 0, Throwable $previous = null)
+    public function __construct(string $codeEvent, int $code = 0, ?Throwable $previous = null)
     {
         parent::__construct('Code event not found.', $code, $previous);
 
