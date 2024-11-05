@@ -320,7 +320,7 @@ class Setup extends AbstractSetup
 		', 10), $stepParams['position']);
         if (!$emailIds)
         {
-            return true;
+            return null;
         }
 
         $db->beginTransaction();
