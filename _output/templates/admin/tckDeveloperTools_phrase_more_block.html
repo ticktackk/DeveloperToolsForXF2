@@ -13,16 +13,23 @@
 	</xf:formrow>
 </xf:if>
 
-<xf:if is="$language.text_direction == 'RTL'">
-	<xf:textarearow name="phrases[{$nextPhraseCount}][phrase_text]" value="{$phrase.phrase_text}" dir="rtl" style="text-align: right"
+<xf:if is="$xf.versionId > 2020270">
+	<xf:textarearow name="phrase_text" value="{$phrase.phrase_text}"
+					dir="{$language.text_direction}" autosize="true"
 					label="{{ phrase('phrase_text') }}"
 					explain="{{ phrase('phrase_text_explain') }}" />
 <xf:else />
-	<xf:codeeditorrow name="phrases[{$nextPhraseCount}][phrase_text]" value="{$phrase.phrase_text}"
-					  mode="html" data-line-wrapping="true" data-line-numbers="false"
-					  class="codeEditor--autoSize codeEditor--proportional"
-					  label="{{ phrase('phrase_text') }}"
-					  explain="{{ phrase('phrase_text_explain') }}" />
+	<xf:if is="$language.text_direction == 'RTL'">
+		<xf:textarearow name="phrases[{$nextPhraseCount}][phrase_text]" value="{$phrase.phrase_text}" dir="rtl" style="text-align: right"
+						label="{{ phrase('phrase_text') }}"
+						explain="{{ phrase('phrase_text_explain') }}" />
+	<xf:else />
+		<xf:codeeditorrow name="phrases[{$nextPhraseCount}][phrase_text]" value="{$phrase.phrase_text}"
+						  mode="html" data-line-wrapping="true" data-line-numbers="false"
+						  class="codeEditor--autoSize codeEditor--proportional"
+						  label="{{ phrase('phrase_text') }}"
+						  explain="{{ phrase('phrase_text_explain') }}" />
+	</xf:if>
 </xf:if>
 
 <xf:if is="!$language.language_id">
