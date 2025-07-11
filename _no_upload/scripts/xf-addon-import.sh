@@ -13,3 +13,4 @@ fi
 php cmd.php xf-dev:metadata-clean -v || exit 1
 php cmd.php tck-devtools:clamp-versions "$1" -v || exit 1
 php cmd.php xf-dev:import --addon="$1" -v || exit 1
+php cmd.php xf-dev:rebuild-caches -v || exit 1
