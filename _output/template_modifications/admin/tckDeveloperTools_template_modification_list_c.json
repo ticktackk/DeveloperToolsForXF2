@@ -1,0 +1,9 @@
+{
+    "template": "template_modification_list",
+    "description": "Show modification key",
+    "execution_order": 6119,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "#hint=\"(\\{\\$modification.description\\})\"#",
+    "replace": "hint=\"{{ $xf.development ? $modification.modification_key . '<br />' . $1 : $1 }}\""
+}
