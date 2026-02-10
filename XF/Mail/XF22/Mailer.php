@@ -21,8 +21,8 @@ class Mailer extends XFCP_Mailer
     public function send
     (
         \Swift_Mime_SimpleMessage $message,
-        \Swift_Transport $transport = null,
-        array $queueEntry = null,
+        ?\Swift_Transport $transport = null,
+        ?array $queueEntry = null,
         $allowRetry = true
     )
     {

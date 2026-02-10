@@ -24,7 +24,7 @@ class CodeEvent extends XFCP_CodeEvent
      *
      * @return string The doc block of the event
      */
-    public function getDocBlockForCodeEvent(string $eventId, string &$callbackSignature = null) : string
+    public function getDocBlockForCodeEvent(string $eventId, ?string &$callbackSignature = null) : string
     {
         /** @var CodeEventEntity $codeEvent */
         $codeEvent = $this->app()->find($this->identifier, $eventId);

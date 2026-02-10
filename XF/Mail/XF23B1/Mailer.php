@@ -20,7 +20,7 @@ class Mailer extends XFCP_Mailer
      *
      * @throws \XF\PrintableException
      */
-    public function send(Email $email, AbstractTransport $transport = null)
+    public function send(Email $email, ?AbstractTransport $transport = null)
     {
         $sent = parent::send($email, $transport);
 

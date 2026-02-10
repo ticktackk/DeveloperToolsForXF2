@@ -334,7 +334,7 @@ class TemplateModification extends XFCP_TemplateModification
      * @return StyleEntity|Entity
      * @throws ExceptionReply
      */
-    protected function assertStyleExists(?int $id, array $with = null, string $phraseKey = null)
+    protected function assertStyleExists(?int $id, ?array $with = null, string $phraseKey = null)
     {
         if ($id === 0)
         {
