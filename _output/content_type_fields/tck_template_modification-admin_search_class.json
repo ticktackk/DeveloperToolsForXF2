@@ -1,0 +1,5 @@
+{
+    "content_type": "tck_template_modification",
+    "field_name": "admin_search_class",
+    "field_value": "TickTackk\\DeveloperTools\\AdminSearch\\TemplateModification"
+}
